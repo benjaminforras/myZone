@@ -7,7 +7,7 @@ after_success:
 - sh push_release.sh
 
 deploy:
-  provider: master
+  provider: releases
   overwrite: true
   skip_cleanup: true
   api_key:
