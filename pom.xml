@@ -3,7 +3,7 @@
 
 	<groupId>hu.tryharddood</groupId>
 	<artifactId>myZone</artifactId>
-	<version>1.0</version>
+	<version>v1.${TRAVIS_BUILD_NUMBER}</version>
 	<packaging>jar</packaging>
 
 	<name>myZone</name>
