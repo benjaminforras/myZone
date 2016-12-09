@@ -2,7 +2,7 @@ language: java
 jdk:
 - oraclejdk8
 deploy:
-  provider: releases
+  provider: master
   overwrite: true
   skip_cleanup: true
   api_key:
@@ -10,4 +10,5 @@ deploy:
   file: target/myZone.jar
   on:
     repo: TryHardDood/myZone
+    tags: true
 script: mvn -Dmaven.wagon.http.ssl.insecure=true -Dmaven.wagon.http.ssl.allowall=true clean package
