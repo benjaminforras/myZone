@@ -1,0 +1,12 @@
+language: java
+jdk:
+   - oraclejdk8
+deploy:
+  provider: releases
+  api_key: "d7017fc1c2b1be139aca1f20e716389ff9054a83"
+  file: "myZone.jar"
+  skip_cleanup: true
+  overwrite: true
+  on:
+    tags: true
+script: mvn -Dmaven.wagon.http.ssl.insecure=true -Dmaven.wagon.http.ssl.allowall=true clean package

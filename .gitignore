@@ -1,0 +1,9 @@
+.idea/
+.atom-build.yml
+.gradle/
+target/classes/
+target/maven-status/
+target/maven-archiver/
+myZone.iml
+gradle/
+build/

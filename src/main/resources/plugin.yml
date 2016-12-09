@@ -1,0 +1,69 @@
+name: myZone
+version: ${project.version}
+main: hu.tryharddood.myzone.myZone
+depend: [WorldGuard]
+softdepend: [Vault]
+authors: [TryHardDood]
+description: myZone is a easy to use protection system which is based on Worldguard, that allows users to perform various actions on user-selected areas
+website: https://tryharddood.github.io
+commands:
+  myzone:
+    aliases: [zone]
+    description: Main command.
+    usage: /zone
+permissions:
+  myzone.zone:
+    default: true
+  myzone.permpack.basic:
+    default: op
+    children:
+      myzone.zone.create: true
+      myzone.zone.delete: true
+      myzone.zone.flag: true
+      myzone.zone.members: true
+      myzone.zone.members.add: true
+      myzone.zone.members.remove: true
+      myzone.zone.selectborder: true
+  myzone.permpack.admin:
+    default: op
+    children:
+      myzone.zone.delete.others: true
+      myzone.zone.flag.others: true
+      myzone.zone.members.add.others: true
+      myzone.zone.members.remove.others: true
+      myzone.zone.info: true
+      myzone.zone.checkzone: true
+      myzone.admin: true
+      myzone.zone.flag.*: true
+  myzone.permpack.basicFlags:
+    default: op
+    children:
+      myzone.zone.flag.passthrough: true
+      myzone.zone.flag.build: true
+      myzone.zone.flag.mob-damage: true
+      myzone.zone.flag.entity-item-frame-destroy: true
+      myzone.zone.flag.entity-painting-destroy: true
+      myzone.zone.flag.item-drop: true
+      myzone.zone.flag.creeper-explosion: true
+      myzone.zone.flag.other-explosion: true
+      myzone.zone.flag.enderman-grief: true
+      myzone.zone.flag.enderpearl: true
+      myzone.zone.flag.enderdragon-block-damage: true
+      myzone.zone.flag.ghast-fireball: true
+      myzone.zone.flag.tnt: true
+      myzone.zone.flag.lighter: true
+      myzone.zone.flag.lava-fire: true
+      myzone.zone.flag.chest-access: true
+      myzone.zone.flag.water-flow: true
+      myzone.zone.flag.lava-flow: true
+      myzone.zone.flag.use: true
+      myzone.zone.flag.vehicle-place: true
+      myzone.zone.flag.vehicle-destroy: true
+      myzone.zone.flag.snow-fall: true
+      myzone.zone.flag.snow-melt: true
+      myzone.zone.flag.ice-form: true
+      myzone.zone.flag.ice-melt: true
+      myzone.zone.flag.entry: true
+      myzone.zone.flag.greeting: true
+      myzone.zone.flag.farewell: true
+      myzone.zone.flag.potion-splash: true

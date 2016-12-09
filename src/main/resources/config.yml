@@ -1,0 +1,68 @@
+# +----------------------------------------------------+
+# <                       myZone                       >
+# <                 Configuration file                 >
+# <                     config.yml                     >
+# +----------------------------------------------------+
+
+# You can change the default localization.
+Locale: en
+
+# You don't need to give the players Worldedit permissions.
+# The players need to select a region with this tool.
+createTool: WOOD_SPADE
+
+# You don't need to give the players Worldedit permissions.
+# The players can check the zones info.
+checkTool: WOOD_SWORD
+
+Delay:
+  checkTool: 5
+
+Title:
+  Enabled: true
+
+Zone:
+  Regex: '[^a-zA-Z0-9_\p{L}+]'
+
+# Economy
+Economy:
+  Enabled: false
+  Create: 50
+  Delete: 50
+  Flag: 50
+  Expand: 50
+  Member:
+    Add: 50
+    Remove: 50
+  Owner:
+    Add: 50
+    Remove: 50
+
+# Disabled in these worlds.
+DisabledWorlds:
+  - world_nether
+  - world_the_end
+
+# Example:
+# For a 25x256x25 zone you have to add this under (50, 256, 50): myzone.zone.max-size.1:
+# (25, 256, 25): myzone.zone.max-size.2
+# When you add this permission 'myzone.zone.max-size.2' the player will have a zone restriction of (25, 256, 25).
+#
+# To restrict the max zone of a player to 10 you need to add this under 3: myzone.zone.max-zone.1
+# 10: myzone.zone.max-zone.2
+# And when you add this permission 'myzone.zone.max-zone.2' the player will have a zone restriction of 10.
+Restriction:
+  BlockedFlags:
+    - sleep
+    - pistons
+    - exit
+    - game-mode
+    - receive-chat
+    - send-chat
+  Size:
+    (-1, -1, -1): myzone.zone.max-size.unlimited
+    (50, 256, 50): myzone.zone.max-size.1
+  Zone:
+    -1: myzone.zone.max-zone.unlimited
+    3: myzone.zone.max-zone.1
+    1: myzone.zone.max-zone.2
