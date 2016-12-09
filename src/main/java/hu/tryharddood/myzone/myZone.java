@@ -157,7 +157,7 @@ public class myZone extends JavaPlugin {
 		if (plugin == null || !(plugin instanceof WorldGuardPlugin))
 		{
 			log("Couldn't hook WorldGuard. Maybe not installed?");
-			log("Disabling plugin.");
+			log("In order to run this plugin you must have WorldGuard installed. Stopping...");
 			getServer().getPluginManager().disablePlugin(this);
 			return;
 		}
