@@ -17,5 +17,4 @@ deploy:
   file: target/myZone.jar
   on:
     repo: TryHardDood/myZone
-    tags: true
 script: mvn -Dmaven.wagon.http.ssl.insecure=true -Dmaven.wagon.http.ssl.allowall=true clean package
