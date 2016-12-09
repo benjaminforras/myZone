@@ -8,7 +8,7 @@
 
 	<name>myZone</name>
 	<description>myZone is a easy to use protection system which is based on Worldguard, that allows users to perform various actions on user-selected areas</description>
-	<url>https://tryharddood.github.com/web</url>
+	<url>https://tryharddood.github.com</url>
 
 	<properties>
 		<server.version>1.11-R0.1-SNAPSHOT</server.version>
