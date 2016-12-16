@@ -32,7 +32,7 @@
 			<scope>provided</scope>
 		</dependency>
 		
-		<!--WorldEdit API-->
+		<!--WorldEdit API
 		<dependency>
 			<groupId>com.github.sk89q.WorldEdit</groupId>
 			<artifactId>worldedit-bukkit</artifactId>
@@ -40,11 +40,27 @@
 			<scope>provided</scope>
 		</dependency>
 		
-		<!--WorldGuard API-->
+		WorldGuard API
 		<dependency>
 			<groupId>com.github.sk89q.WorldGuard</groupId>
 			<artifactId>worldguard-legacy</artifactId>
 			<version>-SNAPSHOT</version>
+			<scope>provided</scope>
+		</dependency>-->
+		
+		<!--WorldEdit API-->
+		<dependency>
+			<groupId>com.sk89q.worldedit</groupId>
+			<artifactId>worldedit-bukkit</artifactId>
+			<version>6.1.5</version>
+			<scope>provided</scope>
+		</dependency>
+		
+		<!--WorldGuard API-->
+		<dependency>
+			<groupId>com.sk89q.worldguard</groupId>
+			<artifactId>worldguard-legacy</artifactId>
+			<version>6.2</version>
 			<scope>provided</scope>
 		</dependency>
 
