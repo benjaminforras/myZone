@@ -36,7 +36,7 @@ public class MainCommand extends Subcommand {
 
 	private ArrayList<Flag> flagsCache = new ArrayList<>();
 	private ProtectedRegion region;
-	private InventoryMenuListener flagSettingListener = new InventoryMenuListener() {
+	private InventoryMenuListener flagSettingListener     = new InventoryMenuListener() {
 		@Override
 		public void interact(Player player, ClickType action, InventoryClickEvent event) {
 			ItemStack itemStack = event.getCurrentItem();
@@ -94,7 +94,7 @@ public class MainCommand extends Subcommand {
 			player.updateInventory();
 		}
 	};
-	private InventoryMenuListener removeMemberListener = new InventoryMenuListener() {
+	private InventoryMenuListener removeMemberListener    = new InventoryMenuListener() {
 		@Override
 		public void interact(Player player, ClickType action, InventoryClickEvent event) {
 			ItemStack itemStack = event.getCurrentItem();
@@ -105,7 +105,7 @@ public class MainCommand extends Subcommand {
 			Bukkit.dispatchCommand(player, "zone members " + region.getId() + " remove " + playerName);
 		}
 	};
-	private InventoryMenuListener removeOwnerListener = new InventoryMenuListener() {
+	private InventoryMenuListener removeOwnerListener     = new InventoryMenuListener() {
 		@Override
 		public void interact(Player player, ClickType action, InventoryClickEvent event) {
 			ItemStack itemStack = event.getCurrentItem();
@@ -119,22 +119,28 @@ public class MainCommand extends Subcommand {
 	private InventoryMenuListener deleteInventoryListener = new InventoryMenuListener() {
 		@Override
 		public void interact(Player player, ClickType action, InventoryClickEvent event) {
-			ItemStack itemStack = event.getCurrentItem();
-			if (itemStack == null) return;
+			if (event.getCurrentItem() == null) return;
 
-			if (itemStack.getDurability() == (short) 13)
+			if (event.getCurrentItem().getDurability() == (short) 13)
 			{
+				if (Properties.getEconomyEnabled())
+				{
+					if (!myZone.getEconomy().has(Bukkit.getOfflinePlayer(player.getUniqueId()), Properties.getZoneDeleteMoney()))
+					{
+						player.sendMessage(tl("Error") + " " + tl("Economy_NotEnoughMoney", Properties.getZoneDeleteMoney()));
+						return;
+					}
+					myZone.getEconomy().withdrawPlayer(Bukkit.getOfflinePlayer(player.getUniqueId()), Properties.getZoneDeleteMoney());
+				}
+
 				player.sendMessage(tl("Success") + " " + tl("DeleteZone_Success", region.getId()));
 				WGWrapper.deleteRegion(region);
 				WGWrapper.saveAll();
-				player.closeInventory();
 			}
-			else if (itemStack.getDurability() == (short) 14)
-			{
-				player.closeInventory();
-			}
+			player.closeInventory();
 		}
 	};
+
 	private InventoryMenuListener settingsMenuListener = new InventoryMenuListener() {
 		@Override
 		public void interact(Player player, ClickType action, InventoryClickEvent event) {
@@ -260,7 +266,7 @@ public class MainCommand extends Subcommand {
 			}
 		}
 	};
-	private InventoryMenuListener mainMenuListener = new InventoryMenuListener() {
+	private InventoryMenuListener mainMenuListener     = new InventoryMenuListener() {
 		@Override
 		public void interact(Player player, ClickType action, InventoryClickEvent event) {
 			if (event.getCurrentItem() == null

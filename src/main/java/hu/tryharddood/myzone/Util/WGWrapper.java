@@ -49,6 +49,7 @@ public class WGWrapper {
 		String regionID = regionName.getId();
 		if (!manager.hasRegion(regionID))
 		{
+			plugin.getLogger().warning("Manager doesn't contain this zone.");
 			return false;
 		}
 

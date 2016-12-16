@@ -18,7 +18,6 @@ import org.bukkit.command.CommandSender;
 import org.bukkit.entity.Player;
 import org.bukkit.event.inventory.ClickType;
 import org.bukkit.event.inventory.InventoryClickEvent;
-import org.bukkit.event.inventory.InventoryType;
 
 import static hu.tryharddood.myzone.Util.I18n.tl;
 
@@ -68,23 +67,23 @@ public class DeleteCommand extends Subcommand {
 			sender.sendMessage(tl("Error") + " " + tl("DeleteZone_Error1"));
 			return;
 		}
-
-
-		InventoryMenuBuilder imb = new InventoryMenuBuilder(InventoryType.PLAYER).withTitle("Are you sure?");
-		imb.withItem(0, new ItemBuilder(Material.STAINED_GLASS_PANE, (short) 13).setTitle(ChatColor.GREEN + tl("GUI_Confirm", true)).build());
-		imb.withItem(8, new ItemBuilder(Material.STAINED_GLASS_PANE, (short) 14).setTitle(ChatColor.GREEN + tl("GUI_Cancel", true)).build());
+		
+		InventoryMenuBuilder imb = new InventoryMenuBuilder(27).withTitle("Are you sure?");
+		imb.withItem(11, new ItemBuilder(Material.STAINED_GLASS_PANE, (short) 13).setTitle(ChatColor.GREEN + tl("GUI_Confirm", true)).build());
+		imb.withItem(15, new ItemBuilder(Material.STAINED_GLASS_PANE, (short) 14).setTitle(ChatColor.GREEN + tl("GUI_Cancel", true)).build());
+		imb.show(player);
 		imb.onInteract(new InventoryMenuListener() {
 			@Override
-			public void interact(Player player, ClickType action, InventoryClickEvent slot) {
-				if (slot.getCurrentItem() == null) return;
+			public void interact(Player player, ClickType action, InventoryClickEvent event) {
+				if (event.getCurrentItem() == null) return;
 
-				if (slot.getCurrentItem().getDurability() == (short) 13)
+				if (event.getCurrentItem().getDurability() == (short) 13)
 				{
 					if (Properties.getEconomyEnabled())
 					{
 						if (!myZone.getEconomy().has(Bukkit.getOfflinePlayer(player.getUniqueId()), Properties.getZoneDeleteMoney()))
 						{
-							sender.sendMessage(tl("Error") + " " + tl("Economy_NotEnoughMoney", Properties.getZoneDeleteMoney()));
+							player.sendMessage(tl("Error") + " " + tl("Economy_NotEnoughMoney", Properties.getZoneDeleteMoney()));
 							return;
 						}
 						myZone.getEconomy().withdrawPlayer(Bukkit.getOfflinePlayer(player.getUniqueId()), Properties.getZoneDeleteMoney());
