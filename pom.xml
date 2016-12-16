@@ -31,7 +31,7 @@
 			<version>${server.version}</version>
 			<scope>provided</scope>
 		</dependency>
-		
+
 		<!--WorldEdit API
 		<dependency>
 			<groupId>com.github.sk89q.WorldEdit</groupId>
@@ -47,7 +47,7 @@
 			<version>-SNAPSHOT</version>
 			<scope>provided</scope>
 		</dependency>-->
-		
+
 		<!--WorldEdit API-->
 		<dependency>
 			<groupId>com.sk89q.worldedit</groupId>
@@ -55,7 +55,7 @@
 			<version>6.1.5</version>
 			<scope>provided</scope>
 		</dependency>
-		
+
 		<!--WorldGuard API-->
 		<dependency>
 			<groupId>com.sk89q.worldguard</groupId>
@@ -79,7 +79,7 @@
 			<version>${vault.version}</version>
 			<scope>provided</scope>
 		</dependency>
-		
+
 		<dependency>
 			<groupId>com.google.code.findbugs</groupId>
 			<artifactId>jsr305</artifactId>
@@ -93,12 +93,12 @@
 			<url>https://hub.spigotmc.org/nexus/content/repositories/snapshots/</url>
 		</repository>
 		<repository>
-			<id>vault-repo</id>
-			<url>http://nexus.hc.to/content/repositories/pub_releases/</url>
+			<id>sk89q-repo</id>
+			<url>http://maven.sk89q.com/repo/</url>
 		</repository>
 		<repository>
-			<id>sk89q-repo</id>
-			<url>https://maven.sk89q.com/repo/</url>
+			<id>vault-repo</id>
+			<url>http://nexus.hc.to/content/repositories/pub_releases/</url>
 		</repository>
 		<repository>
 			<id>jitpack.io</id>
