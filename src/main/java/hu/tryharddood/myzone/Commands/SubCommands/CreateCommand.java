@@ -16,7 +16,7 @@ import org.bukkit.entity.Player;
 import java.util.Random;
 
 import static com.sk89q.worldguard.bukkit.BukkitUtil.toVector;
-import static hu.tryharddood.myzone.Util.I18n.tl;
+import static hu.tryharddood.myzone.Util.Localization.I18n.tl;
 
 
 public class CreateCommand extends Subcommand {

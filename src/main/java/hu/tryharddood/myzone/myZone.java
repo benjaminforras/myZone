@@ -6,7 +6,7 @@ import hu.tryharddood.myzone.Commands.MainCommand;
 import hu.tryharddood.myzone.Commands.SubCommands.*;
 import hu.tryharddood.myzone.Listeners.pListener;
 import hu.tryharddood.myzone.MenuBuilder.inventory.InventoryListener;
-import hu.tryharddood.myzone.Util.I18n;
+import hu.tryharddood.myzone.Util.Localization.I18n;
 import hu.tryharddood.myzone.Util.Updater;
 import hu.tryharddood.myzone.Util.WGWrapper;
 import hu.tryharddood.myzone.Zones.ZoneManager;

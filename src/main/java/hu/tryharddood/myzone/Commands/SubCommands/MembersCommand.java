@@ -13,7 +13,7 @@ import org.bukkit.command.Command;
 import org.bukkit.command.CommandSender;
 import org.bukkit.entity.Player;
 
-import static hu.tryharddood.myzone.Util.I18n.tl;
+import static hu.tryharddood.myzone.Util.Localization.I18n.tl;
 
 
 public class MembersCommand extends Subcommand {

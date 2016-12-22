@@ -7,7 +7,7 @@ import hu.tryharddood.myzone.myZone;
 import org.bukkit.command.Command;
 import org.bukkit.command.CommandSender;
 
-import static hu.tryharddood.myzone.Util.I18n.tl;
+import static hu.tryharddood.myzone.Util.Localization.I18n.tl;
 
 
 public class ReloadCommand extends Subcommand {

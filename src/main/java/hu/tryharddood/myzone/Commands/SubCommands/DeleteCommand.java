@@ -19,7 +19,7 @@ import org.bukkit.entity.Player;
 import org.bukkit.event.inventory.ClickType;
 import org.bukkit.event.inventory.InventoryClickEvent;
 
-import static hu.tryharddood.myzone.Util.I18n.tl;
+import static hu.tryharddood.myzone.Util.Localization.I18n.tl;
 
 
 public class DeleteCommand extends Subcommand {

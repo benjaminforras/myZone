@@ -29,7 +29,7 @@ import java.util.List;
 import java.util.UUID;
 import java.util.stream.Collectors;
 
-import static hu.tryharddood.myzone.Util.I18n.tl;
+import static hu.tryharddood.myzone.Util.Localization.I18n.tl;
 
 
 public class MainCommand extends Subcommand {

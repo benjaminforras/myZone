@@ -5,6 +5,12 @@
 # +----------------------------------------------------+
 
 # You can change the default localization.
+# Currently Avaliable translations:
+# - English - en
+# - Hungarian - hu
+#
+# If you'd like to translate to your language you can do it here:
+# https://poeditor.com/join/project/MkiMGNgS4j
 Locale: en
 
 # You don't need to give the players Worldedit permissions.

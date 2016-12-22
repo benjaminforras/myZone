@@ -12,7 +12,7 @@ import org.bukkit.entity.Player;
 
 import java.util.ArrayList;
 
-import static hu.tryharddood.myzone.Util.I18n.tl;
+import static hu.tryharddood.myzone.Util.Localization.I18n.tl;
 
 /*****************************************************
  *              Created by TryHardDood on 2016. 07. 17..

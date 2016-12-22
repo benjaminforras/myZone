@@ -15,7 +15,7 @@ import org.bukkit.entity.Player;
 import java.util.Objects;
 import java.util.UUID;
 
-import static hu.tryharddood.myzone.Util.I18n.tl;
+import static hu.tryharddood.myzone.Util.Localization.I18n.tl;
 import static hu.tryharddood.myzone.Variables.PlayerCommands.INFO_PERMISSION;
 
 

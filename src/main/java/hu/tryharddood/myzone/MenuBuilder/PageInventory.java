@@ -9,6 +9,8 @@ import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.HashMap;
 
+import static hu.tryharddood.myzone.Util.Localization.I18n.tl;
+
 /*****************************************************
  *              Created by TryHardDood on 2016. 10. 31..
  ****************************************************/
@@ -66,7 +68,7 @@ public final class PageInventory extends InventoryMenuBuilder {
 	public ItemStack getBackPage() {
 		if (backAPage == null)
 		{
-			backAPage = new ItemBuilder(Material.PAPER).setTitle(ChatColor.GREEN + "" + ChatColor.BOLD + "Previous page").build();
+			backAPage = new ItemBuilder(Material.PAPER).setTitle(ChatColor.GREEN + "" + ChatColor.BOLD + tl("GUI_Back")).addLore(tl("GUI_NextLore")).build();
 		}
 		return backAPage;
 	}
@@ -78,7 +80,7 @@ public final class PageInventory extends InventoryMenuBuilder {
 	public ItemStack getForwardsPage() {
 		if (forwardsAPage == null)
 		{
-			forwardsAPage = new ItemBuilder(Material.PAPER).setTitle(ChatColor.GREEN + "" + ChatColor.BOLD + "Next page").build();
+			forwardsAPage = new ItemBuilder(Material.PAPER).setTitle(ChatColor.GREEN + "" + ChatColor.BOLD + tl("GUI_Next")).addLore(tl("GUI_BackLore")).build();
 		}
 		return forwardsAPage;
 	}
