@@ -3,7 +3,7 @@ package hu.tryharddood.myzone.Listeners;
 import com.sk89q.worldguard.bukkit.WGBukkit;
 import com.sk89q.worldguard.protection.ApplicableRegionSet;
 import com.sk89q.worldguard.protection.flags.Flag;
-import hu.tryharddood.myzone.Minecraft;
+import hu.tryharddood.mcversion.MCVersion;
 import hu.tryharddood.myzone.Properties;
 import hu.tryharddood.myzone.Variables;
 import hu.tryharddood.myzone.Zones.Settings;
@@ -37,7 +37,7 @@ public class pListener implements Listener {
 		Player player = event.getPlayer();
 		Action action = event.getAction();
 
-		if (myZone.getVersion().newerThan(Minecraft.Version.v1_9_R1))
+		if (myZone.getVersion().newerThan(MCVersion.Version.v1_9_R1))
 		{
 			if (event.getHand() == null)
 			{

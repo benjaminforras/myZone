@@ -3,11 +3,8 @@ package hu.tryharddood.myzone.MenuBuilder;
 import org.bukkit.inventory.ItemStack;
 
 import java.util.ArrayList;
-import java.util.HashMap;
 
 public class PageLayout {
-
-	private static HashMap<String, ItemStack> replaces = new HashMap<>();
 
 	private static String             empty   = "X";
 	private static String             full    = "O";
@@ -42,12 +39,6 @@ public class PageLayout {
 				throw new RuntimeException("Unrecognised value " + letter);
 			}
 		}
-	}
-
-	public static void addStringFormat(String key, ItemStack item) {
-		if (replaces.containsKey(key)) throw new RuntimeException("Already existing key");
-
-		replaces.put(key, item);
 	}
 
 	public static void setStringFormat(String noItem, String aItem) {

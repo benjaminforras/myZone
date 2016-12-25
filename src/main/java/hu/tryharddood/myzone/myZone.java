@@ -1,6 +1,7 @@
 package hu.tryharddood.myzone;
 
 import com.sk89q.worldguard.bukkit.WorldGuardPlugin;
+import hu.tryharddood.mcversion.MCVersion;
 import hu.tryharddood.myzone.Commands.CommandHandler;
 import hu.tryharddood.myzone.Commands.MainCommand;
 import hu.tryharddood.myzone.Commands.SubCommands.*;
@@ -20,12 +21,11 @@ import java.util.Collections;
 
 public class myZone extends JavaPlugin {
 
-	private static WorldGuardPlugin _wgPlugin;
-	private static Economy          _econ;
-
-	private static Minecraft.Version _serverversion;
-
 	private static myZone _myZonePlugin;
+	private static WorldGuardPlugin _wgPlugin;
+	private static Economy          _vaultEcon;
+
+	private static MCVersion.Version _serverVersion;
 
 	private static I18n _i18n;
 
@@ -33,11 +33,11 @@ public class myZone extends JavaPlugin {
 
 	private static String _name;
 	private static String _version;
-	public InventoryListener inventoryListener;
-	private pListener _plistener;
 
-	public static Minecraft.Version getVersion() {
-		return _serverversion;
+	public InventoryListener inventoryListener;
+
+	public static MCVersion.Version getVersion() {
+		return _serverVersion;
 	}
 
 	public static myZone getInstance() {
@@ -49,11 +49,11 @@ public class myZone extends JavaPlugin {
 	}
 
 	public static Economy getEconomy() {
-		return _econ;
+		return _vaultEcon;
 	}
 
 	public static void setEconomy(Economy economy) {
-		_econ = economy;
+		_vaultEcon = economy;
 	}
 
 	public static ZoneManager getZoneManager() {
@@ -71,13 +71,20 @@ public class myZone extends JavaPlugin {
 	@Override
 	public void onEnable() {
 		_myZonePlugin = this;
+		_serverVersion = MCVersion.Version.getVersion();
 
 		_name = getDescription().getName();
 		_version = getDescription().getVersion();
 
-		log("Starting...");
+		if(_serverVersion.olderThan(MCVersion.Version.v1_8_R1))
+		{
+			log(ChatColor.RED + "You server version is not supported. Please update your server...");
+			log(ChatColor.RED + "Disabling " + _name + " " + _version);
+			return;
+		}
 
-		_serverversion = Minecraft.Version.getVersion();
+
+		log("Starting...");
 
 		log("Trying to hook WorldGuard...");
 		setWgPlugin();
@@ -94,10 +101,14 @@ public class myZone extends JavaPlugin {
 		log("Loading configuration file...");
 		Properties.loadConfiguration();
 
+		log("Checking for updates...");
 		Updater updater = new Updater(this, 254781, this.getFile(), Updater.UpdateType.DEFAULT, false);
 		Updater.UpdateResult result = updater.getResult();
 		switch(result)
 		{
+			case DISABLED:
+				log(ChatColor.RED + "Update checking is disabled.");
+				break;
 			case SUCCESS:
 				log(ChatColor.GREEN + "Downloaded the latest version. Please restart the server.");
 				break;
@@ -118,14 +129,11 @@ public class myZone extends JavaPlugin {
 	@Override
 	public void onDisable() {
 		WGWrapper.saveAll();
-		_plistener = null;
 	}
 
 	private void registerEvents() {
 		this.getServer().getPluginManager().registerEvents(inventoryListener = new InventoryListener(this), this);
-
-		_plistener = new pListener();
-		this.getServer().getPluginManager().registerEvents(_plistener, this);
+		this.getServer().getPluginManager().registerEvents(new pListener(), this);
 
 		log("Events successfully hooked.");
 	}

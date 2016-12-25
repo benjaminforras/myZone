@@ -1,0 +1,3 @@
+[submodule "Modules/MCVersion"]
+	path = Modules/MCVersion
+	url = https://github.com/TryHardDood/MCVersion

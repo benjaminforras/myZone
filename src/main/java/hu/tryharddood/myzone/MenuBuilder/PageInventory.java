@@ -24,48 +24,17 @@ public final class PageInventory extends InventoryMenuBuilder {
 	private ItemStack paddingItem;
 
 	private int currentPage;
-	private boolean dynamicInventorySize = true;
-	private int     inventorySize        = 54;
 
 	public PageInventory(String inventoryName, ArrayList<ItemStack> itemStacks) {
 		super(getInventorySize(itemStacks.size()), inventoryName);
 		setPages(itemStacks);
 	}
 
-	public PageInventory(String inventoryName, ItemStack... itemStacks) {
-		super(getInventorySize(itemStacks.length), inventoryName);
-		setPages(itemStacks);
-	}
-
-	public PageInventory(boolean dymanicInventory) {
-		this(null, dymanicInventory);
-	}
-
-	public PageInventory(int inventorySize) {
-		this(null, inventorySize);
-	}
-
-	public PageInventory(String inventoryName) {
-		super(54, inventoryName);
-	}
-
-	public PageInventory(String inventoryName, boolean dymanicInventory) {
-		super(54, inventoryName);
-		dynamicInventorySize = dymanicInventory;
-	}
-
-	public PageInventory(String inventoryName, int inventorySize) {
-		super(inventorySize, inventoryName);
-		this.inventorySize = Math.min(54, (int) (Math.ceil((double) inventorySize / 9)) * 9);
-		this.dynamicInventorySize = false;
-		pages.put(0, new ItemStack[0]);
-	}
-
 	private static int getInventorySize(int size) {
-		return size > 54 ? 54 : (int) Math.min(54, Math.ceil((double) size / 9) * 9);
+		return size == 0 ? 9 : size > 54 ? 54 : (int) Math.min(54, Math.ceil((double) size / 9) * 9);
 	}
 
-	public ItemStack getBackPage() {
+	private ItemStack getBackPage() {
 		if (backAPage == null)
 		{
 			backAPage = new ItemBuilder(Material.PAPER).setTitle(ChatColor.GREEN + "" + ChatColor.BOLD + tl("GUI_Back")).addLore(tl("GUI_NextLore")).build();
@@ -73,26 +42,16 @@ public final class PageInventory extends InventoryMenuBuilder {
 		return backAPage;
 	}
 
-	public int getCurrentPage() {
+	private int getCurrentPage() {
 		return currentPage;
 	}
 
-	public ItemStack getForwardsPage() {
+	private ItemStack getForwardsPage() {
 		if (forwardsAPage == null)
 		{
 			forwardsAPage = new ItemBuilder(Material.PAPER).setTitle(ChatColor.GREEN + "" + ChatColor.BOLD + tl("GUI_Next")).addLore(tl("GUI_BackLore")).build();
 		}
 		return forwardsAPage;
-	}
-
-	public ArrayList<ItemStack> getItems() {
-		ArrayList<ItemStack> items = new ArrayList<>();
-		for (int i = 0; i < pages.size(); i++)
-		{
-			ItemStack[] itemArray = pages.get(i);
-			items.addAll(Arrays.asList(itemArray).subList(0, itemArray.length - (pages.size() > 1 ? 9 : 0)));
-		}
-		return items;
 	}
 
 	private ItemStack[] getItemsForPage() {
@@ -101,14 +60,6 @@ public final class PageInventory extends InventoryMenuBuilder {
 		if (pages.size() > 1)
 		{
 			pageSize += 9;
-		}
-		if (!this.dynamicInventorySize)
-		{
-			pageSize = inventorySize;
-		}
-		else
-		{
-			pageSize = 54;
 		}
 		pageItems = Arrays.copyOf(pageItems, pageSize);
 		if (getCurrentPage() > 0)
@@ -145,37 +96,25 @@ public final class PageInventory extends InventoryMenuBuilder {
 		return pageItems;
 	}
 
-	public ItemStack[] getPage(int pageNumber) {
-		if (pages.containsKey(pageNumber))
-		{
-			return pages.get(pageNumber);
-		}
-		return null;
-	}
-
-	public HashMap<Integer, ItemStack[]> getPages() {
-		return pages;
-	}
-
-	public void setPages(ItemStack... allItems) {
+	private void setPages(ItemStack... allItems) {
 		pages.clear();
-		int         invPage     = 0;
-		boolean     usePages    = allItems.length > inventorySize;
-		ItemStack[] items       = null;
-		int         currentSlot = 0;
-		int         baseSize    = inventorySize;
+		int         invPage       = 0;
+		int         inventorySize = 54;
+		boolean     usePages      = allItems.length > inventorySize;
+		ItemStack[] items         = null;
+		int         currentSlot   = 0;
 		for (int currentItem = 0; currentItem < allItems.length; currentItem++)
 		{
 			if (items == null)
 			{
 				int newSize = allItems.length - currentItem;
-				if (usePages && newSize + 9 > baseSize)
+				if (usePages && newSize + 9 > inventorySize)
 				{
-					newSize = baseSize - 9;
+					newSize = inventorySize - 9;
 				}
-				else if (newSize > baseSize)
+				else if (newSize > inventorySize)
 				{
-					newSize = baseSize;
+					newSize = inventorySize;
 				}
 				items = new ItemStack[newSize];
 			}
@@ -195,24 +134,19 @@ public final class PageInventory extends InventoryMenuBuilder {
 		}
 		if (allItems.length == 0)
 		{
-			int size = inventorySize;
-			if (dynamicInventorySize)
-			{
-				size = 9;
-			}
+			int itemsSize = (int) (Math.ceil((double) inventorySize / 9)) * 9;
 
-			int itemsSize = (int) (Math.ceil((double) size / 9)) * 9;
 			items = new ItemStack[Math.min(54, itemsSize)];
 			pages.put(0, items);
 		}
 		setPage(getCurrentPage());
 	}
 
-	public void setPages(ArrayList<ItemStack> allItems) {
+	private void setPages(ArrayList<ItemStack> allItems) {
 		setPages(allItems.toArray(new ItemStack[allItems.size()]));
 	}
 
-	public void setPage(int newPage) {
+	private void setPage(int newPage) {
 		if (pages.containsKey(newPage))
 		{
 			currentPage = newPage;
@@ -223,7 +157,7 @@ public final class PageInventory extends InventoryMenuBuilder {
 		}
 	}
 
-	public ItemStack getPaddingItem() {
+	private ItemStack getPaddingItem() {
 		if (paddingItem == null)
 			paddingItem = new ItemBuilder(Material.STAINED_GLASS_PANE, (short) 0).setTitle("§8").build();
 		return paddingItem;
