@@ -6,6 +6,7 @@ import org.bukkit.configuration.file.YamlConfiguration;
 import org.bukkit.plugin.java.JavaPlugin;
 
 import java.io.File;
+import java.io.IOException;
 import java.util.HashMap;
 import java.util.Map;
 import java.util.UUID;
@@ -91,6 +92,21 @@ public class ZoneManager {
 
 	public HashMap<String, ZoneObject> getZones() {
 		return _zones;
+	}
+
+	public void saveZones()
+	{
+		for (Map.Entry<String, ZoneObject> zoneEntry : _zones.entrySet())
+		{
+			try
+			{
+				zoneEntry.getValue().updateFile();
+			} catch (IOException e)
+			{
+				//e.printStackTrace();
+				System.out.println("Error saving " + zoneEntry.getValue().getZoneName());
+			}
+		}
 	}
 
 	/**

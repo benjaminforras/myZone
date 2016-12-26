@@ -3,7 +3,6 @@ package hu.tryharddood.myzone.Commands.SubCommands;
 import com.sk89q.worldedit.Vector;
 import hu.tryharddood.myzone.Commands.Subcommand;
 import hu.tryharddood.myzone.Properties;
-import hu.tryharddood.myzone.Util.WGWrapper;
 import hu.tryharddood.myzone.Variables;
 import hu.tryharddood.myzone.Zones.Settings;
 import hu.tryharddood.myzone.myZone;
@@ -96,22 +95,22 @@ public class CreateCommand extends Subcommand {
 
 		if (Properties.getEconomyEnabled())
 		{
-			if (!myZone.getEconomy().has(Bukkit.getOfflinePlayer(player.getUniqueId()), Properties.getZoneCreationMoney()))
+			if (!myZone.vaultEcon.has(Bukkit.getOfflinePlayer(player.getUniqueId()), Properties.getZoneCreationMoney()))
 			{
 				sender.sendMessage(tl("Error") + " " + tl("Economy_NotEnoughMoney", Properties.getZoneCreationMoney()));
 				return;
 			}
-			myZone.getEconomy().withdrawPlayer(Bukkit.getOfflinePlayer(player.getUniqueId()), Properties.getZoneCreationMoney());
+			myZone.vaultEcon.withdrawPlayer(Bukkit.getOfflinePlayer(player.getUniqueId()), Properties.getZoneCreationMoney());
 		}
 
 
-		if (myZone.getZoneManager().getZones().containsKey(args[1]))
+		if (myZone.zoneManager.getZones().containsKey(args[1]))
 		{
 			sender.sendMessage(tl("Error") + " " + tl("CreateZone_Error3", args[1]));
 			return;
 		}
 
 		String regionID = player.getUniqueId().toString() + "_" + String.valueOf(new Random().nextInt(1000));
-		WGWrapper.createRegion(args[1], regionID, new Vector[]{toVector(parts[0]), toVector(parts[1])}, player, player.getWorld());
+		myZone.worldGuardHelper.createRegion(args[1], regionID, new Vector[]{toVector(parts[0]), toVector(parts[1])}, player, player.getWorld());
 	}
 }

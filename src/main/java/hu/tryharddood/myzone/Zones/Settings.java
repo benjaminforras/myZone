@@ -3,7 +3,6 @@ package hu.tryharddood.myzone.Zones;
 import com.sk89q.worldguard.protection.managers.RegionManager;
 import com.sk89q.worldguard.protection.regions.ProtectedRegion;
 import hu.tryharddood.myzone.Properties;
-import hu.tryharddood.myzone.Util.WGWrapper;
 import hu.tryharddood.myzone.myZone;
 import org.bukkit.Bukkit;
 import org.bukkit.Location;
@@ -62,7 +61,7 @@ public class Settings {
 	private static boolean checkOwnsPermission(Player player) {
 		Settings sett = Settings.getSett(player);
 
-		return (WGWrapper.getPlayerRegionsNum(player.getUniqueId()) >= sett.getMaxZones()) && (sett.getMaxZones() != -1);
+		return (myZone.worldGuardHelper.getPlayerRegionsNum(player.getUniqueId()) >= sett.getMaxZones()) && (sett.getMaxZones() != -1);
 		//return (sett.getPlayerZones() >= sett.getMaxZones()) && (sett.getMaxZones() != -1);
 	}
 
@@ -129,7 +128,7 @@ public class Settings {
 		Integer       number = 0;
 		for (World world : Bukkit.getWorlds())
 		{
-			regionManager = myZone.getWgPlugin().getRegionManager(world);
+			regionManager = myZone.worldGuardReflection.getWorldGuardPlugin().getRegionManager(world);
 			for (Map.Entry<String, ProtectedRegion> object : regionManager.getRegions().entrySet())
 			{
 				if (object.getValue().getOwners().contains(getPlayer().getUniqueId()) || object.getValue().getOwners().contains(getPlayer().getName()))

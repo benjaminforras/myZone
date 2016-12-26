@@ -3,7 +3,6 @@ package hu.tryharddood.myzone;
 import com.sk89q.worldguard.protection.flags.DefaultFlag;
 import com.sk89q.worldguard.protection.flags.Flag;
 import hu.tryharddood.myzone.Listeners.rListener;
-import hu.tryharddood.myzone.Util.WGWrapper;
 import net.milkbowl.vault.Vault;
 import net.milkbowl.vault.economy.Economy;
 import org.bukkit.Bukkit;
@@ -26,7 +25,7 @@ import static com.sk89q.worldguard.bukkit.BukkitUtil.toVector;
 
 
 public class Properties {
-	private static final myZone _instance = myZone.getInstance();
+	private static final myZone _instance = myZone.myZonePlugin;
 
 	private static String _locale;
 
@@ -107,8 +106,8 @@ public class Properties {
 
 		if (getTitlesEnabled())
 		{
-			rListener rListener = new rListener(_instance, myZone.getWgPlugin());
-			_instance.getServer().getPluginManager().registerEvents(rListener, myZone.getWgPlugin());
+			rListener rListener = new rListener(_instance, myZone.worldGuardReflection.getWorldGuardPlugin());
+			_instance.getServer().getPluginManager().registerEvents(rListener, myZone.worldGuardReflection.getWorldGuardPlugin());
 		}
 
 		for (String key : config.getConfigurationSection("Restriction.Size").getKeys(true))
@@ -148,7 +147,7 @@ public class Properties {
 		Flag<?> tempFlag;
 		for (String flagName : config.getStringList("Restriction.BlockedFlags"))
 		{
-			tempFlag = WGWrapper.fuzzyMatchFlag(flagName);
+			tempFlag = myZone.worldGuardReflection.fuzzyMatchFlag(flagName);
 			_blockedFlags.add(tempFlag);
 		}
 
@@ -231,7 +230,7 @@ public class Properties {
 
 			if (economyProvider != null)
 			{
-				myZone.setEconomy(economyProvider.getProvider());
+				myZone.vaultEcon = economyProvider.getProvider();
 			}
 			else
 			{
@@ -245,7 +244,7 @@ public class Properties {
 			Properties.setEconomyEnabled(false);
 			return false;
 		}
-		return (myZone.getEconomy() != null);
+		return (myZone.vaultEcon != null);
 	}
 
 	private static void setupVault() {

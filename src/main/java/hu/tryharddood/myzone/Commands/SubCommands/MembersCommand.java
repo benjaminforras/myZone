@@ -4,7 +4,6 @@ import com.sk89q.worldguard.LocalPlayer;
 import com.sk89q.worldguard.protection.regions.ProtectedRegion;
 import hu.tryharddood.myzone.Commands.Subcommand;
 import hu.tryharddood.myzone.Properties;
-import hu.tryharddood.myzone.Util.WGWrapper;
 import hu.tryharddood.myzone.Variables;
 import hu.tryharddood.myzone.myZone;
 import org.bukkit.Bukkit;
@@ -48,14 +47,14 @@ public class MembersCommand extends Subcommand {
 		String targetName = args[3];
 
 		Player player   = (Player) sender;
-		String regionID = myZone.getZoneManager().getRegionID(args[1]);
+		String regionID = myZone.zoneManager.getRegionID(args[1]);
 		if (regionID == null)
 		{
 			sender.sendMessage(tl("Error") + " " + tl("ZoneNotFound", args[1]));
 			return;
 		}
 
-		ProtectedRegion region = WGWrapper.getRegion(regionID);
+		ProtectedRegion region = myZone.worldGuardHelper.getRegion(regionID);
 
 		if (action.equalsIgnoreCase("add"))
 		{
@@ -66,7 +65,7 @@ public class MembersCommand extends Subcommand {
 				return;
 			}
 
-			LocalPlayer lcOwner = myZone.getWgPlugin().wrapPlayer(player1);
+			LocalPlayer lcOwner = myZone.worldGuardReflection.getWorldGuardPlugin().wrapPlayer(player1);
 			if (region.getOwners() == null || !region.getOwners().contains(lcOwner) && !player1.hasPermission(Variables.PlayerCommands.MEMBERS_ADD_OTHERS_PERMISSION))
 			{
 				sender.sendMessage(tl("Error") + " " + tl("MembersZone_Add_Error1"));
@@ -80,7 +79,7 @@ public class MembersCommand extends Subcommand {
 				return;
 			}
 
-			LocalPlayer lcPlayer = myZone.getWgPlugin().wrapOfflinePlayer(target);
+			LocalPlayer lcPlayer = myZone.worldGuardReflection.getWorldGuardPlugin().wrapOfflinePlayer(target);
 
 			if (region.getMembers().contains(lcPlayer))
 			{
@@ -90,12 +89,12 @@ public class MembersCommand extends Subcommand {
 
 			if (Properties.getEconomyEnabled())
 			{
-				if (!myZone.getEconomy().has(Bukkit.getOfflinePlayer(player.getUniqueId()), Properties.getZoneMemberAddMoney()))
+				if (!myZone.vaultEcon.has(Bukkit.getOfflinePlayer(player.getUniqueId()), Properties.getZoneMemberAddMoney()))
 				{
 					sender.sendMessage(tl("Error") + " " + tl("Economy_NotEnoughMoney", Properties.getZoneMemberAddMoney()));
 					return;
 				}
-				myZone.getEconomy().withdrawPlayer(Bukkit.getOfflinePlayer(player.getUniqueId()), Properties.getZoneMemberAddMoney());
+				myZone.vaultEcon.withdrawPlayer(Bukkit.getOfflinePlayer(player.getUniqueId()), Properties.getZoneMemberAddMoney());
 			}
 
 			region.getMembers().addPlayer(lcPlayer);
@@ -123,7 +122,7 @@ public class MembersCommand extends Subcommand {
 				return;
 			}
 
-			LocalPlayer lcPlayer = myZone.getWgPlugin().wrapOfflinePlayer(target);
+			LocalPlayer lcPlayer = myZone.worldGuardReflection.getWorldGuardPlugin().wrapOfflinePlayer(target);
 
 			if (!region.getMembers().contains(lcPlayer))
 			{
@@ -133,18 +132,18 @@ public class MembersCommand extends Subcommand {
 
 			if (Properties.getEconomyEnabled())
 			{
-				if (!myZone.getEconomy().has(Bukkit.getOfflinePlayer(player.getUniqueId()), Properties.getZoneMemberRemoveMoney()))
+				if (!myZone.vaultEcon.has(Bukkit.getOfflinePlayer(player.getUniqueId()), Properties.getZoneMemberRemoveMoney()))
 				{
 					sender.sendMessage(tl("Error") + " " + tl("Economy_NotEnoughMoney", Properties.getZoneMemberRemoveMoney()));
 					return;
 				}
-				myZone.getEconomy().withdrawPlayer(Bukkit.getOfflinePlayer(player.getUniqueId()), Properties.getZoneMemberRemoveMoney());
+				myZone.vaultEcon.withdrawPlayer(Bukkit.getOfflinePlayer(player.getUniqueId()), Properties.getZoneMemberRemoveMoney());
 			}
 
 			region.getMembers().removePlayer(lcPlayer);
 
 			sender.sendMessage(tl("Success") + " " + tl("MembersZone_Remove_Success", lcPlayer.getName()));
 		}
-		WGWrapper.saveAll();
+		myZone.worldGuardHelper.saveAll();
 	}
 }

@@ -37,7 +37,7 @@ public class pListener implements Listener {
 		Player player = event.getPlayer();
 		Action action = event.getAction();
 
-		if (myZone.getVersion().newerThan(MCVersion.Version.v1_9_R1))
+		if (myZone.serverVersion.newerThan(MCVersion.Version.v1_9_R1))
 		{
 			if (event.getHand() == null)
 			{
@@ -162,7 +162,7 @@ public class pListener implements Listener {
 						return;
 					}
 
-					player.sendMessage(ChatColor.GRAY + "ID: " + ChatColor.GOLD + myZone.getZoneManager().getRegionName(region.getId()));
+					player.sendMessage(ChatColor.GRAY + "ID: " + ChatColor.GOLD + myZone.zoneManager.getRegionName(region.getId()));
 					player.sendMessage(ChatColor.GRAY + tl("Text_Owners", true) + ": ");
 					if (region.getOwners().getUniqueIds().size() == 0)
 					{

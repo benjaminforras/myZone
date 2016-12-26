@@ -1,8 +1,8 @@
 package hu.tryharddood.myzone.Commands.SubCommands;
 
 import hu.tryharddood.myzone.Commands.Subcommand;
-import hu.tryharddood.myzone.Util.WGWrapper;
 import hu.tryharddood.myzone.Variables;
+import hu.tryharddood.myzone.myZone;
 import net.md_5.bungee.api.ChatColor;
 import org.bukkit.Bukkit;
 import org.bukkit.OfflinePlayer;
@@ -60,6 +60,7 @@ public class ListCommand extends Subcommand {
 			return;
 		}
 
+
 		if (display == 1)
 		{
 			if (!(sender instanceof Player))
@@ -68,7 +69,7 @@ public class ListCommand extends Subcommand {
 				return;
 			}
 			Player            player   = (Player) sender;
-			ArrayList<String> zoneList = WGWrapper.getPlayerOwnedRegions(player.getUniqueId());
+			ArrayList<String> zoneList = myZone.worldGuardHelper.getPlayerOwnedRegions(player.getUniqueId());
 
 			sender.sendMessage(tl("Success") + " " + tl("ListZone_Success", player.getName()));
 
@@ -91,7 +92,7 @@ public class ListCommand extends Subcommand {
 				return;
 			}
 
-			ArrayList<String> zoneList = WGWrapper.getPlayerOwnedRegions(offlinePlayer.getUniqueId());
+			ArrayList<String> zoneList = myZone.worldGuardHelper.getPlayerOwnedRegions(offlinePlayer.getUniqueId());
 
 			sender.sendMessage(tl("Success") + " " + tl("ListZone_Success", offlinePlayer.getName()));
 

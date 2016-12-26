@@ -4,7 +4,6 @@ import com.sk89q.worldguard.LocalPlayer;
 import com.sk89q.worldguard.protection.regions.ProtectedRegion;
 import hu.tryharddood.myzone.Commands.Subcommand;
 import hu.tryharddood.myzone.Properties;
-import hu.tryharddood.myzone.Util.WGWrapper;
 import hu.tryharddood.myzone.Variables;
 import hu.tryharddood.myzone.myZone;
 import org.bukkit.Bukkit;
@@ -46,7 +45,7 @@ public class ExpandCommand extends Subcommand {
 	@Override
 	public void onCommand(CommandSender sender, Command cmd, String label, String[] args) {
 		Player player   = (Player) sender;
-		String regionID = myZone.getZoneManager().getRegionID(args[1]);
+		String regionID = myZone.zoneManager.getRegionID(args[1]);
 
 		if (regionID == null)
 		{
@@ -54,8 +53,8 @@ public class ExpandCommand extends Subcommand {
 			return;
 		}
 
-		ProtectedRegion region  = WGWrapper.getRegion(regionID);
-		LocalPlayer     lcOwner = myZone.getWgPlugin().wrapPlayer(player);
+		ProtectedRegion region  = myZone.worldGuardHelper.getRegion(regionID);
+		LocalPlayer     lcOwner = myZone.worldGuardReflection.getWorldGuardPlugin().wrapPlayer(player);
 		if (region.getOwners() == null || !region.getOwners().contains(lcOwner) && !player.hasPermission(Variables.PlayerCommands.EXPAND_OTHERS_PERMISSION))
 		{
 			sender.sendMessage(tl("Error") + " " + tl("ExpandZone_Error1"));
@@ -64,12 +63,12 @@ public class ExpandCommand extends Subcommand {
 
 		if (Properties.getEconomyEnabled())
 		{
-			if (!myZone.getEconomy().has(Bukkit.getOfflinePlayer(player.getUniqueId()), Properties.getZoneExpandMoney()))
+			if (!myZone.vaultEcon.has(Bukkit.getOfflinePlayer(player.getUniqueId()), Properties.getZoneExpandMoney()))
 			{
 				sender.sendMessage(tl("Error") + " " + tl("Economy_NotEnoughMoney", Properties.getZoneExpandMoney()));
 				return;
 			}
-			myZone.getEconomy().withdrawPlayer(Bukkit.getOfflinePlayer(player.getUniqueId()), Properties.getZoneExpandMoney());
+			myZone.vaultEcon.withdrawPlayer(Bukkit.getOfflinePlayer(player.getUniqueId()), Properties.getZoneExpandMoney());
 		}
 
 		Integer expanse = -1;
@@ -116,7 +115,7 @@ public class ExpandCommand extends Subcommand {
 			return;
 		}
 
-		int data = WGWrapper.expandRegion(player, region, blockFace, expanse);
+		int data = myZone.worldGuardHelper.expandRegion(player, region, blockFace, expanse);
 		if (data == -2)
 		{
 			sender.sendMessage(tl("Error") + " " + tl("ExpandZone_Error3", args[1], expanse, blockFace.toString()));

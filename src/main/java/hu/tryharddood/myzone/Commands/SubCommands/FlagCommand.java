@@ -5,7 +5,6 @@ import com.sk89q.worldguard.protection.flags.*;
 import com.sk89q.worldguard.protection.regions.ProtectedRegion;
 import hu.tryharddood.myzone.Commands.Subcommand;
 import hu.tryharddood.myzone.Properties;
-import hu.tryharddood.myzone.Util.WGWrapper;
 import hu.tryharddood.myzone.Variables;
 import hu.tryharddood.myzone.myZone;
 import org.bukkit.Bukkit;
@@ -63,15 +62,15 @@ public class FlagCommand extends Subcommand {
 
 		Player player = (Player) sender;
 
-		String regionID = myZone.getZoneManager().getRegionID(args[1]);
+		String regionID = myZone.zoneManager.getRegionID(args[1]);
 		if (regionID == null)
 		{
 			sender.sendMessage(tl("Error") + " " + tl("ZoneNotFound", args[1]));
 			return;
 		}
 
-		ProtectedRegion region  = WGWrapper.getRegion(regionID);
-		LocalPlayer     lcOwner = myZone.getWgPlugin().wrapPlayer(player);
+		ProtectedRegion region  = myZone.worldGuardHelper.getRegion(regionID);
+		LocalPlayer     lcOwner = myZone.worldGuardReflection.getWorldGuardPlugin().wrapPlayer(player);
 
 		if (region.getOwners() == null || !region.getOwners().contains(lcOwner) && !player.hasPermission(Variables.PlayerCommands.FLAGOTHERSPERMISSION))
 		{
@@ -79,7 +78,7 @@ public class FlagCommand extends Subcommand {
 			return;
 		}
 
-		Flag flag = WGWrapper.fuzzyMatchFlag(args[2]);
+		Flag flag = myZone.worldGuardReflection.fuzzyMatchFlag(args[2]);
 		if (flag == null)
 		{
 			sender.sendMessage(tl("Wrong") + " " + tl("FlagZone_Error2"));
@@ -194,17 +193,18 @@ public class FlagCommand extends Subcommand {
 
 		if (Properties.getEconomyEnabled())
 		{
-			if (!myZone.getEconomy().has(Bukkit.getOfflinePlayer(player.getUniqueId()), Properties.getZoneFlagMoney()))
+			if (!myZone.vaultEcon.has(Bukkit.getOfflinePlayer(player.getUniqueId()), Properties.getZoneFlagMoney()))
 			{
 				sender.sendMessage(tl("Error") + " " + tl("Economy_NotEnoughMoney", Properties.getZoneFlagMoney()));
 				return;
 			}
-			myZone.getEconomy().withdrawPlayer(Bukkit.getOfflinePlayer(player.getUniqueId()), Properties.getZoneFlagMoney());
+			myZone.vaultEcon.withdrawPlayer(Bukkit.getOfflinePlayer(player.getUniqueId()), Properties.getZoneFlagMoney());
 		}
 
 		try
 		{
-			region.setFlag(flag, flag.parseInput((FlagContext.create().setSender(sender).setInput(value).setObject("region", region).build())));
+			//region.setFlag(flag, flag.parseInput((FlagContext.create().setSender(sender).setInput(value).setObject("region", region).build())));
+			region.setFlag(flag, myZone.worldGuardReflection.parseInput(flag, sender, region, value));
 
 		} catch (InvalidFlagFormat invalidFlagFormat)
 		{
@@ -213,7 +213,7 @@ public class FlagCommand extends Subcommand {
 		}
 
 		sender.sendMessage(tl("Success") + " " + tl("FlagZone_Success", flag.getName(), ((value.contains("allow") || value.contains("true")) ? ChatColor.GREEN : ChatColor.RED) + value));
-		WGWrapper.saveAll();
+		myZone.worldGuardHelper.saveAll();
 	}
 }
 

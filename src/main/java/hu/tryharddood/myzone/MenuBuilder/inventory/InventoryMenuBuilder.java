@@ -192,7 +192,7 @@ public class InventoryMenuBuilder extends MenuBuilder<Inventory> {
 	public InventoryMenuBuilder withEventHandler(@Nonnull InventoryEventHandler eventHandler) {
 		try
 		{
-			myZone.getInstance().inventoryListener.registerEventHandler(this, eventHandler);
+			myZone.myZonePlugin.inventoryListener.registerEventHandler(this, eventHandler);
 		} catch (IllegalArgumentException e)
 		{
 			e.printStackTrace();
@@ -214,7 +214,7 @@ public class InventoryMenuBuilder extends MenuBuilder<Inventory> {
 		}
 		try
 		{
-			myZone.getInstance().inventoryListener.registerListener(this, listener, actions);
+			myZone.myZonePlugin.inventoryListener.registerListener(this, listener, actions);
 		} catch (IllegalArgumentException e)
 		{
 			e.printStackTrace();
@@ -310,13 +310,13 @@ public class InventoryMenuBuilder extends MenuBuilder<Inventory> {
 
 	@Override
 	public void dispose() {
-		myZone.getInstance().inventoryListener.unregisterAllListeners(getInventory());
+		myZone.myZonePlugin.inventoryListener.unregisterAllListeners(getInventory());
 	}
 
 	public void unregisterListener(InventoryMenuListener listener) {
 		try
 		{
-			myZone.getInstance().inventoryListener.registerListener(this, listener, ALL_CLICK_TYPES);
+			myZone.myZonePlugin.inventoryListener.registerListener(this, listener, ALL_CLICK_TYPES);
 		} catch (IllegalArgumentException e)
 		{
 			e.printStackTrace();

@@ -10,7 +10,6 @@ import hu.tryharddood.myzone.MenuBuilder.PageLayout;
 import hu.tryharddood.myzone.MenuBuilder.inventory.InventoryMenuBuilder;
 import hu.tryharddood.myzone.MenuBuilder.inventory.InventoryMenuListener;
 import hu.tryharddood.myzone.Properties;
-import hu.tryharddood.myzone.Util.WGWrapper;
 import hu.tryharddood.myzone.Variables;
 import hu.tryharddood.myzone.myZone;
 import org.bukkit.Bukkit;
@@ -44,7 +43,7 @@ public class MainCommand extends Subcommand {
 
 			String itemName = itemStack.getItemMeta().getDisplayName();
 
-			Flag flag = WGWrapper.fuzzyMatchFlag(ChatColor.stripColor(itemName));
+			Flag flag = myZone.worldGuardReflection.fuzzyMatchFlag(ChatColor.stripColor(itemName));
 
 			Object value;
 
@@ -88,7 +87,7 @@ public class MainCommand extends Subcommand {
 				value = "Unknown";
 			}
 
-			Bukkit.dispatchCommand(player, "zone flag " + myZone.getZoneManager().getRegion(region.getId()).getZoneName() + " " + flag.getName() + " " + value.toString());
+			Bukkit.dispatchCommand(player, "zone flag " + myZone.zoneManager.getRegion(region.getId()).getZoneName() + " " + flag.getName() + " " + value.toString());
 
 			event.getInventory().setItem(event.getSlot(), new ItemBuilder(Material.SIGN).setTitle(flag.getName()).addLore(prefix).build());
 			player.updateInventory();
@@ -125,17 +124,17 @@ public class MainCommand extends Subcommand {
 			{
 				if (Properties.getEconomyEnabled())
 				{
-					if (!myZone.getEconomy().has(Bukkit.getOfflinePlayer(player.getUniqueId()), Properties.getZoneDeleteMoney()))
+					if (!myZone.vaultEcon.has(Bukkit.getOfflinePlayer(player.getUniqueId()), Properties.getZoneDeleteMoney()))
 					{
 						player.sendMessage(tl("Error") + " " + tl("Economy_NotEnoughMoney", Properties.getZoneDeleteMoney()));
 						return;
 					}
-					myZone.getEconomy().withdrawPlayer(Bukkit.getOfflinePlayer(player.getUniqueId()), Properties.getZoneDeleteMoney());
+					myZone.vaultEcon.withdrawPlayer(Bukkit.getOfflinePlayer(player.getUniqueId()), Properties.getZoneDeleteMoney());
 				}
 
 				player.sendMessage(tl("Success") + " " + tl("DeleteZone_Success", region.getId()));
-				WGWrapper.deleteRegion(region);
-				WGWrapper.saveAll();
+				myZone.worldGuardHelper.deleteRegion(region);
+				myZone.worldGuardHelper.saveAll();
 			}
 			player.closeInventory();
 		}
@@ -280,13 +279,13 @@ public class MainCommand extends Subcommand {
 
 			String itemName = event.getCurrentItem().getItemMeta().getDisplayName();
 
-			if (myZone.getZoneManager().getRegionID(ChatColor.stripColor(itemName)) != null)
+			if (myZone.zoneManager.getRegionID(ChatColor.stripColor(itemName)) != null)
 			{
-				if (WGWrapper.getPlayerMemberRegions(player.getUniqueId()).contains(ChatColor.stripColor(itemName)))
+				if (myZone.worldGuardHelper.getPlayerMemberRegions(player.getUniqueId()).contains(ChatColor.stripColor(itemName)))
 				{
 					return;
 				}
-				region = WGWrapper.getRegion(myZone.getZoneManager().getRegionID(ChatColor.stripColor(itemName)));
+				region = myZone.worldGuardHelper.getRegion(myZone.zoneManager.getRegionID(ChatColor.stripColor(itemName)));
 
 				InventoryMenuBuilder imb = new InventoryMenuBuilder(54).withTitle("Settings - " + ChatColor.stripColor(itemName));
 
@@ -334,7 +333,7 @@ public class MainCommand extends Subcommand {
 	public void onCommand(CommandSender sender, Command cmd, String label, String[] args) {
 		Player player = (Player) sender;
 
-		HashMap<String, List<String>> zones = WGWrapper.getPlayerRegions(player.getUniqueId());
+		HashMap<String, List<String>> zones = myZone.worldGuardHelper.getPlayerRegions(player.getUniqueId());
 
 		List<String> owned  = zones.get("owned");
 		List<String> member = zones.get("member");

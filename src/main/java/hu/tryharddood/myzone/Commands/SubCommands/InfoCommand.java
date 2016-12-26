@@ -4,7 +4,6 @@ import com.sk89q.worldguard.protection.flags.Flag;
 import com.sk89q.worldguard.protection.managers.RegionManager;
 import com.sk89q.worldguard.protection.regions.ProtectedRegion;
 import hu.tryharddood.myzone.Commands.Subcommand;
-import hu.tryharddood.myzone.Util.WGWrapper;
 import hu.tryharddood.myzone.myZone;
 import org.bukkit.Bukkit;
 import org.bukkit.ChatColor;
@@ -51,15 +50,15 @@ public class InfoCommand extends Subcommand {
 		Player player = (Player) sender;
 
 		String zoneName = args[1];
-		String regionID = myZone.getZoneManager().getRegionID(args[1]);
+		String regionID = myZone.zoneManager.getRegionID(args[1]);
 		if (regionID == null)
 		{
 			sender.sendMessage(tl("Error") + " " + tl("ZoneNotFound", args[1]));
 			return;
 		}
 
-		ProtectedRegion region        = WGWrapper.getRegion(regionID);
-		RegionManager   regionManager = WGWrapper.getRegionManager(regionID);
+		ProtectedRegion region        = myZone.worldGuardHelper.getRegion(regionID);
+		RegionManager   regionManager = myZone.worldGuardHelper.getRegionManager(regionID);
 
 		player.sendMessage(ChatColor.GRAY + "ID: " + ChatColor.GOLD + zoneName);
 		player.sendMessage(ChatColor.GRAY + tl("Text_Owners", true) + ": ");

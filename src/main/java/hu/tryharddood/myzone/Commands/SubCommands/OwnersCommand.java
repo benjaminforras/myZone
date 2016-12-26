@@ -4,7 +4,6 @@ import com.sk89q.worldguard.LocalPlayer;
 import com.sk89q.worldguard.protection.regions.ProtectedRegion;
 import hu.tryharddood.myzone.Commands.Subcommand;
 import hu.tryharddood.myzone.Properties;
-import hu.tryharddood.myzone.Util.WGWrapper;
 import hu.tryharddood.myzone.Variables;
 import hu.tryharddood.myzone.myZone;
 import org.bukkit.Bukkit;
@@ -50,14 +49,14 @@ public class OwnersCommand extends Subcommand {
 		String targetName = args[3];
 
 		Player player   = (Player) sender;
-		String regionID = myZone.getZoneManager().getRegionID(args[1]);
+		String regionID = myZone.zoneManager.getRegionID(args[1]);
 		if (regionID == null)
 		{
 			sender.sendMessage(tl("Error") + " " + tl("ZoneNotFound", args[1]));
 			return;
 		}
 
-		ProtectedRegion region = WGWrapper.getRegion(regionID);
+		ProtectedRegion region = myZone.worldGuardHelper.getRegion(regionID);
 
 		if (action.equalsIgnoreCase("add"))
 		{
@@ -68,7 +67,7 @@ public class OwnersCommand extends Subcommand {
 				return;
 			}
 
-			LocalPlayer lcOwner = myZone.getWgPlugin().wrapPlayer(player1);
+			LocalPlayer lcOwner = myZone.worldGuardReflection.getWorldGuardPlugin().wrapPlayer(player1);
 			if (region.getOwners() == null || !region.getOwners().contains(lcOwner) && !player1.hasPermission(Variables.PlayerCommands.OWNERS_ADD_OTHERS_PERMISSION))
 			{
 				sender.sendMessage(tl("Error") + " " + tl("OwnersZone_Add_Error1"));
@@ -82,7 +81,7 @@ public class OwnersCommand extends Subcommand {
 				return;
 			}
 
-			LocalPlayer lcPlayer = myZone.getWgPlugin().wrapOfflinePlayer(target);
+			LocalPlayer lcPlayer = myZone.worldGuardReflection.getWorldGuardPlugin().wrapOfflinePlayer(target);
 
 			if (region.getOwners().contains(lcPlayer))
 			{
@@ -92,12 +91,12 @@ public class OwnersCommand extends Subcommand {
 
 			if (Properties.getEconomyEnabled())
 			{
-				if (!myZone.getEconomy().has(Bukkit.getOfflinePlayer(player.getUniqueId()), Properties.getZoneOwnerAddMoney()))
+				if (!myZone.vaultEcon.has(Bukkit.getOfflinePlayer(player.getUniqueId()), Properties.getZoneOwnerAddMoney()))
 				{
 					sender.sendMessage(tl("Error") + " " + tl("Economy_NotEnoughMoney", Properties.getZoneOwnerAddMoney()));
 					return;
 				}
-				myZone.getEconomy().withdrawPlayer(Bukkit.getOfflinePlayer(player.getUniqueId()), Properties.getZoneOwnerAddMoney());
+				myZone.vaultEcon.withdrawPlayer(Bukkit.getOfflinePlayer(player.getUniqueId()), Properties.getZoneOwnerAddMoney());
 			}
 
 			region.getOwners().addPlayer(lcPlayer);
@@ -126,13 +125,13 @@ public class OwnersCommand extends Subcommand {
 				return;
 			}
 
-			if (myZone.getZoneManager().getZoneObject(args[1]).getOwnerID().equals(target.getUniqueId()) && !player.hasPermission(Variables.PlayerCommands.OWNERS_REMOVE_OG_PERMISSION))
+			if (myZone.zoneManager.getZoneObject(args[1]).getOwnerID().equals(target.getUniqueId()) && !player.hasPermission(Variables.PlayerCommands.OWNERS_REMOVE_OG_PERMISSION))
 			{
 				sender.sendMessage(tl("Error") + " " + tl("OwnersZone_Remove_Error4"));
 				return;
 			}
 
-			LocalPlayer lcPlayer = myZone.getWgPlugin().wrapOfflinePlayer(target);
+			LocalPlayer lcPlayer = myZone.worldGuardReflection.getWorldGuardPlugin().wrapOfflinePlayer(target);
 
 			if (!region.getOwners().contains(lcPlayer))
 			{
@@ -142,18 +141,18 @@ public class OwnersCommand extends Subcommand {
 
 			if (Properties.getEconomyEnabled())
 			{
-				if (!myZone.getEconomy().has(Bukkit.getOfflinePlayer(player.getUniqueId()), Properties.getZoneOwnerRemoveMoney()))
+				if (!myZone.vaultEcon.has(Bukkit.getOfflinePlayer(player.getUniqueId()), Properties.getZoneOwnerRemoveMoney()))
 				{
 					sender.sendMessage(tl("Error") + " " + tl("Economy_NotEnoughMoney", Properties.getZoneOwnerRemoveMoney()));
 					return;
 				}
-				myZone.getEconomy().withdrawPlayer(Bukkit.getOfflinePlayer(player.getUniqueId()), Properties.getZoneOwnerRemoveMoney());
+				myZone.vaultEcon.withdrawPlayer(Bukkit.getOfflinePlayer(player.getUniqueId()), Properties.getZoneOwnerRemoveMoney());
 			}
 
 			region.getOwners().removePlayer(lcPlayer);
 
 			sender.sendMessage(tl("Success") + " " + tl("OwnersZone_Remove_Success", lcPlayer.getName()));
 		}
-		WGWrapper.saveAll();
+		myZone.worldGuardHelper.saveAll();
 	}
 }

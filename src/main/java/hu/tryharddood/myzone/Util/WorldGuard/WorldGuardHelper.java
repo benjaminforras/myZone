@@ -1,11 +1,8 @@
-package hu.tryharddood.myzone.Util;
+package hu.tryharddood.myzone.Util.WorldGuard;
 
 import com.sk89q.worldedit.BlockVector;
 import com.sk89q.worldedit.Vector;
 import com.sk89q.worldguard.LocalPlayer;
-import com.sk89q.worldguard.protection.flags.DefaultFlag;
-import com.sk89q.worldguard.protection.flags.Flag;
-import com.sk89q.worldguard.protection.flags.registry.FlagRegistry;
 import com.sk89q.worldguard.protection.managers.RegionManager;
 import com.sk89q.worldguard.protection.managers.storage.StorageException;
 import com.sk89q.worldguard.protection.regions.ProtectedCuboidRegion;
@@ -27,15 +24,23 @@ import java.util.stream.Collectors;
 
 import static hu.tryharddood.myzone.Util.Localization.I18n.tl;
 
+/*****************************************************
+ *              Created by TryHardDood on 2016. 12. 26..
+ ****************************************************/
+public class WorldGuardHelper {
 
-public class WGWrapper {
-	private static final JavaPlugin   plugin   = JavaPlugin.getProvidingPlugin(WGWrapper.class);
-	private static       FlagRegistry registry = myZone.getWgPlugin().getFlagRegistry();
+	private final JavaPlugin _instance;
 
-	public static boolean deleteRegion(ProtectedRegion regionName) {
+	public WorldGuardHelper(JavaPlugin instance)
+	{
+		_instance = instance;
+	}
+
+
+	public boolean deleteRegion(ProtectedRegion regionName) {
 		RegionManager manager = null;
 
-		for (RegionManager regionManager : myZone.getWgPlugin().getRegionContainer().getLoaded())
+		for (RegionManager regionManager : myZone.worldGuardReflection.getWorldGuardPlugin().getRegionContainer().getLoaded())
 		{
 			for (Map.Entry<String, ProtectedRegion> s : regionManager.getRegions().entrySet())
 			{
@@ -49,33 +54,33 @@ public class WGWrapper {
 		String regionID = regionName.getId();
 		if (!manager.hasRegion(regionID))
 		{
-			plugin.getLogger().warning("Manager doesn't contain this zone.");
+			_instance.getLogger().warning("Manager doesn't contain this zone.");
 			return false;
 		}
 
 		manager.removeRegion(regionName.getId());
 
-		String zonename = myZone.getZoneManager().getRegionName(regionID);
+		String zonename = myZone.zoneManager.getRegionName(regionID);
 
-		ZoneObject zoneObject = myZone.getZoneManager().getZoneObject(zonename);
+		ZoneObject zoneObject = myZone.zoneManager.getZoneObject(zonename);
 		zoneObject.deleteFile();
-		myZone.getZoneManager().getZones().remove(zonename);
+		myZone.zoneManager.getZones().remove(zonename);
 
 		try
 		{
 			manager.save();
 		} catch (StorageException e)
 		{
-			plugin.getLogger().warning("Failed to delete region: " + e.getMessage());
+			_instance.getLogger().warning("Failed to delete region: " + e.getMessage());
 		}
 		return true;
 	}
 
-	public static void createRegion(String zoneName, String regionID, Vector[] vectors, Player owner, World world) {
+	public void createRegion(String zoneName, String regionID, Vector[] vectors, Player owner, World world) {
 		ProtectedRegion region = new ProtectedCuboidRegion(regionID, vectors[0].toBlockVector(), vectors[1].toBlockVector());
 
 		OfflinePlayer offlinePlayer = Bukkit.getOfflinePlayer(owner.getUniqueId());
-		LocalPlayer   lcPlayer      = myZone.getWgPlugin().wrapOfflinePlayer(offlinePlayer);
+		LocalPlayer   lcPlayer      = myZone.worldGuardReflection.getWorldGuardPlugin().wrapOfflinePlayer(offlinePlayer);
 		region.getOwners().addPlayer(lcPlayer);
 
 		ZoneObject zoneObject = new ZoneObject();
@@ -83,7 +88,7 @@ public class WGWrapper {
 		zoneObject.setOwnerID(owner.getUniqueId());
 		zoneObject.setZoneName(zoneName);
 
-		for (Map.Entry<String, ProtectedRegion> region1 : myZone.getWgPlugin().getRegionManager(world).getRegions().entrySet())
+		for (Map.Entry<String, ProtectedRegion> region1 : myZone.worldGuardReflection.getWorldGuardPlugin().getRegionManager(world).getRegions().entrySet())
 		{
 			if (region1.getValue().getId().equalsIgnoreCase(zoneName))
 			{
@@ -93,7 +98,7 @@ public class WGWrapper {
 
 			if (!Objects.equals(region1.getValue().getId(), region.getId()))
 			{
-				if (WGWrapper.regionsIntersect(region1.getValue(), region))
+				if (regionsIntersect(region1.getValue(), region))
 				{
 					owner.sendMessage(tl("Error") + " " + tl("CreateZone_Error4"));
 					return;
@@ -105,19 +110,19 @@ public class WGWrapper {
 		{
 			zoneObject.createFile();
 
-			myZone.getWgPlugin().getRegionManager(world).addRegion(region);
-			myZone.getWgPlugin().getRegionManager(world).save();
+			myZone.worldGuardReflection.getWorldGuardPlugin().getRegionManager(world).addRegion(region);
+			myZone.worldGuardReflection.getWorldGuardPlugin().getRegionManager(world).save();
 		} catch (IOException | StorageException e)
 		{
-			plugin.getLogger().warning("Failed to delete region: " + e.getMessage());
+			_instance.getLogger().warning("Failed to delete region: " + e.getMessage());
 		}
-		myZone.getZoneManager().getZones().put(zoneName, zoneObject);
+		myZone.zoneManager.getZones().put(zoneName, zoneObject);
 		owner.sendMessage(tl("Success") + " " + tl("CreateZone_Success", zoneName));
 	}
 
-	public static Integer getPlayerRegionsNum(UUID player) {
+	public Integer getPlayerRegionsNum(UUID player) {
 		int num = 0;
-		for (Map.Entry<String, ZoneObject> zoneEntry : myZone.getZoneManager().getZones().entrySet())
+		for (Map.Entry<String, ZoneObject> zoneEntry : myZone.zoneManager.getZones().entrySet())
 		{
 			if (zoneEntry.getValue().getOwnerID().equals(player))
 			{ num++; }
@@ -126,9 +131,9 @@ public class WGWrapper {
 		return num;
 	}
 
-	public static ArrayList<String> getPlayerOwnedRegions(UUID player) {
+	public ArrayList<String> getPlayerOwnedRegions(UUID player) {
 		ArrayList<String> zones = new ArrayList<>();
-		for (Map.Entry<String, ZoneObject> zoneEntry : myZone.getZoneManager().getZones().entrySet())
+		for (Map.Entry<String, ZoneObject> zoneEntry : myZone.zoneManager.getZones().entrySet())
 		{
 			if (zoneEntry.getValue().getOwnerID().equals(player))
 				zones.add(zoneEntry.getKey());
@@ -137,12 +142,12 @@ public class WGWrapper {
 		return zones;
 	}
 
-	public static ArrayList<String> getPlayerMemberRegions(UUID player) {
+	public ArrayList<String> getPlayerMemberRegions(UUID player) {
 		ArrayList<String> zones = new ArrayList<>();
 		ProtectedRegion   region;
-		for (Map.Entry<String, ZoneObject> zoneEntry : myZone.getZoneManager().getZones().entrySet())
+		for (Map.Entry<String, ZoneObject> zoneEntry : myZone.zoneManager.getZones().entrySet())
 		{
-			region = WGWrapper.getRegion(zoneEntry.getValue().getRegionID());
+			region = myZone.worldGuardHelper.getRegion(zoneEntry.getValue().getRegionID());
 			if (region == null)
 				continue;
 			if (region.getMembers() == null || !region.getMembers().contains(player))
@@ -154,16 +159,16 @@ public class WGWrapper {
 		return zones;
 	}
 
-	public static HashMap<String, List<String>> getPlayerRegions(UUID player) {
+	public HashMap<String, List<String>> getPlayerRegions(UUID player) {
 		HashMap<String, List<String>> zones = new HashMap<>();
 
 		ArrayList<String> owned  = new ArrayList<>();
 		ArrayList<String> member = new ArrayList<>();
 
 		ProtectedRegion region;
-		for (Map.Entry<String, ZoneObject> zoneEntry : myZone.getZoneManager().getZones().entrySet())
+		for (Map.Entry<String, ZoneObject> zoneEntry : myZone.zoneManager.getZones().entrySet())
 		{
-			region = WGWrapper.getRegion(zoneEntry.getValue().getRegionID());
+			region = myZone.worldGuardHelper.getRegion(zoneEntry.getValue().getRegionID());
 			if (region == null)
 				continue;
 
@@ -181,7 +186,7 @@ public class WGWrapper {
 		return zones;
 	}
 
-	public static int expandRegion(Player player, ProtectedRegion existing, BlockFace dir, int expansion) {
+	public int expandRegion(Player player, ProtectedRegion existing, BlockFace dir, int expansion) {
 		if (expansion <= 0)
 		{
 			return -1;
@@ -189,7 +194,7 @@ public class WGWrapper {
 
 		RegionManager manager = null;
 		World         world   = null;
-		for (RegionManager regionManager : myZone.getWgPlugin().getRegionContainer().getLoaded())
+		for (RegionManager regionManager : myZone.worldGuardReflection.getWorldGuardPlugin().getRegionContainer().getLoaded())
 		{
 			for (Map.Entry<String, ProtectedRegion> s : regionManager.getRegions().entrySet())
 			{
@@ -262,7 +267,7 @@ public class WGWrapper {
 
 		ProtectedRegion newRegion = new ProtectedCuboidRegion(existing.getId(), newMin, newMax);
 
-		for (ProtectedRegion region1 : WGWrapper.getRegions())
+		for (ProtectedRegion region1 : myZone.worldGuardHelper.getRegions())
 		{
 			if (!Objects.equals(region1.getId(), newRegion.getId()))
 			{
@@ -293,21 +298,21 @@ public class WGWrapper {
 			manager.save();
 		} catch (StorageException e)
 		{
-			plugin.getLogger().warning("Failed to write region: " + e.getMessage());
+			_instance.getLogger().warning("Failed to write region: " + e.getMessage());
 		}
 		return area;
 	}
 
-	private static boolean regionsIntersect(ProtectedRegion a, ProtectedRegion b) {
+	private boolean regionsIntersect(ProtectedRegion a, ProtectedRegion b) {
 		return intersects(a.getMinimumPoint().getBlockX(), a.getMaximumPoint().getBlockX(), b.getMinimumPoint().getBlockX(), b.getMaximumPoint().getBlockX()) && intersects(a.getMinimumPoint().getBlockY(), a.getMaximumPoint().getBlockY(), b.getMinimumPoint().getBlockY(), b.getMaximumPoint().getBlockY()) && intersects(a.getMinimumPoint().getBlockZ(), a.getMaximumPoint().getBlockZ(), b.getMinimumPoint().getBlockZ(), b.getMaximumPoint().getBlockZ());
 	}
 
-	private static boolean intersects(int aMin, int aMax, int bMin, int bMax) {
+	private boolean intersects(int aMin, int aMax, int bMin, int bMax) {
 		return aMin <= bMax && aMax >= bMin;
 	}
 
-	public static ProtectedRegion getRegion(String id) {
-		for (RegionManager regionManager : myZone.getWgPlugin().getRegionContainer().getLoaded())
+	public ProtectedRegion getRegion(String id) {
+		for (RegionManager regionManager : myZone.worldGuardReflection.getWorldGuardPlugin().getRegionContainer().getLoaded())
 		{
 			if (regionManager.getRegion(id) != null)
 			{
@@ -317,17 +322,17 @@ public class WGWrapper {
 		return null;
 	}
 
-	public static List<ProtectedRegion> getRegions() {
+	public List<ProtectedRegion> getRegions() {
 		ArrayList<ProtectedRegion> regions = new ArrayList<>();
-		for (RegionManager regionManager : myZone.getWgPlugin().getRegionContainer().getLoaded())
+		for (RegionManager regionManager : myZone.worldGuardReflection.getWorldGuardPlugin().getRegionContainer().getLoaded())
 		{
 			regions.addAll(regionManager.getRegions().entrySet().stream().map(Map.Entry::getValue).collect(Collectors.toList()));
 		}
 		return regions;
 	}
 
-	public static RegionManager getRegionManager(String regionid) {
-		for (RegionManager regionManager : myZone.getWgPlugin().getRegionContainer().getLoaded())
+	public RegionManager getRegionManager(String regionid) {
+		for (RegionManager regionManager : myZone.worldGuardReflection.getWorldGuardPlugin().getRegionContainer().getLoaded())
 		{
 			for (Map.Entry<String, ProtectedRegion> regionEntry : regionManager.getRegions().entrySet())
 			{
@@ -338,8 +343,8 @@ public class WGWrapper {
 		return null;
 	}
 
-	public static void saveAll() {
-		for (RegionManager regionManager : myZone.getWgPlugin().getRegionContainer().getLoaded())
+	public void saveAll() {
+		for (RegionManager regionManager : myZone.worldGuardReflection.getWorldGuardPlugin().getRegionContainer().getLoaded())
 		{
 			try
 			{
@@ -349,10 +354,5 @@ public class WGWrapper {
 				e.printStackTrace();
 			}
 		}
-	}
-
-	public static Flag<?> fuzzyMatchFlag(String id)
-	{
-		return DefaultFlag.fuzzyMatchFlag(registry, id);
 	}
 }

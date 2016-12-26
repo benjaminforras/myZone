@@ -7,7 +7,6 @@ import hu.tryharddood.myzone.MenuBuilder.ItemBuilder;
 import hu.tryharddood.myzone.MenuBuilder.inventory.InventoryMenuBuilder;
 import hu.tryharddood.myzone.MenuBuilder.inventory.InventoryMenuListener;
 import hu.tryharddood.myzone.Properties;
-import hu.tryharddood.myzone.Util.WGWrapper;
 import hu.tryharddood.myzone.Variables;
 import hu.tryharddood.myzone.myZone;
 import org.bukkit.Bukkit;
@@ -52,16 +51,16 @@ public class DeleteCommand extends Subcommand {
 	@Override
 	public void onCommand(CommandSender sender, Command cmd, String label, String[] args) {
 		Player player   = (Player) sender;
-		String regionID = myZone.getZoneManager().getRegionID(args[1]);
+		String regionID = myZone.zoneManager.getRegionID(args[1]);
 		if (regionID == null)
 		{
 			sender.sendMessage(tl("Error") + " " + tl("ZoneNotFound", args[1]));
 			return;
 		}
 
-		ProtectedRegion region = WGWrapper.getRegion(regionID);
+		ProtectedRegion region = myZone.worldGuardHelper.getRegion(regionID);
 
-		LocalPlayer lcOwner = myZone.getWgPlugin().wrapPlayer(player);
+		LocalPlayer lcOwner = myZone.worldGuardReflection.getWorldGuardPlugin().wrapPlayer(player);
 		if (region.getOwners() == null || !region.getOwners().contains(lcOwner) && !player.hasPermission(Variables.PlayerCommands.DELETEOTHERSPERMISSION))
 		{
 			sender.sendMessage(tl("Error") + " " + tl("DeleteZone_Error1"));
@@ -81,17 +80,17 @@ public class DeleteCommand extends Subcommand {
 				{
 					if (Properties.getEconomyEnabled())
 					{
-						if (!myZone.getEconomy().has(Bukkit.getOfflinePlayer(player.getUniqueId()), Properties.getZoneDeleteMoney()))
+						if (!myZone.vaultEcon.has(Bukkit.getOfflinePlayer(player.getUniqueId()), Properties.getZoneDeleteMoney()))
 						{
 							player.sendMessage(tl("Error") + " " + tl("Economy_NotEnoughMoney", Properties.getZoneDeleteMoney()));
 							return;
 						}
-						myZone.getEconomy().withdrawPlayer(Bukkit.getOfflinePlayer(player.getUniqueId()), Properties.getZoneDeleteMoney());
+						myZone.vaultEcon.withdrawPlayer(Bukkit.getOfflinePlayer(player.getUniqueId()), Properties.getZoneDeleteMoney());
 					}
 
-					player.sendMessage(tl("Success") + " " + tl("DeleteZone_Success", region.getId()));
-					WGWrapper.deleteRegion(region);
-					WGWrapper.saveAll();
+					player.sendMessage(tl("Success") + " " + tl("DeleteZone_Success", args[1]));
+					myZone.worldGuardHelper.deleteRegion(region);
+					myZone.worldGuardHelper.saveAll();
 				}
 				player.closeInventory();
 			}

@@ -9,7 +9,8 @@ import hu.tryharddood.myzone.Listeners.pListener;
 import hu.tryharddood.myzone.MenuBuilder.inventory.InventoryListener;
 import hu.tryharddood.myzone.Util.Localization.I18n;
 import hu.tryharddood.myzone.Util.Updater;
-import hu.tryharddood.myzone.Util.WGWrapper;
+import hu.tryharddood.myzone.Util.WorldGuard.WorldGuardHelper;
+import hu.tryharddood.myzone.Util.WorldGuard.WorldGuardReflection;
 import hu.tryharddood.myzone.Zones.ZoneManager;
 import net.milkbowl.vault.economy.Economy;
 import org.bukkit.Bukkit;
@@ -21,44 +22,18 @@ import java.util.Collections;
 
 public class myZone extends JavaPlugin {
 
-	private static myZone _myZonePlugin;
-	private static WorldGuardPlugin _wgPlugin;
-	private static Economy          _vaultEcon;
-
-	private static MCVersion.Version _serverVersion;
-
-	private static I18n _i18n;
-
-	private static ZoneManager _zoneManager;
-
-	private static String _name;
-	private static String _version;
+	public static myZone               myZonePlugin;
+	public static Economy              vaultEcon;
+	public static WorldGuardReflection worldGuardReflection;
+	public static WorldGuardHelper     worldGuardHelper;
+	public static MCVersion.Version    serverVersion;
+	public static ZoneManager          zoneManager;
 
 	public InventoryListener inventoryListener;
 
-	public static MCVersion.Version getVersion() {
-		return _serverVersion;
-	}
-
-	public static myZone getInstance() {
-		return _myZonePlugin;
-	}
-
-	public static WorldGuardPlugin getWgPlugin() {
-		return _wgPlugin;
-	}
-
-	public static Economy getEconomy() {
-		return _vaultEcon;
-	}
-
-	public static void setEconomy(Economy economy) {
-		_vaultEcon = economy;
-	}
-
-	public static ZoneManager getZoneManager() {
-		return _zoneManager;
-	}
+	private static I18n   _i18n;
+	private static String _name;
+	private static String _version;
 
 	public static void log(String message) {
 		Bukkit.getConsoleSender().sendMessage("[" + _name + " v" + _version + "] " + message);
@@ -70,13 +45,13 @@ public class myZone extends JavaPlugin {
 
 	@Override
 	public void onEnable() {
-		_myZonePlugin = this;
-		_serverVersion = MCVersion.Version.getVersion();
+		myZonePlugin = this;
+		serverVersion = MCVersion.Version.getVersion();
 
 		_name = getDescription().getName();
 		_version = getDescription().getVersion();
 
-		if(_serverVersion.olderThan(MCVersion.Version.v1_8_R1))
+		if (serverVersion.olderThan(MCVersion.Version.v1_8_R1))
 		{
 			log(ChatColor.RED + "You server version is not supported. Please update your server...");
 			log(ChatColor.RED + "Disabling " + _name + " " + _version);
@@ -102,9 +77,9 @@ public class myZone extends JavaPlugin {
 		Properties.loadConfiguration();
 
 		log("Checking for updates...");
-		Updater updater = new Updater(this, 254781, this.getFile(), Updater.UpdateType.DEFAULT, false);
-		Updater.UpdateResult result = updater.getResult();
-		switch(result)
+		Updater              updater = new Updater(this, 254781, this.getFile(), Updater.UpdateType.DEFAULT, false);
+		Updater.UpdateResult result  = updater.getResult();
+		switch (result)
 		{
 			case DISABLED:
 				log(ChatColor.RED + "Update checking is disabled.");
@@ -122,13 +97,15 @@ public class myZone extends JavaPlugin {
 				log(ChatColor.GREEN + "There's a new version available.");
 		}
 
-		_zoneManager = new ZoneManager();
-		_zoneManager.loadZones();
+		zoneManager = new ZoneManager();
+		zoneManager.loadZones();
 	}
 
 	@Override
 	public void onDisable() {
-		WGWrapper.saveAll();
+
+		zoneManager.saveZones();
+		worldGuardHelper.saveAll();
 	}
 
 	private void registerEvents() {
@@ -171,6 +148,8 @@ public class myZone extends JavaPlugin {
 		}
 
 		log("WorldGuard (v" + plugin.getDescription().getVersion() + ") successfully hooked.");
-		_wgPlugin = (WorldGuardPlugin) plugin;
+
+		worldGuardReflection = new WorldGuardReflection((WorldGuardPlugin) plugin);
+		worldGuardHelper = new WorldGuardHelper(this);
 	}
 }

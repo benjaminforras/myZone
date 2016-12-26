@@ -38,7 +38,7 @@ public class ReloadCommand extends Subcommand {
 
 	@Override
 	public void onCommand(CommandSender sender, Command cmd, String label, String[] args) {
-		myZone.getZoneManager().loadZones();
+		myZone.zoneManager.loadZones();
 		Properties.loadConfiguration();
 
 		sender.sendMessage(tl("Success") + " " + tl("Reload_Success"));
