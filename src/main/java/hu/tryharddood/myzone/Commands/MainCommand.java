@@ -33,8 +33,9 @@ import static hu.tryharddood.myzone.Util.Localization.I18n.tl;
 
 public class MainCommand extends Subcommand {
 
-	private ArrayList<Flag> flagsCache = new ArrayList<>();
+	private static ArrayList<Flag> _flagsCache = new ArrayList<>();
 	private ProtectedRegion region;
+
 	private InventoryMenuListener flagSettingListener     = new InventoryMenuListener() {
 		@Override
 		public void interact(Player player, ClickType action, InventoryClickEvent event) {
@@ -46,6 +47,15 @@ public class MainCommand extends Subcommand {
 			Flag flag = myZone.worldGuardReflection.fuzzyMatchFlag(ChatColor.stripColor(itemName));
 
 			Object value;
+
+			if(action == ClickType.RIGHT)
+			{
+				value = "none";
+				Bukkit.dispatchCommand(player, "zone flag " + myZone.zoneManager.getRegion(region.getId()).getZoneName() + " " + flag.getName() + " " + value.toString());
+				event.getInventory().setItem(event.getSlot(), new ItemBuilder(Material.SIGN).setTitle(flag.getName()).addLore(ChatColor.GRAY + tl("GUI_FlagNotSet", true)).build());
+				player.updateInventory();
+				return;
+			}
 
 			String prefix = "";
 			if (flag instanceof StateFlag)
@@ -155,23 +165,13 @@ public class MainCommand extends Subcommand {
 
 			ItemStack            itemStack  = event.getCurrentItem();
 			ArrayList<ItemStack> itemStacks = new ArrayList<>();
-
 			if (itemStack.getType() == Material.SIGN)
 			{
 				itemStacks.clear();
-				if (flagsCache.isEmpty() || flagsCache == null)
-				{
-					flagsCache.clear();
-					List<Flag<?>> flags = Properties.getFlags();
 
-					flagsCache.addAll(flags.stream().filter(flag -> flag instanceof StateFlag || flag instanceof BooleanFlag).collect(Collectors.toList()));
-				}
-
-				Flag   flag;
 				String prefix = null;
-				for (Flag aFlagsCache : flagsCache)
+				for (Flag flag : _flagsCache)
 				{
-					flag = aFlagsCache;
 					if (!player.hasPermission(Variables.PlayerCommands.FLAGTYPEPERMISSION.replaceAll("\\[flag\\]", flag.getName())) && !player.hasPermission(Variables.PlayerCommands.FLAGTYPEPERMISSION.replaceAll("\\[flag\\]", "*")))
 					{
 						continue;
@@ -208,7 +208,7 @@ public class MainCommand extends Subcommand {
 				PageInventory pageInventory = new PageInventory("Flags", itemStacks);
 				pageInventory.show(player);
 
-				pageInventory.onInteract(flagSettingListener, ClickType.LEFT);
+				pageInventory.onInteract(flagSettingListener, ClickType.LEFT, ClickType.RIGHT);
 			}
 			else if (itemStack.getType() == Material.SKULL_ITEM)
 			{
@@ -287,7 +287,7 @@ public class MainCommand extends Subcommand {
 				}
 				region = myZone.worldGuardHelper.getRegion(myZone.zoneManager.getRegionID(ChatColor.stripColor(itemName)));
 
-				InventoryMenuBuilder imb = new InventoryMenuBuilder(54).withTitle("Settings - " + ChatColor.stripColor(itemName));
+				InventoryMenuBuilder imb = new InventoryMenuBuilder(54).withTitle("ZoneUtils - " + ChatColor.stripColor(itemName));
 
 				ArrayList<ItemStack> itemStacks = new ArrayList<>();
 				itemStacks.add(new ItemBuilder(Material.SIGN).setTitle(ChatColor.GREEN + tl("GUI_Flags", true)).build());
@@ -331,6 +331,9 @@ public class MainCommand extends Subcommand {
 
 	@Override
 	public void onCommand(CommandSender sender, Command cmd, String label, String[] args) {
+		if (_flagsCache == null || _flagsCache.isEmpty())
+			_flagsCache.addAll(Properties.getFlags().stream().filter(flag -> flag instanceof StateFlag || flag instanceof BooleanFlag).collect(Collectors.toList()));
+
 		Player player = (Player) sender;
 
 		HashMap<String, List<String>> zones = myZone.worldGuardHelper.getPlayerRegions(player.getUniqueId());

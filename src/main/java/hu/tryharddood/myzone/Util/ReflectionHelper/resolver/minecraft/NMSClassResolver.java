@@ -26,10 +26,10 @@
  *  either expressed or implied, of anybody else.
  */
 
-package org.inventivetalent.reflection.resolver.minecraft;
+package hu.tryharddood.myzone.Util.ReflectionHelper.resolver.minecraft;
 
-import org.inventivetalent.reflection.minecraft.Minecraft;
-import org.inventivetalent.reflection.resolver.ClassResolver;
+import hu.tryharddood.myzone.Util.ReflectionHelper.minecraft.Minecraft;
+import hu.tryharddood.myzone.Util.ReflectionHelper.resolver.ClassResolver;
 
 /**
  * {@link ClassResolver} for <code>net.minecraft.server.*</code> classes

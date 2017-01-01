@@ -26,24 +26,24 @@
  *  either expressed or implied, of anybody else.
  */
 
-package org.inventivetalent.particle;
+package hu.tryharddood.myzone.Util.ParticleAPI;
 
 import org.bukkit.Color;
 import org.bukkit.Location;
 import org.bukkit.entity.Player;
 import org.bukkit.inventory.ItemStack;
-import org.inventivetalent.reflection.minecraft.Minecraft;
-import org.inventivetalent.reflection.resolver.ConstructorResolver;
-import org.inventivetalent.reflection.resolver.FieldResolver;
-import org.inventivetalent.reflection.resolver.MethodResolver;
-import org.inventivetalent.reflection.resolver.minecraft.NMSClassResolver;
+import hu.tryharddood.myzone.Util.ReflectionHelper.minecraft.Minecraft;
+import hu.tryharddood.myzone.Util.ReflectionHelper.resolver.ConstructorResolver;
+import hu.tryharddood.myzone.Util.ReflectionHelper.resolver.FieldResolver;
+import hu.tryharddood.myzone.Util.ReflectionHelper.resolver.MethodResolver;
+import hu.tryharddood.myzone.Util.ReflectionHelper.resolver.minecraft.NMSClassResolver;
 
 import java.lang.reflect.InvocationTargetException;
 import java.util.ArrayList;
 import java.util.Collection;
 import java.util.Iterator;
 
-import static org.inventivetalent.reflection.minecraft.Minecraft.Version.*;
+import static hu.tryharddood.myzone.Util.ReflectionHelper.minecraft.Minecraft.Version.*;
 
 public enum ParticleEffect {
 
@@ -193,7 +193,7 @@ public enum ParticleEffect {
 	}
 
 	/**
-	 * @return the minimum {@link org.inventivetalent.reflection.minecraft.Minecraft.Version} required for this particle
+	 * @return the minimum {@link hu.tryharddood.myzone.Util.ReflectionHelper.minecraft.Minecraft.Version} required for this particle
 	 */
 	public Minecraft.Version getMinVersion() {
 		return minVersion;
@@ -207,9 +207,9 @@ public enum ParticleEffect {
 	}
 
 	/**
-	 * Check if this particle has special {@link org.inventivetalent.particle.ParticleEffect.Feature}s - Particles with features cannot use the default send() methods - Particles without features cannot use special sendColor or sendData methods
+	 * Check if this particle has special {@link hu.tryharddood.myzone.Util.ParticleAPI.ParticleEffect.Feature}s - Particles with features cannot use the default send() methods - Particles without features cannot use special sendColor or sendData methods
 	 *
-	 * @param feature {@link org.inventivetalent.particle.ParticleEffect.Feature} to check
+	 * @param feature {@link hu.tryharddood.myzone.Util.ParticleAPI.ParticleEffect.Feature} to check
 	 * @return <code>true</code> if this particle has the feature
 	 * @see #hasNoFeatures()
 	 */
@@ -218,7 +218,7 @@ public enum ParticleEffect {
 	}
 
 	/**
-	 * Check if this particle has no {@link org.inventivetalent.particle.ParticleEffect.Feature}s - Particles without features cannot use special sendColor or sendData methods - Particles with features cannot use the default send() methods
+	 * Check if this particle has no {@link hu.tryharddood.myzone.Util.ParticleAPI.ParticleEffect.Feature}s - Particles without features cannot use special sendColor or sendData methods - Particles with features cannot use the default send() methods
 	 *
 	 * @return <code>true</code> if this particle has no special features
 	 * @see #hasFeature(Feature)

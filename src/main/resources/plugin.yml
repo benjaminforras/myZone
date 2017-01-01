@@ -1,7 +1,7 @@
 name: myZone
 version: ${project.version}
 main: hu.tryharddood.myzone.myZone
-depend: [WorldGuard]
+depend: [WorldEdit, WorldGuard]
 softdepend: [Vault]
 authors: [TryHardDood]
 description: myZone is a easy to use protection system which is based on Worldguard, that allows users to perform various actions on user-selected areas

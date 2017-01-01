@@ -26,7 +26,7 @@
  *  either expressed or implied, of anybody else.
  */
 
-package org.inventivetalent.reflection.resolver;
+package hu.tryharddood.myzone.Util.ReflectionHelper.resolver;
 
 import java.util.Arrays;
 import java.util.Map;

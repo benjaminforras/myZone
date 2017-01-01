@@ -1,12 +1,12 @@
-package org.inventivetalent.reflection.annotation;
+package hu.tryharddood.myzone.Util.ReflectionHelper.annotation;
 
-import org.inventivetalent.reflection.minecraft.Minecraft;
-import org.inventivetalent.reflection.resolver.ClassResolver;
-import org.inventivetalent.reflection.resolver.FieldResolver;
-import org.inventivetalent.reflection.resolver.MethodResolver;
-import org.inventivetalent.reflection.resolver.wrapper.ClassWrapper;
-import org.inventivetalent.reflection.resolver.wrapper.FieldWrapper;
-import org.inventivetalent.reflection.resolver.wrapper.MethodWrapper;
+import hu.tryharddood.myzone.Util.ReflectionHelper.minecraft.Minecraft;
+import hu.tryharddood.myzone.Util.ReflectionHelper.resolver.ClassResolver;
+import hu.tryharddood.myzone.Util.ReflectionHelper.resolver.FieldResolver;
+import hu.tryharddood.myzone.Util.ReflectionHelper.resolver.MethodResolver;
+import hu.tryharddood.myzone.Util.ReflectionHelper.resolver.wrapper.ClassWrapper;
+import hu.tryharddood.myzone.Util.ReflectionHelper.resolver.wrapper.FieldWrapper;
+import hu.tryharddood.myzone.Util.ReflectionHelper.resolver.wrapper.MethodWrapper;
 
 import java.lang.annotation.Annotation;
 import java.util.ArrayList;

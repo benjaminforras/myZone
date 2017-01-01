@@ -1,4 +1,4 @@
-package hu.tryharddood.myzone.Util.BossBar;
+package hu.tryharddood.myzone.Util.BossBarAPI;
 
 import org.bukkit.Location;
 import org.bukkit.entity.Player;
@@ -27,29 +27,29 @@ public interface BossBar {
 	void removePlayer(Player player);
 
 	/**
-	 * @return the {@link org.inventivetalent.bossbar.BossBarAPI.Color}
+	 * @return the {@link hu.tryharddood.myzone.Util.BossBarAPI.BossBarAPI.Color}
 	 */
 	BossBarAPI.Color getColor();
 
 	/**
-	 * @param color the new {@link org.inventivetalent.bossbar.BossBarAPI.Color}
+	 * @param color the new {@link hu.tryharddood.myzone.Util.BossBarAPI.BossBarAPI.Color}
 	 */
 	void setColor(BossBarAPI.Color color);
 
 	/**
-	 * @return the {@link org.inventivetalent.bossbar.BossBarAPI.Style}
+	 * @return the {@link hu.tryharddood.myzone.Util.BossBarAPI.BossBarAPI.Style}
 	 */
 	BossBarAPI.Style getStyle();
 
 	/**
-	 * @param style the new {@link org.inventivetalent.bossbar.BossBarAPI.Style}
+	 * @param style the new {@link hu.tryharddood.myzone.Util.BossBarAPI.BossBarAPI.Style}
 	 */
 	void setStyle(BossBarAPI.Style style);
 
 	/**
 	 * Modify a property
 	 *
-	 * @param property {@link org.inventivetalent.bossbar.BossBarAPI.Property}
+	 * @param property {@link hu.tryharddood.myzone.Util.BossBarAPI.BossBarAPI.Property}
 	 * @param flag     whether to enable the property
 	 */
 	void setProperty(BossBarAPI.Property property, boolean flag);

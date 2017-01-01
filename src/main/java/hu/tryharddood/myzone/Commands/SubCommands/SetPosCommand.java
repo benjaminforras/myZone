@@ -1,7 +1,7 @@
 package hu.tryharddood.myzone.Commands.SubCommands;
 
 import hu.tryharddood.myzone.Commands.Subcommand;
-import hu.tryharddood.myzone.Zones.Settings;
+import hu.tryharddood.myzone.Zones.Selection;
 import org.bukkit.command.Command;
 import org.bukkit.command.CommandSender;
 import org.bukkit.entity.Player;
@@ -41,18 +41,21 @@ public class SetPosCommand extends Subcommand {
 	@Override
 	public void onCommand(CommandSender sender, Command cmd, String label, String[] args) {
 
-		String   data     = args[1];
-		Player   player   = (Player) sender;
-		Settings settings = Settings.getSett(player);
+		String    data      = args[1];
+		Player    player    = (Player) sender;
+		Selection selection = Selection.getSelection(player);
+		//ZoneUtils settings = ZoneUtils.getSett(player);
 
 		if (data.equalsIgnoreCase("1"))
 		{
-			settings.setBorder(1, player.getLocation());
+			selection.setPos1(player.getLocation());
+			//settings.setBorder(1, player.getLocation());
 			player.sendMessage(tl("Success") + " " + tl("Creation_Select_Border", "1."));
 		}
 		else if (data.equalsIgnoreCase("2"))
 		{
-			settings.setBorder(2, player.getLocation());
+			selection.setPos2(player.getLocation());
+			//settings.setBorder(2, player.getLocation());
 			player.sendMessage(tl("Success") + " " + tl("Creation_Select_Border", "2."));
 		}
 		else

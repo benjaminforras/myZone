@@ -1,4 +1,4 @@
-package hu.tryharddood.myzone.Util.BossBar.reflection;
+package hu.tryharddood.myzone.Util.BossBarAPI.reflection;
 
 import java.lang.reflect.Field;
 import java.lang.reflect.Method;

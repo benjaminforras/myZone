@@ -1,6 +1,6 @@
-package org.inventivetalent.reflection.annotation;
+package hu.tryharddood.myzone.Util.ReflectionHelper.annotation;
 
-import org.inventivetalent.reflection.minecraft.Minecraft;
+import hu.tryharddood.myzone.Util.ReflectionHelper.minecraft.Minecraft;
 
 import java.lang.annotation.ElementType;
 import java.lang.annotation.Retention;
@@ -8,7 +8,7 @@ import java.lang.annotation.RetentionPolicy;
 import java.lang.annotation.Target;
 
 /**
- * Resolves the annotated {@link org.inventivetalent.reflection.resolver.wrapper.FieldWrapper} or {@link java.lang.reflect.Field} field to the first matching field name.
+ * Resolves the annotated {@link hu.tryharddood.myzone.Util.ReflectionHelper.resolver.wrapper.FieldWrapper} or {@link java.lang.reflect.Field} field to the first matching field name.
  */
 @Target(ElementType.FIELD)
 @Retention(RetentionPolicy.RUNTIME)

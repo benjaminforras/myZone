@@ -24,9 +24,6 @@ checkTool: WOOD_SWORD
 Delay:
   checkTool: 5
 
-Title:
-  Enabled: true
-
 Zone:
   Regex: '[^a-zA-Z0-9_\p{L}+]'
 
@@ -48,6 +45,19 @@ Economy:
 DisabledWorlds:
   - world_nether
   - world_the_end
+
+# Enable or disable the option to show the welcome/farewell messages.
+# Permission: Whether it require a permission to enable/disable the message.
+Messages:
+  Title:
+    Enabled: true
+    Permission: false
+  ActionBar:
+    Enabled: true
+    Permission: false
+  BossBar:
+    Enabled: true
+    Permission: false
 
 # Example:
 # For a 25x256x25 zone you have to add this under (50, 256, 50): myzone.zone.max-size.1:

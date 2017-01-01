@@ -1,4 +1,4 @@
-package hu.tryharddood.myzone.Util.BossBar.reflection;
+package hu.tryharddood.myzone.Util.BossBarAPI.reflection;
 
 public abstract class MathUtil {
 

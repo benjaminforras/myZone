@@ -1,5 +1,8 @@
-package hu.tryharddood.myzone.Util.BossBar;
+package hu.tryharddood.myzone.Util.BossBarAPI;
 
+import hu.tryharddood.myzone.Util.BossBarAPI.reflection.Reflection;
+import hu.tryharddood.myzone.Util.ReflectionHelper.minecraft.Minecraft;
+import hu.tryharddood.myzone.myZone;
 import net.md_5.bungee.api.chat.BaseComponent;
 import net.md_5.bungee.api.chat.TextComponent;
 import org.bukkit.Bukkit;
@@ -10,12 +13,7 @@ import org.bukkit.event.EventPriority;
 import org.bukkit.event.Listener;
 import org.bukkit.event.player.*;
 import org.bukkit.event.server.PluginEnableEvent;
-import org.bukkit.plugin.Plugin;
 import org.bukkit.scheduler.BukkitRunnable;
-import org.inventivetalent.apihelper.API;
-import org.inventivetalent.apihelper.APIManager;
-import org.inventivetalent.bossbar.reflection.Reflection;
-import org.inventivetalent.reflection.minecraft.Minecraft;
 
 import javax.annotation.Nonnull;
 import javax.annotation.Nullable;
@@ -24,7 +22,7 @@ import java.util.*;
 import java.util.concurrent.ConcurrentHashMap;
 import java.util.logging.Logger;
 
-public class BossBarAPI implements API, Listener {
+public class BossBarAPI implements Listener {
 
 	protected static final Map<UUID, Collection<BossBar>> barMap = new ConcurrentHashMap<>();
 
@@ -60,10 +58,10 @@ public class BossBarAPI implements API, Listener {
 	 *
 	 * @param players    Receivers of the BossBar
 	 * @param message    Message of the BossBar (JSON)
-	 * @param color      {@link org.inventivetalent.bossbar.BossBarAPI.Color}
-	 * @param style      {@link org.inventivetalent.bossbar.BossBarAPI.Style}
+	 * @param color      {@link hu.tryharddood.myzone.Util.BossBarAPI.BossBarAPI.Color}
+	 * @param style      {@link hu.tryharddood.myzone.Util.BossBarAPI.BossBarAPI.Style}
 	 * @param progress   progress (0.0 - 1.0)
-	 * @param properties {@link org.inventivetalent.bossbar.BossBarAPI.Property}
+	 * @param properties {@link hu.tryharddood.myzone.Util.BossBarAPI.BossBarAPI.Property}
 	 * @return the new {@link BossBar} instance
 	 */
 	public static BossBar addBar(Collection<Player> players, String message, Color color, Style style, float progress, Property... properties) {
@@ -80,10 +78,10 @@ public class BossBarAPI implements API, Listener {
 	 *
 	 * @param players    Receivers of the BossBar
 	 * @param component  displayed message
-	 * @param color      {@link org.inventivetalent.bossbar.BossBarAPI.Color}
-	 * @param style      {@link org.inventivetalent.bossbar.BossBarAPI.Style}
+	 * @param color      {@link hu.tryharddood.myzone.Util.BossBarAPI.BossBarAPI.Color}
+	 * @param style      {@link hu.tryharddood.myzone.Util.BossBarAPI.BossBarAPI.Style}
 	 * @param progress   progress (0.0 - 1.0)
-	 * @param properties {@link org.inventivetalent.bossbar.BossBarAPI.Property}
+	 * @param properties {@link hu.tryharddood.myzone.Util.BossBarAPI.BossBarAPI.Property}
 	 * @return the new {@link BossBar} instance
 	 */
 	public static BossBar addBar(Collection<Player> players, BaseComponent component, Color color, Style style, float progress, Property... properties) {
@@ -100,18 +98,18 @@ public class BossBarAPI implements API, Listener {
 	 *
 	 * @param players    Receivers of the BossBar
 	 * @param component  displayed message
-	 * @param color      {@link org.inventivetalent.bossbar.BossBarAPI.Color}
-	 * @param style      {@link org.inventivetalent.bossbar.BossBarAPI.Style}
+	 * @param color      {@link hu.tryharddood.myzone.Util.BossBarAPI.BossBarAPI.Color}
+	 * @param style      {@link hu.tryharddood.myzone.Util.BossBarAPI.BossBarAPI.Style}
 	 * @param progress   progress (0.0 - 1.0)
 	 * @param timeout    time until the bar disappears
 	 * @param interval   interval of the "countdown"
-	 * @param properties {@link org.inventivetalent.bossbar.BossBarAPI.Property}
+	 * @param properties {@link hu.tryharddood.myzone.Util.BossBarAPI.BossBarAPI.Property}
 	 * @return the new {@link BossBar} instance
 	 */
 	public static BossBar addBar(Collection<Player> players, BaseComponent component, Color color, Style style, float progress, int timeout, long interval, Property... properties) {
 		validate1_9();
 		final BossBar bossBar = addBar(players, component, color, style, progress, properties);
-		new BossBarTimer((PacketBossBar) bossBar, progress, timeout).runTaskTimer(BossBarPlugin.instance, interval, interval);
+		new BossBarTimer((PacketBossBar) bossBar, progress, timeout).runTaskTimer(myZone.myZonePlugin, interval, interval);
 		return bossBar;
 	}
 
@@ -120,10 +118,10 @@ public class BossBarAPI implements API, Listener {
 	 *
 	 * @param player     Receiver of the BossBar
 	 * @param component  displayed message
-	 * @param color      {@link org.inventivetalent.bossbar.BossBarAPI.Color} (1.9-only)
-	 * @param style      {@link org.inventivetalent.bossbar.BossBarAPI.Style} (1.9-only)
+	 * @param color      {@link hu.tryharddood.myzone.Util.BossBarAPI.BossBarAPI.Color} (1.9-only)
+	 * @param style      {@link hu.tryharddood.myzone.Util.BossBarAPI.BossBarAPI.Style} (1.9-only)
 	 * @param progress   progress (0.0 - 1.0)
-	 * @param properties {@link org.inventivetalent.bossbar.BossBarAPI.Property} (1.9-only)
+	 * @param properties {@link hu.tryharddood.myzone.Util.BossBarAPI.BossBarAPI.Property} (1.9-only)
 	 * @return the new {@link BossBar} instance
 	 * @see #setMessage(Player, String, float)
 	 */
@@ -143,18 +141,18 @@ public class BossBarAPI implements API, Listener {
 	 *
 	 * @param player     Receiver of the BossBar
 	 * @param component  displayed message
-	 * @param color      {@link org.inventivetalent.bossbar.BossBarAPI.Color} (1.9-only)
-	 * @param style      {@link org.inventivetalent.bossbar.BossBarAPI.Style} (1.9-only)
+	 * @param color      {@link hu.tryharddood.myzone.Util.BossBarAPI.BossBarAPI.Color} (1.9-only)
+	 * @param style      {@link hu.tryharddood.myzone.Util.BossBarAPI.BossBarAPI.Style} (1.9-only)
 	 * @param progress   progress (0.0-1.0)
 	 * @param timeout    time until the bar disappears
 	 * @param interval   interval of the "countdown"
-	 * @param properties {@link org.inventivetalent.bossbar.BossBarAPI.Property} (1.9-only)
+	 * @param properties {@link hu.tryharddood.myzone.Util.BossBarAPI.BossBarAPI.Property} (1.9-only)
 	 * @return the new {@link BossBar} instance
 	 */
 	public static BossBar addBar(Player player, BaseComponent component, Color color, Style style, float progress, int timeout, long interval, Property... properties) {
 		if (is1_9) {
 			final BossBar bossBar = addBar(player, component, color, style, progress, properties);
-			new BossBarTimer((PacketBossBar) bossBar, progress, timeout).runTaskTimer(BossBarPlugin.instance, interval, interval);
+			new BossBarTimer((PacketBossBar) bossBar, progress, timeout).runTaskTimer(myZone.myZonePlugin, interval, interval);
 			return bossBar;
 		} else {
 			setMessage(player, component.toLegacyText(), progress * 100, timeout);
@@ -166,10 +164,10 @@ public class BossBarAPI implements API, Listener {
 	 * Not compatible with 1.8! Adds a BossBar without displaying it to a player
 	 *
 	 * @param component  displayed message
-	 * @param color      {@link org.inventivetalent.bossbar.BossBarAPI.Color}
-	 * @param style      {@link org.inventivetalent.bossbar.BossBarAPI.Style}
+	 * @param color      {@link hu.tryharddood.myzone.Util.BossBarAPI.BossBarAPI.Color}
+	 * @param style      {@link hu.tryharddood.myzone.Util.BossBarAPI.BossBarAPI.Style}
 	 * @param progress   progress (0.0 - 1.0)
-	 * @param properties {@link org.inventivetalent.bossbar.BossBarAPI.Property}
+	 * @param properties {@link hu.tryharddood.myzone.Util.BossBarAPI.BossBarAPI.Property}
 	 * @return the new {@link BossBar} instance
 	 */
 	public static BossBar addBar(BaseComponent component, Color color, Style style, float progress, Property... properties) {
@@ -382,24 +380,7 @@ public class BossBarAPI implements API, Listener {
 	}
 
 	Logger logger = Logger.getLogger("BossBarAPI");
-
-	@Override
-	public void load() {
-	}
-
-	@Override
-	public void init(Plugin plugin) {
-		APIManager.registerEvents(this, this);
-		BossBarPlugin.instance = APIManager.getAPIHost(this);
-		for (Player player : Bukkit.getOnlinePlayers()) {
-			BossBarAPI.removeAllBars(player);
-		}
-	}
-
-	@Override
-	public void disable(Plugin plugin) {
-	}
-
+	
 	@EventHandler
 	public void onPluginEnable(PluginEnableEvent e) {
 		if ("BarAPI".equals(e.getPlugin().getName()) && Bukkit.getPluginManager().isPluginEnabled("BarAPI")) {
@@ -452,7 +433,7 @@ public class BossBarAPI implements API, Listener {
 			public void run() {
 				bar.setVisible(true);
 			}
-		}.runTaskLater(APIManager.getAPIHost(this), 2);
+		}.runTaskLater(myZone.myZonePlugin, 2);
 	}
 
 	@EventHandler
@@ -467,7 +448,7 @@ public class BossBarAPI implements API, Listener {
 						if (!e.getPlayer().isOnline()) { return; }
 						bar.updateMovement();
 					}
-				}.runTaskLater(APIManager.getAPIHost(this), 0);
+				}.runTaskLater(myZone.myZonePlugin, 0);
 			}
 		}
 	}

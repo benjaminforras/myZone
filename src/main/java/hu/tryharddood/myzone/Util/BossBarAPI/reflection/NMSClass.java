@@ -1,10 +1,8 @@
-package hu.tryharddood.myzone.Util.BossBar.reflection;
+package hu.tryharddood.myzone.Util.BossBarAPI.reflection;
 
 import java.lang.reflect.Field;
 
 public abstract class NMSClass {
-
-	private static boolean initialized;
 
 	public static Class<?> Entity;
 	public static Class<?> EntityLiving;
@@ -29,18 +27,28 @@ public abstract class NMSClass {
 	public static Class<?> BlockPosition;
 	public static Class<?> Vector3f;
 	public static Class<?> EnumEntityUseAction;
+	private static boolean initialized;
 
-	static {
-		if (!initialized) {
-			for (Field f : NMSClass.class.getDeclaredFields()) {
-				if (f.getType().equals(Class.class)) {
-					try {
+	static
+	{
+		if (!initialized)
+		{
+			for (Field f : NMSClass.class.getDeclaredFields())
+			{
+				if (f.getType().equals(Class.class))
+				{
+					try
+					{
 						f.set(null, Reflection.getNMSClassWithException(f.getName()));
-					} catch (Exception e) {
-						if (f.getName().equals("WatchableObject")) {
-							try {
+					} catch (Exception e)
+					{
+						if (f.getName().equals("WatchableObject"))
+						{
+							try
+							{
 								f.set(null, Reflection.getNMSClassWithException("DataWatcher$WatchableObject"));
-							} catch (Exception e1) {
+							} catch (Exception e1)
+							{
 								e1.printStackTrace();
 							}
 						}

@@ -13,7 +13,6 @@ import org.bukkit.command.Command;
 import org.bukkit.command.CommandSender;
 import org.bukkit.entity.Player;
 
-import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
 import java.util.regex.Pattern;
@@ -22,7 +21,8 @@ import static hu.tryharddood.myzone.Util.Localization.I18n.tl;
 
 
 public class FlagCommand extends Subcommand {
-	private ArrayList<String> flags = new ArrayList<>();
+	//private static ArrayList<String> _flags = new ArrayList<>();
+	private static String _flags;
 
 	@Override
 	public String getPermission() {
@@ -51,6 +51,18 @@ public class FlagCommand extends Subcommand {
 
 	@Override
 	public void onCommand(CommandSender sender, Command cmd, String label, String[] args) {
+		if (_flags == null || _flags.length() == 0)
+		{
+			List<Flag<?>> flags = Properties.getFlags();
+
+			StringBuilder stringBuilder = new StringBuilder();
+			for (Flag flag : flags)
+			{
+				stringBuilder.append(flag.getName()).append(", ");
+			}
+			_flags = stringBuilder.toString();
+		}
+
 		if (args.length < 4)
 		{
 			sender.sendMessage(tl("Wrong") + " " + tl("Command_Usage", getUsage(), getDescription()));
@@ -82,58 +94,23 @@ public class FlagCommand extends Subcommand {
 		if (flag == null)
 		{
 			sender.sendMessage(tl("Wrong") + " " + tl("FlagZone_Error2"));
-
-			if (flags.isEmpty() || flags == null)
-			{
-				this.flags.clear();
-				List<Flag<?>> flags = Properties.getFlags();
-				int           size  = flags.size();
-
-				String temp;
-				for (int i = 0; i < size; i += 5)
-				{
-					temp = "";
-
-					if ((i >= 0) && (i < size))
-					{
-						temp += flags.get(i).getName();
-					}
-
-					if ((i + 1 >= 0) && (i + 1 < size))
-					{
-						temp += ", " + flags.get(i + 1).getName();
-					}
-
-					if ((i + 2 >= 0) && (i + 2 < size))
-					{
-						temp += ", " + flags.get(i + 2).getName();
-					}
-
-					if ((i + 3 >= 0) && (i + 3 < size))
-					{
-						temp += ", " + flags.get(i + 3).getName();
-					}
-
-					if ((i + 4 >= 0) && (i + 4 < size))
-					{
-						temp += ", " + flags.get(i + 4).getName();
-					}
-
-					this.flags.add(temp);
-				}
-			}
-
 			sender.sendMessage(tl("FlagZone_AvailableFlags"));
-			for (String flagName : this.flags)
+			/*for (String flagName : _flags)
 			{
 				sender.sendMessage(ChatColor.GOLD + "- " + flagName);
+			}*/
+
+			String[] lines = splitSentence(_flags, 5);
+			for (String line : lines)
+			{
+				sender.sendMessage(ChatColor.GOLD + "- " + line);
 			}
 			return;
 		}
 
 		if (flag instanceof StateFlag)
 		{
-			if (!value.contains("allow") && !value.contains("deny"))
+			if (!value.contains("allow") && !value.contains("deny") && !value.contains("none"))
 			{
 				sender.sendMessage(tl("Wrong") + " " + tl("FlagZone_Error3"));
 				return;
@@ -141,7 +118,7 @@ public class FlagCommand extends Subcommand {
 		}
 		else if (flag instanceof IntegerFlag)
 		{
-			if (!isNumeric(value))
+			if (!isNumeric(value) && !value.contains("none"))
 			{
 				sender.sendMessage(tl("Wrong") + " " + tl("FlagZone_Error4"));
 				return;
@@ -149,7 +126,7 @@ public class FlagCommand extends Subcommand {
 		}
 		else if (flag instanceof DoubleFlag)
 		{
-			if (!isDouble(value))
+			if (!isDouble(value) && !value.contains("none"))
 			{
 				sender.sendMessage(tl("Wrong") + " " + tl("FlagZone_Error5"));
 				return;
@@ -157,7 +134,7 @@ public class FlagCommand extends Subcommand {
 		}
 		else if (flag instanceof BooleanFlag)
 		{
-			if (!value.contains("true") && !value.contains("false"))
+			if (!value.contains("allow") && !value.contains("deny") && !value.contains("none"))
 			{
 				sender.sendMessage(tl("Wrong") + " " + tl("FlagZone_Error6"));
 				return;
@@ -165,7 +142,7 @@ public class FlagCommand extends Subcommand {
 		}
 		else if (flag instanceof LocationFlag)
 		{
-			if (!Pattern.compile("\\[,\\]+").matcher(value).find())
+			if (!Pattern.compile("\\[,\\]+").matcher(value).find() && !value.contains("none"))
 			{
 				sender.sendMessage(tl("Wrong") + " " + tl("FlagZone_Error9"));
 				return;
@@ -173,17 +150,12 @@ public class FlagCommand extends Subcommand {
 		}
 		else if (flag instanceof SetFlag)
 		{
-			if (!Pattern.compile("\\[,\\]+").matcher(value).find())
+			if (!Pattern.compile("\\[,\\]+").matcher(value).find() && !value.contains("none"))
 			{
 				sender.sendMessage(tl("Wrong") + " " + tl("FlagZone_Error9"));
 				return;
 			}
 		}
-		/*else if (flag instanceof SetFlag || flag instanceof LocationFlag || flag instanceof EnumFlag)
-		{
-			sender.sendMessage(tl("Error") + " " + tl("FlagZone_Error7"));
-			return;
-		}*/
 
 		if (!player.hasPermission(Variables.PlayerCommands.FLAGTYPEPERMISSION.replaceAll("\\[flag\\]", flag.getName())) && !player.hasPermission(Variables.PlayerCommands.FLAGTYPEPERMISSION.replaceAll("\\[flag\\]", "*")))
 		{
@@ -214,6 +186,36 @@ public class FlagCommand extends Subcommand {
 
 		sender.sendMessage(tl("Success") + " " + tl("FlagZone_Success", flag.getName(), ((value.contains("allow") || value.contains("true")) ? ChatColor.GREEN : ChatColor.RED) + value));
 		myZone.worldGuardHelper.saveAll();
+	}
+
+	private static String[] splitSentence(String sentence, int amount) {
+
+		String[] words     = sentence.split(" ");
+		int      arraySize = (int) Math.ceil((double) words.length / amount);
+
+		String[] output    = new String[arraySize];
+		int      index     = 0;
+		int      fullLines = (int) Math.floor((double) words.length / amount);
+
+		for (int i = 0; i < fullLines; i++)
+		{
+			String appender = "";
+			for (int j = 0; j < amount; j++)
+			{
+				appender += words[index] + " ";
+				index++;
+			}
+			output[i] = appender;
+		}
+
+		String appender = "";
+		for (int i = index; i < words.length; i++)
+		{
+			appender += words[index] + " ";
+			index++;
+		}
+		output[fullLines] = appender;
+		return output;
 	}
 }
 

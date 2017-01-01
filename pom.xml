@@ -3,11 +3,13 @@
 
 	<groupId>hu.tryharddood</groupId>
 	<artifactId>myZone</artifactId>
-	<version>1.0-${TRAVIS_BUILD_NUMBER}</version>
+	<version>1.1-${TRAVIS_BUILD_NUMBER}</version>
 	<packaging>jar</packaging>
 
 	<name>myZone</name>
-	<description>myZone is a easy to use protection system which is based on Worldguard, that allows users to perform various actions on user-selected areas</description>
+	<description>myZone is a easy to use protection system which is based on Worldguard, that allows users to perform
+		various actions on user-selected areas
+	</description>
 	<url>https://tryharddood.github.io</url>
 
 	<properties>
@@ -31,7 +33,7 @@
 			<version>a8d04c24be</version>
 			<scope>provided</scope>
 		</dependency>
-		
+
 		<!--WorldGuard API-->
 		<dependency>
 			<groupId>com.github.sk89q.WorldGuard</groupId>

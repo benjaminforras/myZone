@@ -6,7 +6,7 @@ import com.sk89q.worldguard.protection.flags.Flag;
 import hu.tryharddood.mcversion.MCVersion;
 import hu.tryharddood.myzone.Properties;
 import hu.tryharddood.myzone.Variables;
-import hu.tryharddood.myzone.Zones.Settings;
+import hu.tryharddood.myzone.Zones.Selection;
 import hu.tryharddood.myzone.myZone;
 import org.bukkit.Bukkit;
 import org.bukkit.ChatColor;
@@ -86,8 +86,8 @@ public class pListener implements Listener {
 					event.setCancelled(true);
 					return;
 				}
-				Settings settings = Settings.getSett(player);
-				settings.setBorder(1, location);
+				Selection selection = Selection.getSelection(player);
+				selection.setPos1(location);
 
 				player.sendMessage(tl("Success") + " " + tl("Creation_Select_Border", "1."));
 				event.setCancelled(true);
@@ -110,8 +110,8 @@ public class pListener implements Listener {
 					event.setCancelled(true);
 					return;
 				}
-				Settings settings = Settings.getSett(player);
-				settings.setBorder(2, location);
+				Selection selection = Selection.getSelection(player);
+				selection.setPos2(location);
 
 				player.sendMessage(tl("Success") + " " + tl("Creation_Select_Border", "2."));
 				event.setCancelled(true);
@@ -144,7 +144,7 @@ public class pListener implements Listener {
 					return;
 				}
 
-				set.getRegions().stream().forEach(region ->
+				set.getRegions().forEach(region ->
 				{
 					if (region.getId().equalsIgnoreCase("__global__"))
 					{

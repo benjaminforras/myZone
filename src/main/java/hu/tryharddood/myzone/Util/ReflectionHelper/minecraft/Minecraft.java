@@ -26,17 +26,16 @@
  *  either expressed or implied, of anybody else.
  */
 
-package org.inventivetalent.reflection.minecraft;
+package hu.tryharddood.myzone.Util.ReflectionHelper.minecraft;
 
+import hu.tryharddood.myzone.Util.ReflectionHelper.resolver.ConstructorResolver;
+import hu.tryharddood.myzone.Util.ReflectionHelper.resolver.FieldResolver;
+import hu.tryharddood.myzone.Util.ReflectionHelper.resolver.MethodResolver;
+import hu.tryharddood.myzone.Util.ReflectionHelper.resolver.minecraft.NMSClassResolver;
+import hu.tryharddood.myzone.Util.ReflectionHelper.resolver.minecraft.OBCClassResolver;
+import hu.tryharddood.myzone.Util.ReflectionHelper.util.AccessUtil;
 import org.bukkit.Bukkit;
 import org.bukkit.entity.Entity;
-import org.inventivetalent.reflection.resolver.ConstructorResolver;
-import org.inventivetalent.reflection.resolver.FieldResolver;
-import org.inventivetalent.reflection.resolver.MethodResolver;
-import org.inventivetalent.reflection.resolver.minecraft.NMSClassResolver;
-import org.inventivetalent.reflection.resolver.minecraft.OBCClassResolver;
-import org.inventivetalent.reflection.util.AccessUtil;
-import sun.reflect.ConstructorAccessor;
 
 import java.lang.reflect.Constructor;
 import java.lang.reflect.Field;
@@ -231,10 +230,10 @@ public class Minecraft {
 	public static Object newEnumInstance(Class clazz, Class[] types, Object[] values) throws ReflectiveOperationException {
 		Constructor constructor = new ConstructorResolver(clazz).resolve(types);
 		Field accessorField = new FieldResolver(Constructor.class).resolve("constructorAccessor");
-		ConstructorAccessor constructorAccessor = (ConstructorAccessor) accessorField.get(constructor);
+		Constructor constructorAccessor = (Constructor) accessorField.get(constructor);
 		if (constructorAccessor == null) {
 			new MethodResolver(Constructor.class).resolve("acquireConstructorAccessor").invoke(constructor);
-			constructorAccessor = (ConstructorAccessor) accessorField.get(constructor);
+			constructorAccessor = (Constructor) accessorField.get(constructor);
 		}
 		return constructorAccessor.newInstance(values);
 

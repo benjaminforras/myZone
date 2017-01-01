@@ -26,7 +26,7 @@
  *  either expressed or implied, of anybody else.
  */
 
-package org.inventivetalent.particle;
+package hu.tryharddood.myzone.Util.ParticleAPI;
 
 public class ParticleException extends RuntimeException {
 	public ParticleException() {

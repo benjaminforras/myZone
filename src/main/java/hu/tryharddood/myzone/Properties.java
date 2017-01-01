@@ -1,6 +1,5 @@
 package hu.tryharddood.myzone;
 
-import com.sk89q.worldguard.protection.flags.DefaultFlag;
 import com.sk89q.worldguard.protection.flags.Flag;
 import hu.tryharddood.myzone.Listeners.rListener;
 import net.milkbowl.vault.Vault;
@@ -36,6 +35,8 @@ public class Properties {
 
 	private static Boolean _economyEnabled;
 	private static Boolean _titlesEnabled;
+	private static Boolean _actionbarEnabled;
+	private static Boolean _bossbarEnabled;
 
 	private static Pattern _regex;
 
@@ -58,8 +59,6 @@ public class Properties {
 	private static HashMap<String, Integer>                    _maxZonePermission     = new HashMap<>();
 	private static HashMap<String, com.sk89q.worldedit.Vector> _maxZoneSizePermission = new HashMap<>();
 
-	private static File _langFile;
-
 	public static void loadConfiguration() {
 		_instance.saveDefaultConfig();
 		_instance.reloadConfig();
@@ -72,7 +71,6 @@ public class Properties {
 
 		_checkToolDelay = config.getInt("Delay.checkTool", 5);
 
-		_titlesEnabled = config.getBoolean("Title.Enabled", true);
 
 		String regex = config.getString("Zone.Regex", "[^a-zA-Z0-9_\\p{L}+]");
 
@@ -104,7 +102,11 @@ public class Properties {
 
 		_viewdistance = Bukkit.getViewDistance();
 
-		if (getTitlesEnabled())
+		_titlesEnabled = config.getBoolean("Messages.Title.Enabled", true);
+		_actionbarEnabled = config.getBoolean("Messages.ActionBar.Enabled", true);
+		_bossbarEnabled = config.getBoolean("Messages.BossBarAPI.Enabled", true);
+
+		if (_titlesEnabled || _actionbarEnabled || _bossbarEnabled)
 		{
 			rListener rListener = new rListener(_instance, myZone.worldGuardReflection.getWorldGuardPlugin());
 			_instance.getServer().getPluginManager().registerEvents(rListener, myZone.worldGuardReflection.getWorldGuardPlugin());
@@ -151,7 +153,7 @@ public class Properties {
 			_blockedFlags.add(tempFlag);
 		}
 
-		Flag<?>[] flags = DefaultFlag.getFlags();
+		Flag<?>[] flags = myZone.worldGuardReflection.getFlags();
 		for (Flag flag : flags)
 		{
 			if (!_blockedFlags.contains(flag))
@@ -163,7 +165,6 @@ public class Properties {
 		_disabledworlds.addAll(config.getStringList("DisabledWorlds"));
 
 		copyLangConfig();
-
 		System.out.println("[" + _instance.getDescription().getName() + " v" + _instance.getDescription().getVersion() + "] " + "Configuration successfully loaded.");
 	}
 
@@ -293,6 +294,7 @@ public class Properties {
 			localeFileName = "messages.properties";
 		}
 
+		File _langFile;
 		try
 		{
 			_langFile = new File(_instance.getDataFolder(), localeFileName);
@@ -333,6 +335,14 @@ public class Properties {
 		return _titlesEnabled;
 	}
 
+	public static Boolean getActionBarEnabled() {
+		return _actionbarEnabled;
+	}
+
+	public static Boolean getBossBarEnabled() {
+		return _bossbarEnabled;
+	}
+
 	public static Pattern getRegex() {
 		return _regex;
 	}
@@ -345,7 +355,7 @@ public class Properties {
 		return _zoneOwnerRemoveMoney;
 	}
 
-	public static Integer getViewDistance() {
+	/*public static Integer getViewDistance() {
 		return _viewdistance;
-	}
+	}*/
 }

@@ -26,7 +26,7 @@
  *  either expressed or implied, of anybody else.
  */
 
-package org.inventivetalent.reflection.util;
+package hu.tryharddood.myzone.Util.ReflectionHelper.util;
 
 import java.lang.reflect.Constructor;
 import java.lang.reflect.Field;

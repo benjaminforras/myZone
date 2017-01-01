@@ -66,7 +66,7 @@ public class DeleteCommand extends Subcommand {
 			sender.sendMessage(tl("Error") + " " + tl("DeleteZone_Error1"));
 			return;
 		}
-		
+
 		InventoryMenuBuilder imb = new InventoryMenuBuilder(27).withTitle("Are you sure?");
 		imb.withItem(11, new ItemBuilder(Material.STAINED_GLASS_PANE, (short) 13).setTitle(ChatColor.GREEN + tl("GUI_Confirm", true)).build());
 		imb.withItem(15, new ItemBuilder(Material.STAINED_GLASS_PANE, (short) 14).setTitle(ChatColor.GREEN + tl("GUI_Cancel", true)).build());

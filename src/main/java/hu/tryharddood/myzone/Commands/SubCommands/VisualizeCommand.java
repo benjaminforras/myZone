@@ -1,16 +1,20 @@
 package hu.tryharddood.myzone.Commands.SubCommands;
 
+import com.sk89q.worldedit.BlockVector;
 import hu.tryharddood.myzone.Commands.Subcommand;
 import hu.tryharddood.myzone.Properties;
-import hu.tryharddood.myzone.Util.ParticleEffects.ParticleEffect;
+import hu.tryharddood.myzone.Util.ParticleAPI.ParticleEffect;
 import hu.tryharddood.myzone.Variables;
-import hu.tryharddood.myzone.Zones.Settings;
+import hu.tryharddood.myzone.Zones.Selection;
+import hu.tryharddood.myzone.myZone;
 import org.bukkit.Location;
-import org.bukkit.World;
-import org.bukkit.block.Block;
 import org.bukkit.command.Command;
 import org.bukkit.command.CommandSender;
 import org.bukkit.entity.Player;
+import org.bukkit.scheduler.BukkitRunnable;
+import org.bukkit.scheduler.BukkitTask;
+
+import java.util.Collections;
 
 import static hu.tryharddood.myzone.Util.Localization.I18n.tl;
 
@@ -45,66 +49,53 @@ public class VisualizeCommand extends Subcommand {
 
 	@Override
 	public void onCommand(CommandSender sender, Command cmd, String label, String[] args) {
-		Player     player    = (Player) sender;
-		Settings   sett      = Settings.getSett(player);
-		Location[] locations = {sett.getBorder1(), sett.getBorder2()};
+		Player                       player    = (Player) sender;
+		Selection                    selection = Selection.getSelection(player);
+		com.sk89q.worldedit.Vector[] vectors   = new com.sk89q.worldedit.Vector[]{selection.getPos1(), selection.getPos2()};
 
-		if ((locations[0] == null) || (locations[1] == null))
+		if ((vectors[0] == null) || (vectors[1] == null))
 		{
 			sender.sendMessage(tl("Wrong") + " " + tl("SuggestItem", Properties.getCreateTool().toString()));
 			return;
 		}
 
-		if (locations[0].getWorld() != locations[1].getWorld())
+		if (selection.getPos1World() != selection.getPos2World())
 		{
 			sender.sendMessage(tl("Error") + " " + tl("VisualizeZone_Error1"));
 			return;
 		}
 
-		if (Properties.getDisabledWorlds().contains(locations[0].getWorld().getName()))
+		if (Properties.getDisabledWorlds().contains(selection.getPos1World().getName()))
 		{
-			sender.sendMessage(tl("Error") + " " + tl("VisualizeZone_Error2", locations[0].getWorld().getName()));
+			sender.sendMessage(tl("Error") + " " + tl("CreateZone_Error2", selection.getPos1World().getName()));
 			return;
 		}
 
-		int minx = Math.min(locations[0].getBlockX(), locations[1].getBlockX());
-		int maxx = Math.max(locations[0].getBlockX(), locations[1].getBlockX());
-		int miny = Math.min(locations[0].getBlockY(), locations[1].getBlockY());
-		int maxy = Math.max(locations[0].getBlockY(), locations[1].getBlockY());
-		int minz = Math.min(locations[0].getBlockZ(), locations[1].getBlockZ());
-		int maxz = Math.max(locations[0].getBlockZ(), locations[1].getBlockZ());
-
-		World world = locations[0].getWorld();
-
-		Location loc = player.getLocation();
-		loc.add((double) Properties.getViewDistance(), (double) Properties.getViewDistance(), (double) Properties.getViewDistance());
-
-		Block b;
-		for (int x = minx; x <= maxx; x++)
-		{
-			for (int y = miny; y <= maxy; y++)
-			{
-				for (int z = minz; z <= maxz; z++)
+		BukkitTask iTaskID = new BukkitRunnable() {
+			@Override
+			public void run() {
+				for (BlockVector lo : selection.getCuboidRegion().getFaces())
 				{
-					if (loc.getX() < x || loc.getY() < y || loc.getZ() < z)
-					{
-						break;
-					}
+					Location l = new Location(player.getWorld(), lo.getX() + 0.5, lo.getY() + 0.5, lo.getZ() + 0.5);
 
-					b = world.getBlockAt(x, y, z);
-					if (isOutline(b.getLocation(), minx, maxx, miny, maxy, minz, maxz))
+					try
 					{
-						ParticleEffect.FIREWORKS_SPARK.display(0, 0, 0, 0, 1, b.getLocation(), player);
+						ParticleEffect.VILLAGER_HAPPY.send(Collections.singletonList(player), l.clone(), 0, 0, 0, 0, 1);
+
+					} catch (Exception e)
+					{
+						e.printStackTrace();
 					}
 				}
 			}
-		}
+		}.runTaskTimerAsynchronously(myZone.myZonePlugin, 5L, 20L);
+
+		new BukkitRunnable() {
+			@Override
+			public void run() {
+				iTaskID.cancel();
+			}
+		}.runTaskLater(myZone.myZonePlugin, 90L);
 	}
 
-	private boolean isOutline(Location l, int xmin, int xmax, int ymin, int ymax, int zmin, int zmax) {
-		int x = l.getBlockX();
-		int y = l.getBlockY();
-		int z = l.getBlockZ();
-		return (x == xmin || x == xmax || y == ymin || y == ymax || z == zmin || z == zmax);
-	}
 }

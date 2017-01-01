@@ -94,8 +94,7 @@ public class ZoneManager {
 		return _zones;
 	}
 
-	public void saveZones()
-	{
+	public void saveZones() {
 		for (Map.Entry<String, ZoneObject> zoneEntry : _zones.entrySet())
 		{
 			try

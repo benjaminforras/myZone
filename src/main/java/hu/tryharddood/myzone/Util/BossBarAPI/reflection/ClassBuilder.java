@@ -1,44 +1,44 @@
-package hu.tryharddood.myzone.Util.BossBar.reflection;
+package hu.tryharddood.myzone.Util.BossBarAPI.reflection;
 
-import hu.tryharddood.myzone.Util.BossBar.reflection.*;
-import hu.tryharddood.myzone.Util.BossBar.reflection.AccessUtil;
-import hu.tryharddood.myzone.Util.BossBar.reflection.NMSClass;
+import hu.tryharddood.myzone.Util.ReflectionHelper.minecraft.DataWatcher;
+import hu.tryharddood.myzone.Util.ReflectionHelper.minecraft.Minecraft;
 import org.bukkit.Location;
-import org.inventivetalent.reflection.minecraft.DataWatcher;
-import org.inventivetalent.reflection.minecraft.Minecraft;
 
 import java.util.UUID;
 
-import static org.inventivetalent.reflection.minecraft.DataWatcher.V1_9.ValueType.ENTITY_NAME;
-import static org.inventivetalent.reflection.minecraft.DataWatcher.V1_9.ValueType.ENTITY_NAME_VISIBLE;
+import static hu.tryharddood.myzone.Util.ReflectionHelper.minecraft.DataWatcher.V1_9.ValueType.ENTITY_NAME;
+import static hu.tryharddood.myzone.Util.ReflectionHelper.minecraft.DataWatcher.V1_9.ValueType.ENTITY_NAME_VISIBLE;
 
 public abstract class ClassBuilder {
 
 	public static Object buildWitherSpawnPacket(int id, UUID uuid/*UUID*/, Location loc, Object dataWatcher) throws Exception {
-		Object packet = hu.tryharddood.myzone.Util.BossBar.reflection.NMSClass.PacketPlayOutSpawnEntityLiving.newInstance();
-		if (Minecraft.VERSION.olderThan(Minecraft.Version.v1_9_R1)) {
-			hu.tryharddood.myzone.Util.BossBar.reflection.AccessUtil.setAccessible(hu.tryharddood.myzone.Util.BossBar.reflection.NMSClass.PacketPlayOutSpawnEntityLiving.getDeclaredField("a")).set(packet, id);
-			hu.tryharddood.myzone.Util.BossBar.reflection.AccessUtil.setAccessible(hu.tryharddood.myzone.Util.BossBar.reflection.NMSClass.PacketPlayOutSpawnEntityLiving.getDeclaredField("b")).set(packet, 64);// TODO: Find correct entity type id
-			hu.tryharddood.myzone.Util.BossBar.reflection.AccessUtil.setAccessible(hu.tryharddood.myzone.Util.BossBar.reflection.NMSClass.PacketPlayOutSpawnEntityLiving.getDeclaredField("c")).set(packet, (int) loc.getX());
-			hu.tryharddood.myzone.Util.BossBar.reflection.AccessUtil.setAccessible(hu.tryharddood.myzone.Util.BossBar.reflection.NMSClass.PacketPlayOutSpawnEntityLiving.getDeclaredField("d")).set(packet, hu.tryharddood.myzone.Util.BossBar.reflection.MathUtil.floor(loc.getY() * 32D));
-			hu.tryharddood.myzone.Util.BossBar.reflection.AccessUtil.setAccessible(hu.tryharddood.myzone.Util.BossBar.reflection.NMSClass.PacketPlayOutSpawnEntityLiving.getDeclaredField("e")).set(packet, (int) loc.getZ());
+		Object packet = hu.tryharddood.myzone.Util.BossBarAPI.reflection.NMSClass.PacketPlayOutSpawnEntityLiving.newInstance();
+		if (Minecraft.VERSION.olderThan(Minecraft.Version.v1_9_R1))
+		{
+			hu.tryharddood.myzone.Util.BossBarAPI.reflection.AccessUtil.setAccessible(hu.tryharddood.myzone.Util.BossBarAPI.reflection.NMSClass.PacketPlayOutSpawnEntityLiving.getDeclaredField("a")).set(packet, id);
+			hu.tryharddood.myzone.Util.BossBarAPI.reflection.AccessUtil.setAccessible(hu.tryharddood.myzone.Util.BossBarAPI.reflection.NMSClass.PacketPlayOutSpawnEntityLiving.getDeclaredField("b")).set(packet, 64);// TODO: Find correct entity type id
+			hu.tryharddood.myzone.Util.BossBarAPI.reflection.AccessUtil.setAccessible(hu.tryharddood.myzone.Util.BossBarAPI.reflection.NMSClass.PacketPlayOutSpawnEntityLiving.getDeclaredField("c")).set(packet, (int) loc.getX());
+			hu.tryharddood.myzone.Util.BossBarAPI.reflection.AccessUtil.setAccessible(hu.tryharddood.myzone.Util.BossBarAPI.reflection.NMSClass.PacketPlayOutSpawnEntityLiving.getDeclaredField("d")).set(packet, hu.tryharddood.myzone.Util.BossBarAPI.reflection.MathUtil.floor(loc.getY() * 32D));
+			hu.tryharddood.myzone.Util.BossBarAPI.reflection.AccessUtil.setAccessible(hu.tryharddood.myzone.Util.BossBarAPI.reflection.NMSClass.PacketPlayOutSpawnEntityLiving.getDeclaredField("e")).set(packet, (int) loc.getZ());
 
-			hu.tryharddood.myzone.Util.BossBar.reflection.AccessUtil.setAccessible(hu.tryharddood.myzone.Util.BossBar.reflection.NMSClass.PacketPlayOutSpawnEntityLiving.getDeclaredField("i")).set(packet, (byte) hu.tryharddood.myzone.Util.BossBar.reflection.MathUtil.d(loc.getYaw() * 256F / 360F));
-			hu.tryharddood.myzone.Util.BossBar.reflection.AccessUtil.setAccessible(hu.tryharddood.myzone.Util.BossBar.reflection.NMSClass.PacketPlayOutSpawnEntityLiving.getDeclaredField("j")).set(packet, (byte) hu.tryharddood.myzone.Util.BossBar.reflection.MathUtil.d(loc.getPitch() * 256F / 360F));
-			hu.tryharddood.myzone.Util.BossBar.reflection.AccessUtil.setAccessible(hu.tryharddood.myzone.Util.BossBar.reflection.NMSClass.PacketPlayOutSpawnEntityLiving.getDeclaredField("k")).set(packet, (byte) hu.tryharddood.myzone.Util.BossBar.reflection.MathUtil.d(loc.getPitch() * 256F / 360F));
-			hu.tryharddood.myzone.Util.BossBar.reflection.AccessUtil.setAccessible(hu.tryharddood.myzone.Util.BossBar.reflection.NMSClass.PacketPlayOutSpawnEntityLiving.getDeclaredField("l")).set(packet, dataWatcher);
-		} else {
-			hu.tryharddood.myzone.Util.BossBar.reflection.AccessUtil.setAccessible(hu.tryharddood.myzone.Util.BossBar.reflection.NMSClass.PacketPlayOutSpawnEntityLiving.getDeclaredField("a")).set(packet, id);
-			hu.tryharddood.myzone.Util.BossBar.reflection.AccessUtil.setAccessible(hu.tryharddood.myzone.Util.BossBar.reflection.NMSClass.PacketPlayOutSpawnEntityLiving.getDeclaredField("b")).set(packet, uuid);
-			hu.tryharddood.myzone.Util.BossBar.reflection.AccessUtil.setAccessible(hu.tryharddood.myzone.Util.BossBar.reflection.NMSClass.PacketPlayOutSpawnEntityLiving.getDeclaredField("c")).set(packet, 64);
-			hu.tryharddood.myzone.Util.BossBar.reflection.AccessUtil.setAccessible(hu.tryharddood.myzone.Util.BossBar.reflection.NMSClass.PacketPlayOutSpawnEntityLiving.getDeclaredField("d")).set(packet, loc.getX());
-			hu.tryharddood.myzone.Util.BossBar.reflection.AccessUtil.setAccessible(hu.tryharddood.myzone.Util.BossBar.reflection.NMSClass.PacketPlayOutSpawnEntityLiving.getDeclaredField("e")).set(packet, loc.getY());
-			hu.tryharddood.myzone.Util.BossBar.reflection.AccessUtil.setAccessible(hu.tryharddood.myzone.Util.BossBar.reflection.NMSClass.PacketPlayOutSpawnEntityLiving.getDeclaredField("f")).set(packet, loc.getZ());
+			hu.tryharddood.myzone.Util.BossBarAPI.reflection.AccessUtil.setAccessible(hu.tryharddood.myzone.Util.BossBarAPI.reflection.NMSClass.PacketPlayOutSpawnEntityLiving.getDeclaredField("i")).set(packet, (byte) hu.tryharddood.myzone.Util.BossBarAPI.reflection.MathUtil.d(loc.getYaw() * 256F / 360F));
+			hu.tryharddood.myzone.Util.BossBarAPI.reflection.AccessUtil.setAccessible(hu.tryharddood.myzone.Util.BossBarAPI.reflection.NMSClass.PacketPlayOutSpawnEntityLiving.getDeclaredField("j")).set(packet, (byte) hu.tryharddood.myzone.Util.BossBarAPI.reflection.MathUtil.d(loc.getPitch() * 256F / 360F));
+			hu.tryharddood.myzone.Util.BossBarAPI.reflection.AccessUtil.setAccessible(hu.tryharddood.myzone.Util.BossBarAPI.reflection.NMSClass.PacketPlayOutSpawnEntityLiving.getDeclaredField("k")).set(packet, (byte) hu.tryharddood.myzone.Util.BossBarAPI.reflection.MathUtil.d(loc.getPitch() * 256F / 360F));
+			hu.tryharddood.myzone.Util.BossBarAPI.reflection.AccessUtil.setAccessible(hu.tryharddood.myzone.Util.BossBarAPI.reflection.NMSClass.PacketPlayOutSpawnEntityLiving.getDeclaredField("l")).set(packet, dataWatcher);
+		}
+		else
+		{
+			hu.tryharddood.myzone.Util.BossBarAPI.reflection.AccessUtil.setAccessible(hu.tryharddood.myzone.Util.BossBarAPI.reflection.NMSClass.PacketPlayOutSpawnEntityLiving.getDeclaredField("a")).set(packet, id);
+			hu.tryharddood.myzone.Util.BossBarAPI.reflection.AccessUtil.setAccessible(hu.tryharddood.myzone.Util.BossBarAPI.reflection.NMSClass.PacketPlayOutSpawnEntityLiving.getDeclaredField("b")).set(packet, uuid);
+			hu.tryharddood.myzone.Util.BossBarAPI.reflection.AccessUtil.setAccessible(hu.tryharddood.myzone.Util.BossBarAPI.reflection.NMSClass.PacketPlayOutSpawnEntityLiving.getDeclaredField("c")).set(packet, 64);
+			hu.tryharddood.myzone.Util.BossBarAPI.reflection.AccessUtil.setAccessible(hu.tryharddood.myzone.Util.BossBarAPI.reflection.NMSClass.PacketPlayOutSpawnEntityLiving.getDeclaredField("d")).set(packet, loc.getX());
+			hu.tryharddood.myzone.Util.BossBarAPI.reflection.AccessUtil.setAccessible(hu.tryharddood.myzone.Util.BossBarAPI.reflection.NMSClass.PacketPlayOutSpawnEntityLiving.getDeclaredField("e")).set(packet, loc.getY());
+			hu.tryharddood.myzone.Util.BossBarAPI.reflection.AccessUtil.setAccessible(hu.tryharddood.myzone.Util.BossBarAPI.reflection.NMSClass.PacketPlayOutSpawnEntityLiving.getDeclaredField("f")).set(packet, loc.getZ());
 
-			hu.tryharddood.myzone.Util.BossBar.reflection.AccessUtil.setAccessible(hu.tryharddood.myzone.Util.BossBar.reflection.NMSClass.PacketPlayOutSpawnEntityLiving.getDeclaredField("j")).set(packet, (byte) hu.tryharddood.myzone.Util.BossBar.reflection.MathUtil.d(loc.getYaw() * 256F / 360F));
-			hu.tryharddood.myzone.Util.BossBar.reflection.AccessUtil.setAccessible(hu.tryharddood.myzone.Util.BossBar.reflection.NMSClass.PacketPlayOutSpawnEntityLiving.getDeclaredField("k")).set(packet, (byte) hu.tryharddood.myzone.Util.BossBar.reflection.MathUtil.d(loc.getPitch() * 256F / 360F));
-			hu.tryharddood.myzone.Util.BossBar.reflection.AccessUtil.setAccessible(hu.tryharddood.myzone.Util.BossBar.reflection.NMSClass.PacketPlayOutSpawnEntityLiving.getDeclaredField("l")).set(packet, (byte) hu.tryharddood.myzone.Util.BossBar.reflection.MathUtil.d(loc.getPitch() * 256F / 360F));
-			hu.tryharddood.myzone.Util.BossBar.reflection.AccessUtil.setAccessible(hu.tryharddood.myzone.Util.BossBar.reflection.NMSClass.PacketPlayOutSpawnEntityLiving.getDeclaredField("m")).set(packet, dataWatcher);
+			hu.tryharddood.myzone.Util.BossBarAPI.reflection.AccessUtil.setAccessible(hu.tryharddood.myzone.Util.BossBarAPI.reflection.NMSClass.PacketPlayOutSpawnEntityLiving.getDeclaredField("j")).set(packet, (byte) hu.tryharddood.myzone.Util.BossBarAPI.reflection.MathUtil.d(loc.getYaw() * 256F / 360F));
+			hu.tryharddood.myzone.Util.BossBarAPI.reflection.AccessUtil.setAccessible(hu.tryharddood.myzone.Util.BossBarAPI.reflection.NMSClass.PacketPlayOutSpawnEntityLiving.getDeclaredField("k")).set(packet, (byte) hu.tryharddood.myzone.Util.BossBarAPI.reflection.MathUtil.d(loc.getPitch() * 256F / 360F));
+			hu.tryharddood.myzone.Util.BossBarAPI.reflection.AccessUtil.setAccessible(hu.tryharddood.myzone.Util.BossBarAPI.reflection.NMSClass.PacketPlayOutSpawnEntityLiving.getDeclaredField("l")).set(packet, (byte) hu.tryharddood.myzone.Util.BossBarAPI.reflection.MathUtil.d(loc.getPitch() * 256F / 360F));
+			hu.tryharddood.myzone.Util.BossBarAPI.reflection.AccessUtil.setAccessible(hu.tryharddood.myzone.Util.BossBarAPI.reflection.NMSClass.PacketPlayOutSpawnEntityLiving.getDeclaredField("m")).set(packet, dataWatcher);
 		}
 
 		return packet;
@@ -49,15 +49,15 @@ public abstract class ClassBuilder {
 		//		dataWatcher = setDataWatcherValue(dataWatcher, visibilityIndex, (byte) (name != null && !name.isEmpty() ? 1 : 0));
 		DataWatcher.setValue(dataWatcher, nameIndex, ENTITY_NAME, name != null ? name : "");// Pass an empty string to avoid exceptions
 		DataWatcher.setValue(dataWatcher, visibilityIndex, ENTITY_NAME_VISIBLE, Minecraft.VERSION.olderThan(Minecraft.Version.v1_9_R1) ? (byte) (name != null && !name.isEmpty() ? 1 : 0) : (name != null && !name.isEmpty()));//Byte < 1.9, Boolean >= 1.9
-		Object metaPacket = hu.tryharddood.myzone.Util.BossBar.reflection.NMSClass.PacketPlayOutEntityMetadata.getConstructor(int.class, hu.tryharddood.myzone.Util.BossBar.reflection.NMSClass.DataWatcher, boolean.class).newInstance(id, dataWatcher, true);
+		Object metaPacket = hu.tryharddood.myzone.Util.BossBarAPI.reflection.NMSClass.PacketPlayOutEntityMetadata.getConstructor(int.class, hu.tryharddood.myzone.Util.BossBarAPI.reflection.NMSClass.DataWatcher, boolean.class).newInstance(id, dataWatcher, true);
 
 		return metaPacket;
 	}
 
 	public static Object updateEntityLocation(Object entity, Location loc) throws Exception {
-		hu.tryharddood.myzone.Util.BossBar.reflection.NMSClass.Entity.getDeclaredField("locX").set(entity, loc.getX());
-		hu.tryharddood.myzone.Util.BossBar.reflection.NMSClass.Entity.getDeclaredField("locY").set(entity, loc.getY());
-		hu.tryharddood.myzone.Util.BossBar.reflection.NMSClass.Entity.getDeclaredField("locZ").set(entity, loc.getZ());
+		hu.tryharddood.myzone.Util.BossBarAPI.reflection.NMSClass.Entity.getDeclaredField("locX").set(entity, loc.getX());
+		hu.tryharddood.myzone.Util.BossBarAPI.reflection.NMSClass.Entity.getDeclaredField("locY").set(entity, loc.getY());
+		hu.tryharddood.myzone.Util.BossBarAPI.reflection.NMSClass.Entity.getDeclaredField("locZ").set(entity, loc.getZ());
 		return entity;
 	}
 
@@ -131,19 +131,19 @@ public abstract class ClassBuilder {
 	//	}
 
 	public static Object buildArmorStandSpawnPacket(Object armorStand) throws Exception {
-		Object spawnPacket = hu.tryharddood.myzone.Util.BossBar.reflection.NMSClass.PacketPlayOutSpawnEntityLiving.getConstructor(hu.tryharddood.myzone.Util.BossBar.reflection.NMSClass.EntityLiving).newInstance(armorStand);
-		hu.tryharddood.myzone.Util.BossBar.reflection.AccessUtil.setAccessible(hu.tryharddood.myzone.Util.BossBar.reflection.NMSClass.PacketPlayOutSpawnEntityLiving.getDeclaredField("b")).setInt(spawnPacket, 30);
+		Object spawnPacket = hu.tryharddood.myzone.Util.BossBarAPI.reflection.NMSClass.PacketPlayOutSpawnEntityLiving.getConstructor(hu.tryharddood.myzone.Util.BossBarAPI.reflection.NMSClass.EntityLiving).newInstance(armorStand);
+		hu.tryharddood.myzone.Util.BossBarAPI.reflection.AccessUtil.setAccessible(hu.tryharddood.myzone.Util.BossBarAPI.reflection.NMSClass.PacketPlayOutSpawnEntityLiving.getDeclaredField("b")).setInt(spawnPacket, 30);
 
 		return spawnPacket;
 	}
 
 	public static Object buildTeleportPacket(int id, Location loc, boolean onGround, boolean heightCorrection) throws Exception {
-		Object packet = hu.tryharddood.myzone.Util.BossBar.reflection.NMSClass.PacketPlayOutEntityTeleport.newInstance();
-		hu.tryharddood.myzone.Util.BossBar.reflection.AccessUtil.setAccessible(hu.tryharddood.myzone.Util.BossBar.reflection.NMSClass.PacketPlayOutEntityTeleport.getDeclaredField("a")).set(packet, id);
-		hu.tryharddood.myzone.Util.BossBar.reflection.AccessUtil.setAccessible(hu.tryharddood.myzone.Util.BossBar.reflection.NMSClass.PacketPlayOutEntityTeleport.getDeclaredField("b")).set(packet, (int) (loc.getX() * 32D));
-		hu.tryharddood.myzone.Util.BossBar.reflection.AccessUtil.setAccessible(hu.tryharddood.myzone.Util.BossBar.reflection.NMSClass.PacketPlayOutEntityTeleport.getDeclaredField("c")).set(packet, (int) (loc.getY() * 32D));
-		hu.tryharddood.myzone.Util.BossBar.reflection.AccessUtil.setAccessible(hu.tryharddood.myzone.Util.BossBar.reflection.NMSClass.PacketPlayOutEntityTeleport.getDeclaredField("d")).set(packet, (int) (loc.getZ() * 32D));
-		hu.tryharddood.myzone.Util.BossBar.reflection.AccessUtil.setAccessible(hu.tryharddood.myzone.Util.BossBar.reflection.NMSClass.PacketPlayOutEntityTeleport.getDeclaredField("e")).set(packet, (byte) (int) (loc.getYaw() * 256F / 360F));
+		Object packet = hu.tryharddood.myzone.Util.BossBarAPI.reflection.NMSClass.PacketPlayOutEntityTeleport.newInstance();
+		hu.tryharddood.myzone.Util.BossBarAPI.reflection.AccessUtil.setAccessible(hu.tryharddood.myzone.Util.BossBarAPI.reflection.NMSClass.PacketPlayOutEntityTeleport.getDeclaredField("a")).set(packet, id);
+		hu.tryharddood.myzone.Util.BossBarAPI.reflection.AccessUtil.setAccessible(hu.tryharddood.myzone.Util.BossBarAPI.reflection.NMSClass.PacketPlayOutEntityTeleport.getDeclaredField("b")).set(packet, (int) (loc.getX() * 32D));
+		hu.tryharddood.myzone.Util.BossBarAPI.reflection.AccessUtil.setAccessible(hu.tryharddood.myzone.Util.BossBarAPI.reflection.NMSClass.PacketPlayOutEntityTeleport.getDeclaredField("c")).set(packet, (int) (loc.getY() * 32D));
+		hu.tryharddood.myzone.Util.BossBarAPI.reflection.AccessUtil.setAccessible(hu.tryharddood.myzone.Util.BossBarAPI.reflection.NMSClass.PacketPlayOutEntityTeleport.getDeclaredField("d")).set(packet, (int) (loc.getZ() * 32D));
+		hu.tryharddood.myzone.Util.BossBarAPI.reflection.AccessUtil.setAccessible(hu.tryharddood.myzone.Util.BossBarAPI.reflection.NMSClass.PacketPlayOutEntityTeleport.getDeclaredField("e")).set(packet, (byte) (int) (loc.getYaw() * 256F / 360F));
 		AccessUtil.setAccessible(NMSClass.PacketPlayOutEntityTeleport.getDeclaredField("f")).set(packet, (byte) (int) (loc.getPitch() * 256F / 360F));
 
 		return packet;

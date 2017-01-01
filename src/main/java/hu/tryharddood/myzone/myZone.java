@@ -8,6 +8,7 @@ import hu.tryharddood.myzone.Commands.SubCommands.*;
 import hu.tryharddood.myzone.Listeners.pListener;
 import hu.tryharddood.myzone.MenuBuilder.inventory.InventoryListener;
 import hu.tryharddood.myzone.Util.Localization.I18n;
+import hu.tryharddood.myzone.Util.MessagesAPI;
 import hu.tryharddood.myzone.Util.Updater;
 import hu.tryharddood.myzone.Util.WorldGuard.WorldGuardHelper;
 import hu.tryharddood.myzone.Util.WorldGuard.WorldGuardReflection;
@@ -28,12 +29,10 @@ public class myZone extends JavaPlugin {
 	public static WorldGuardHelper     worldGuardHelper;
 	public static MCVersion.Version    serverVersion;
 	public static ZoneManager          zoneManager;
-
-	public InventoryListener inventoryListener;
-
 	private static I18n   _i18n;
 	private static String _name;
 	private static String _version;
+	public InventoryListener inventoryListener;
 
 	public static void log(String message) {
 		Bukkit.getConsoleSender().sendMessage("[" + _name + " v" + _version + "] " + message);
@@ -58,7 +57,6 @@ public class myZone extends JavaPlugin {
 			return;
 		}
 
-
 		log("Starting...");
 
 		log("Trying to hook WorldGuard...");
@@ -66,6 +64,9 @@ public class myZone extends JavaPlugin {
 
 		_i18n = new I18n(this);
 		_i18n.onEnable();
+
+		MessagesAPI _messagesAPI = new MessagesAPI();
+		_messagesAPI.onEnable();
 
 		log("Creating commands...");
 		registerCommands();

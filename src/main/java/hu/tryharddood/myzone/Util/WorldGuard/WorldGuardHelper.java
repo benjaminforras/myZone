@@ -7,7 +7,7 @@ import com.sk89q.worldguard.protection.managers.RegionManager;
 import com.sk89q.worldguard.protection.managers.storage.StorageException;
 import com.sk89q.worldguard.protection.regions.ProtectedCuboidRegion;
 import com.sk89q.worldguard.protection.regions.ProtectedRegion;
-import hu.tryharddood.myzone.Zones.Settings;
+import hu.tryharddood.myzone.Util.ZoneUtils;
 import hu.tryharddood.myzone.Zones.ZoneObject;
 import hu.tryharddood.myzone.myZone;
 import org.bukkit.Bukkit;
@@ -22,6 +22,7 @@ import java.io.IOException;
 import java.util.*;
 import java.util.stream.Collectors;
 
+import static com.sk89q.worldguard.bukkit.BukkitUtil.toVector;
 import static hu.tryharddood.myzone.Util.Localization.I18n.tl;
 
 /*****************************************************
@@ -31,8 +32,7 @@ public class WorldGuardHelper {
 
 	private final JavaPlugin _instance;
 
-	public WorldGuardHelper(JavaPlugin instance)
-	{
+	public WorldGuardHelper(JavaPlugin instance) {
 		_instance = instance;
 	}
 
@@ -76,11 +76,10 @@ public class WorldGuardHelper {
 		return true;
 	}
 
-	public void createRegion(String zoneName, String regionID, Vector[] vectors, Player owner, World world) {
-		ProtectedRegion region = new ProtectedCuboidRegion(regionID, vectors[0].toBlockVector(), vectors[1].toBlockVector());
-
-		OfflinePlayer offlinePlayer = Bukkit.getOfflinePlayer(owner.getUniqueId());
-		LocalPlayer   lcPlayer      = myZone.worldGuardReflection.getWorldGuardPlugin().wrapOfflinePlayer(offlinePlayer);
+	public void createRegion(String zoneName, String regionID, com.sk89q.worldedit.Vector[] vectors, Player owner, World world) {
+		ProtectedRegion region        = new ProtectedCuboidRegion(regionID, vectors[0].toBlockVector(), vectors[1].toBlockVector());
+		OfflinePlayer   offlinePlayer = Bukkit.getOfflinePlayer(owner.getUniqueId());
+		LocalPlayer     lcPlayer      = myZone.worldGuardReflection.getWorldGuardPlugin().wrapOfflinePlayer(offlinePlayer);
 		region.getOwners().addPlayer(lcPlayer);
 
 		ZoneObject zoneObject = new ZoneObject();
@@ -255,10 +254,10 @@ public class WorldGuardHelper {
 		BlockVector newMin = new BlockVector(x1, y1, z1);
 		BlockVector newMax = new BlockVector(x2, y2, z2);
 
-		String permission = Settings.checkSizePermission(player, new Location[]{new Location(world, x1, y1, z1), new Location(world, x2, y2, z2)});
+		String permission = ZoneUtils.checkSizePermission(player, new com.sk89q.worldedit.Vector[]{toVector(new Location(world, x1, y1, z1)), toVector(new Location(world, x2, y2, z2))});
 		if (permission.startsWith("size"))
 		{
-			Vector maxSize = Settings.getSett(player).getMaxSize();
+			Vector maxSize = ZoneUtils.getMaxSize(player);
 			player.sendMessage(tl("Error") + " " + tl("ZoneTooBig", permission.split(":")[1], maxSize.getX() + ", " + maxSize.getY() + ", " + maxSize.getZ()));
 			return -1;
 		}

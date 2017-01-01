@@ -26,10 +26,10 @@
  *  either expressed or implied, of anybody else.
  */
 
-package org.inventivetalent.reflection.minecraft;
+package hu.tryharddood.myzone.Util.ReflectionHelper.minecraft;
 
-import org.inventivetalent.reflection.resolver.*;
-import org.inventivetalent.reflection.resolver.minecraft.NMSClassResolver;
+import hu.tryharddood.myzone.Util.ReflectionHelper.resolver.*;
+import hu.tryharddood.myzone.Util.ReflectionHelper.resolver.minecraft.NMSClassResolver;
 
 import javax.annotation.Nullable;
 import java.lang.reflect.Field;

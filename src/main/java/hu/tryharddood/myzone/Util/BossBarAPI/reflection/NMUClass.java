@@ -1,28 +1,36 @@
-package hu.tryharddood.myzone.Util.BossBar.reflection;
+package hu.tryharddood.myzone.Util.BossBarAPI.reflection;
 
 import java.lang.reflect.Field;
 
 public abstract class NMUClass {
 
-	private static boolean initialized;
-
 	public static Class<?> gnu_trove_map_TIntObjectMap;
 	public static Class<?> gnu_trove_map_hash_TIntObjectHashMap;
 	public static Class<?> gnu_trove_impl_hash_THash;
 	public static Class<?> io_netty_channel_Channel;
+	private static boolean initialized;
 
-	static {
-		if (!initialized) {
-			for (Field f : NMUClass.class.getDeclaredFields()) {
-				if (f.getType().equals(Class.class)) {
-					try {
+	static
+	{
+		if (!initialized)
+		{
+			for (Field f : NMUClass.class.getDeclaredFields())
+			{
+				if (f.getType().equals(Class.class))
+				{
+					try
+					{
 						String name = f.getName().replace("_", ".");
-						if (Reflection.getVersion().contains("1_8")) {
+						if (Reflection.getVersion().contains("1_8"))
+						{
 							f.set(null, Class.forName(name));
-						} else {
+						}
+						else
+						{
 							f.set(null, Class.forName("net.minecraft.util." + name));
 						}
-					} catch (Exception e) {
+					} catch (Exception e)
+					{
 						e.printStackTrace();
 					}
 				}

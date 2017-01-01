@@ -26,10 +26,10 @@
  *  either expressed or implied, of anybody else.
  */
 
-package org.inventivetalent.reflection.resolver;
+package hu.tryharddood.myzone.Util.ReflectionHelper.resolver;
 
-import org.inventivetalent.reflection.resolver.wrapper.FieldWrapper;
-import org.inventivetalent.reflection.util.AccessUtil;
+import hu.tryharddood.myzone.Util.ReflectionHelper.resolver.wrapper.FieldWrapper;
+import hu.tryharddood.myzone.Util.ReflectionHelper.util.AccessUtil;
 
 import java.lang.reflect.Field;
 
