@@ -63,7 +63,39 @@ public class FlagCommand extends Subcommand {
 			_flags = stringBuilder.toString();
 		}
 
-		if (args.length < 4)
+		if(args.length == 3 || (args.length >= 4 && args[3].equalsIgnoreCase("none")))
+		{
+			Flag flag = myZone.worldGuardReflection.fuzzyMatchFlag(args[2]);
+			if(flag == null)
+			{
+				String[] lines = splitSentence(_flags, 5);
+				for (String line : lines)
+				{
+					sender.sendMessage(ChatColor.GOLD + "- " + line);
+				}
+				return;
+			}
+
+			String regionID = myZone.zoneManager.getRegionID(args[1]);
+			ProtectedRegion region  = myZone.worldGuardHelper.getRegion(regionID);
+
+			String value = "none";
+
+			if(flag instanceof StringFlag)
+				value = null;
+
+			try
+			{
+				region.setFlag(flag, myZone.worldGuardReflection.parseInput(flag, sender, region, value));
+				sender.sendMessage(tl("Success") + " " + "Successfully resetted '" + flag.getName() + "' to the default value.");
+			} catch (InvalidFlagFormat invalidFlagFormat)
+			{
+				invalidFlagFormat.printStackTrace();
+			}
+			return;
+		}
+
+		if (args.length < 3)
 		{
 			sender.sendMessage(tl("Wrong") + " " + tl("Command_Usage", getUsage(), getDescription()));
 			return;
@@ -110,7 +142,7 @@ public class FlagCommand extends Subcommand {
 
 		if (flag instanceof StateFlag)
 		{
-			if (!value.contains("allow") && !value.contains("deny") && !value.contains("none"))
+			if (!value.contains("allow") && !value.contains("deny"))
 			{
 				sender.sendMessage(tl("Wrong") + " " + tl("FlagZone_Error3"));
 				return;
@@ -118,7 +150,7 @@ public class FlagCommand extends Subcommand {
 		}
 		else if (flag instanceof IntegerFlag)
 		{
-			if (!isNumeric(value) && !value.contains("none"))
+			if (!isNumeric(value))
 			{
 				sender.sendMessage(tl("Wrong") + " " + tl("FlagZone_Error4"));
 				return;
@@ -126,7 +158,7 @@ public class FlagCommand extends Subcommand {
 		}
 		else if (flag instanceof DoubleFlag)
 		{
-			if (!isDouble(value) && !value.contains("none"))
+			if (!isDouble(value))
 			{
 				sender.sendMessage(tl("Wrong") + " " + tl("FlagZone_Error5"));
 				return;
@@ -134,7 +166,7 @@ public class FlagCommand extends Subcommand {
 		}
 		else if (flag instanceof BooleanFlag)
 		{
-			if (!value.contains("allow") && !value.contains("deny") && !value.contains("none"))
+			if (!value.contains("allow"))
 			{
 				sender.sendMessage(tl("Wrong") + " " + tl("FlagZone_Error6"));
 				return;
@@ -142,7 +174,7 @@ public class FlagCommand extends Subcommand {
 		}
 		else if (flag instanceof LocationFlag)
 		{
-			if (!Pattern.compile("\\[,\\]+").matcher(value).find() && !value.contains("none"))
+			if (!Pattern.compile("\\[,\\]+").matcher(value).find())
 			{
 				sender.sendMessage(tl("Wrong") + " " + tl("FlagZone_Error9"));
 				return;
@@ -150,7 +182,7 @@ public class FlagCommand extends Subcommand {
 		}
 		else if (flag instanceof SetFlag)
 		{
-			if (!Pattern.compile("\\[,\\]+").matcher(value).find() && !value.contains("none"))
+			if (!Pattern.compile("\\[,\\]+").matcher(value).find())
 			{
 				sender.sendMessage(tl("Wrong") + " " + tl("FlagZone_Error9"));
 				return;

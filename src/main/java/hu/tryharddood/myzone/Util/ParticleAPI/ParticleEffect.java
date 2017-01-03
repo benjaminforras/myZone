@@ -552,9 +552,7 @@ public enum ParticleEffect {
 		void send(Collection<? extends Player> receivers, double x, double y, double z, double offsetX, double offsetY, double offsetZ, double speed, int count, int id, byte data) {
 			try {
 				if (Minecraft.VERSION.newerThan(v1_8_R1)) {
-					send_1_8(receivers, x, y, z, offsetX, offsetY, offsetZ, speed, count, new int[] {
-							id,
-							id | data << 12 });
+					send_1_8(receivers, x, y, z, offsetX, offsetY, offsetZ, speed, count, new int[] {id, id | data << 12 });
 				} else {
 					send_1_7(effect.name + id + (data >= 0 ? "_" + data : ""), receivers, x, y, z, offsetX, offsetY, offsetZ, speed, count);
 				}
