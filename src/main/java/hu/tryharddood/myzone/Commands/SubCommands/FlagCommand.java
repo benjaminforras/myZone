@@ -63,38 +63,6 @@ public class FlagCommand extends Subcommand {
 			_flags = stringBuilder.toString();
 		}
 
-		if(args.length == 3 || (args.length >= 4 && args[3].equalsIgnoreCase("none")))
-		{
-			Flag flag = myZone.worldGuardReflection.fuzzyMatchFlag(args[2]);
-			if(flag == null)
-			{
-				String[] lines = splitSentence(_flags, 5);
-				for (String line : lines)
-				{
-					sender.sendMessage(ChatColor.GOLD + "- " + line);
-				}
-				return;
-			}
-
-			String regionID = myZone.zoneManager.getRegionID(args[1]);
-			ProtectedRegion region  = myZone.worldGuardHelper.getRegion(regionID);
-
-			String value = "none";
-
-			if(flag instanceof StringFlag)
-				value = null;
-
-			try
-			{
-				region.setFlag(flag, myZone.worldGuardReflection.parseInput(flag, sender, region, value));
-				sender.sendMessage(tl("Success") + " " + "Successfully resetted '" + flag.getName() + "' to the default value.");
-			} catch (InvalidFlagFormat invalidFlagFormat)
-			{
-				invalidFlagFormat.printStackTrace();
-			}
-			return;
-		}
-
 		if (args.length < 3)
 		{
 			sender.sendMessage(tl("Wrong") + " " + tl("Command_Usage", getUsage(), getDescription()));
@@ -137,6 +105,35 @@ public class FlagCommand extends Subcommand {
 			{
 				sender.sendMessage(ChatColor.GOLD + "- " + line);
 			}
+			return;
+		}
+
+		if (!player.hasPermission(Variables.PlayerCommands.FLAGTYPEPERMISSION.replaceAll("\\[flag\\]", flag.getName())) && !player.hasPermission(Variables.PlayerCommands.FLAGTYPEPERMISSION.replaceAll("\\[flag\\]", "*")))
+		{
+			sender.sendMessage(tl("Error") + " " + tl("FlagZone_Error8"));
+			return;
+		}
+
+		if (Properties.getEconomyEnabled())
+		{
+			if (!myZone.vaultEcon.has(Bukkit.getOfflinePlayer(player.getUniqueId()), Properties.getZoneFlagMoney()))
+			{
+				sender.sendMessage(tl("Error") + " " + tl("Economy_NotEnoughMoney", Properties.getZoneFlagMoney()));
+				return;
+			}
+			myZone.vaultEcon.withdrawPlayer(Bukkit.getOfflinePlayer(player.getUniqueId()), Properties.getZoneFlagMoney());
+		}
+
+		if (args.length == 3 || (args.length >= 4 && args[3].equalsIgnoreCase("none")))
+		{
+			if (flag instanceof StringFlag)
+				value = null;
+
+			try
+			{
+				region.setFlag(flag, myZone.worldGuardReflection.parseInput(flag, sender, region, value));
+				sender.sendMessage(tl("Success") + " " + tl("flag_reset_success", flag.getName()));
+			} catch (InvalidFlagFormat | NullPointerException ignored) {}
 			return;
 		}
 
@@ -187,22 +184,6 @@ public class FlagCommand extends Subcommand {
 				sender.sendMessage(tl("Wrong") + " " + tl("FlagZone_Error9"));
 				return;
 			}
-		}
-
-		if (!player.hasPermission(Variables.PlayerCommands.FLAGTYPEPERMISSION.replaceAll("\\[flag\\]", flag.getName())) && !player.hasPermission(Variables.PlayerCommands.FLAGTYPEPERMISSION.replaceAll("\\[flag\\]", "*")))
-		{
-			sender.sendMessage(tl("Error") + " " + tl("FlagZone_Error8"));
-			return;
-		}
-
-		if (Properties.getEconomyEnabled())
-		{
-			if (!myZone.vaultEcon.has(Bukkit.getOfflinePlayer(player.getUniqueId()), Properties.getZoneFlagMoney()))
-			{
-				sender.sendMessage(tl("Error") + " " + tl("Economy_NotEnoughMoney", Properties.getZoneFlagMoney()));
-				return;
-			}
-			myZone.vaultEcon.withdrawPlayer(Bukkit.getOfflinePlayer(player.getUniqueId()), Properties.getZoneFlagMoney());
 		}
 
 		try

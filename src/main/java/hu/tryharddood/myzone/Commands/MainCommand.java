@@ -50,8 +50,7 @@ public class MainCommand extends Subcommand {
 
 			if(action == ClickType.RIGHT)
 			{
-				value = "none";
-				Bukkit.dispatchCommand(player, "zone flag " + myZone.zoneManager.getRegion(region.getId()).getZoneName() + " " + flag.getName() + " " + value.toString());
+				Bukkit.dispatchCommand(player, "zone flag " + myZone.zoneManager.getRegion(region.getId()).getZoneName() + " " + flag.getName());
 				event.getInventory().setItem(event.getSlot(), new ItemBuilder(Material.SIGN).setTitle(flag.getName()).addLore(ChatColor.GRAY + tl("GUI_FlagNotSet", true)).build());
 				player.updateInventory();
 				return;
