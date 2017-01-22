@@ -76,28 +76,6 @@ public class myZone extends JavaPlugin {
 
 		log("Loading configuration file...");
 		Properties.loadConfiguration();
-
-		log("Checking for updates...");
-		Updater              updater = new Updater(this, 254781, this.getFile(), Updater.UpdateType.DEFAULT, false);
-		Updater.UpdateResult result  = updater.getResult();
-		switch (result)
-		{
-			case DISABLED:
-				log(ChatColor.RED + "Update checking is disabled.");
-				break;
-			case SUCCESS:
-				log(ChatColor.GREEN + "Downloaded the latest version. Please restart the server.");
-				break;
-			case NO_UPDATE:
-				log(ChatColor.GREEN + "You are using the latest version of " + this.getDescription().getName());
-				break;
-			case FAIL_DOWNLOAD:
-				log(ChatColor.GREEN + "New version found but couldn't download it.");
-				break;
-			case UPDATE_AVAILABLE:
-				log(ChatColor.GREEN + "There's a new version available.");
-		}
-
 		zoneManager = new ZoneManager();
 		zoneManager.loadZones();
 	}
