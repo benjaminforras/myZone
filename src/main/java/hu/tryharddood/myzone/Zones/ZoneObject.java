@@ -1,10 +1,13 @@
 package hu.tryharddood.myzone.Zones;
 
+import hu.tryharddood.myzone.Zones.Flags.ZoneFlag;
 import org.bukkit.configuration.file.YamlConfiguration;
 import org.bukkit.plugin.java.JavaPlugin;
 
 import java.io.File;
 import java.io.IOException;
+import java.util.ArrayList;
+import java.util.List;
 import java.util.UUID;
 
 /*****************************************************
@@ -14,13 +17,13 @@ public class ZoneObject {
 
 	private transient final JavaPlugin _instance = JavaPlugin.getProvidingPlugin(ZoneObject.class);
 
+	private ArrayList<ZoneFlag> _myzoneflags = new ArrayList<>();
+
 	private String zoneName;
 	private UUID   ownerID;
 	private String regionID;
 
-	public ZoneObject() {
-
-	}
+	public ZoneObject() {}
 
 	public String getZoneName() {
 		return zoneName;
@@ -67,6 +70,11 @@ public class ZoneObject {
 			file.createNewFile();
 			updateFile();
 		}
+	}
+
+	public List<ZoneFlag> getZoneFlags()
+	{
+		return _myzoneflags;
 	}
 
 	public void deleteFile() {
