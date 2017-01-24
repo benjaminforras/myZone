@@ -92,10 +92,7 @@ public class FlagCommand extends Subcommand {
 		{
 			sender.sendMessage(tl("Wrong") + " " + tl("FlagZone_Error2"));
 			sender.sendMessage(tl("FlagZone_AvailableFlags"));
-			for (String flagName : _flags)
-			{
-				sender.sendMessage(ChatColor.GOLD + "- " + flagName);
-			}
+			sender.sendMessage(ChatColor.GOLD + "- " + Arrays.toString(_flags.toArray()));
 			return;
 		}
 
