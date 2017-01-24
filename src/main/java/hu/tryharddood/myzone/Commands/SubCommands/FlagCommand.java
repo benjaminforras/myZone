@@ -13,6 +13,7 @@ import org.bukkit.command.Command;
 import org.bukkit.command.CommandSender;
 import org.bukkit.entity.Player;
 
+import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
 import java.util.regex.Pattern;
@@ -21,8 +22,7 @@ import static hu.tryharddood.myzone.Util.Localization.I18n.tl;
 
 
 public class FlagCommand extends Subcommand {
-	//private static ArrayList<String> _flags = new ArrayList<>();
-	private static String _flags;
+	private static ArrayList<String> _flags = new ArrayList<>();
 
 	@Override
 	public String getPermission() {
@@ -51,16 +51,13 @@ public class FlagCommand extends Subcommand {
 
 	@Override
 	public void onCommand(CommandSender sender, Command cmd, String label, String[] args) {
-		if (_flags == null || _flags.length() == 0)
+		if (_flags == null || _flags.size() == 0)
 		{
 			List<Flag<?>> flags = Properties.getFlags();
-
-			StringBuilder stringBuilder = new StringBuilder();
 			for (Flag flag : flags)
 			{
-				stringBuilder.append(flag.getName()).append(", ");
+				_flags.add(flag.getName());
 			}
-			_flags = stringBuilder.toString();
 		}
 
 		if (args.length < 3)
@@ -95,15 +92,9 @@ public class FlagCommand extends Subcommand {
 		{
 			sender.sendMessage(tl("Wrong") + " " + tl("FlagZone_Error2"));
 			sender.sendMessage(tl("FlagZone_AvailableFlags"));
-			/*for (String flagName : _flags)
+			for (String flagName : _flags)
 			{
 				sender.sendMessage(ChatColor.GOLD + "- " + flagName);
-			}*/
-
-			String[] lines = splitSentence(_flags, 5);
-			for (String line : lines)
-			{
-				sender.sendMessage(ChatColor.GOLD + "- " + line);
 			}
 			return;
 		}
@@ -201,34 +192,5 @@ public class FlagCommand extends Subcommand {
 		myZone.worldGuardHelper.saveAll();
 	}
 
-	private static String[] splitSentence(String sentence, int amount) {
-
-		String[] words     = sentence.split(" ");
-		int      arraySize = (int) Math.ceil((double) words.length / amount);
-
-		String[] output    = new String[arraySize];
-		int      index     = 0;
-		int      fullLines = (int) Math.floor((double) words.length / amount);
-
-		for (int i = 0; i < fullLines; i++)
-		{
-			String appender = "";
-			for (int j = 0; j < amount; j++)
-			{
-				appender += words[index] + " ";
-				index++;
-			}
-			output[i] = appender;
-		}
-
-		String appender = "";
-		for (int i = index; i < words.length; i++)
-		{
-			appender += words[index] + " ";
-			index++;
-		}
-		output[fullLines] = appender;
-		return output;
-	}
 }
 

@@ -95,7 +95,7 @@ public class rListener implements Listener {
 					String greetmessage = region.getFlag(DefaultFlag.GREET_MESSAGE);
 					if (greetmessage != null)
 					{
-						if (hu.tryharddood.myzone.Properties.getTitlesEnabled())
+						if (Properties.getTitlesEnabled())
 							MessagesAPI.sendTitle(player, "", ChatColor.translateAlternateColorCodes('&', greetmessage));
 						if (Properties.getActionBarEnabled())
 							MessagesAPI.sendActionBar(player, ChatColor.translateAlternateColorCodes('&', greetmessage), 25);

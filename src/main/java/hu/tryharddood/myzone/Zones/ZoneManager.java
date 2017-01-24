@@ -59,7 +59,7 @@ public class ZoneManager {
 			if (Properties.getRegex().matcher(fileName).find())
 			{
 				_instance.getLogger().info("Error when trying to load " + fileName);
-				_instance.getLogger().info("- The name contains special charaters.");
+				_instance.getLogger().info("- The name contains special characters.");
 				continue;
 			}
 
