@@ -117,6 +117,7 @@ public class FlagCommand extends Subcommand {
 
 		if (args.length == 3 || (args.length >= 4 && args[3].equalsIgnoreCase("none")))
 		{
+			value = "none";
 			if (flag instanceof StringFlag)
 				value = null;
 
