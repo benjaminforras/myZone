@@ -3,3 +3,4 @@ myZone.iml
 src/test/
 target/
 Dependencies/
+dependency-reduced-pom\.xml

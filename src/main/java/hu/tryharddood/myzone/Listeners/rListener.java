@@ -6,7 +6,6 @@ import com.sk89q.worldguard.protection.flags.DefaultFlag;
 import com.sk89q.worldguard.protection.managers.RegionManager;
 import com.sk89q.worldguard.protection.regions.ProtectedRegion;
 import hu.tryharddood.myzone.Properties;
-import hu.tryharddood.myzone.Util.BossBarAPI.BossBarAPI;
 import hu.tryharddood.myzone.Util.MessagesAPI;
 import net.md_5.bungee.api.chat.TextComponent;
 import org.bukkit.Bukkit;
@@ -17,6 +16,7 @@ import org.bukkit.event.EventHandler;
 import org.bukkit.event.Listener;
 import org.bukkit.event.player.*;
 import org.bukkit.plugin.java.JavaPlugin;
+import org.inventivetalent.bossbar.BossBarAPI;
 
 import java.util.*;
 

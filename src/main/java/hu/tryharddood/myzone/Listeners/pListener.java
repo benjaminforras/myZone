@@ -3,7 +3,6 @@ package hu.tryharddood.myzone.Listeners;
 import com.sk89q.worldguard.bukkit.WGBukkit;
 import com.sk89q.worldguard.protection.ApplicableRegionSet;
 import com.sk89q.worldguard.protection.flags.Flag;
-import hu.tryharddood.mcversion.MCVersion;
 import hu.tryharddood.myzone.Properties;
 import hu.tryharddood.myzone.Variables;
 import hu.tryharddood.myzone.Zones.Selection;
@@ -19,6 +18,7 @@ import org.bukkit.event.block.Action;
 import org.bukkit.event.player.PlayerInteractEvent;
 import org.bukkit.inventory.EquipmentSlot;
 import org.bukkit.inventory.ItemStack;
+import org.inventivetalent.reflection.minecraft.Minecraft;
 
 import java.util.HashMap;
 import java.util.Map;
@@ -37,7 +37,7 @@ public class pListener implements Listener {
 		Player player = event.getPlayer();
 		Action action = event.getAction();
 
-		if (myZone.serverVersion.newerThan(MCVersion.Version.v1_9_R1))
+		if (Minecraft.VERSION.newerThan(Minecraft.Version.v1_9_R1))
 		{
 			if (event.getHand() == null)
 			{

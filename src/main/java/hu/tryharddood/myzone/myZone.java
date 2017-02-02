@@ -1,7 +1,6 @@
 package hu.tryharddood.myzone;
 
 import com.sk89q.worldguard.bukkit.WorldGuardPlugin;
-import hu.tryharddood.mcversion.MCVersion;
 import hu.tryharddood.myzone.Commands.CommandHandler;
 import hu.tryharddood.myzone.Commands.MainCommand;
 import hu.tryharddood.myzone.Commands.SubCommands.*;
@@ -9,7 +8,6 @@ import hu.tryharddood.myzone.Listeners.pListener;
 import hu.tryharddood.myzone.MenuBuilder.inventory.InventoryListener;
 import hu.tryharddood.myzone.Util.Localization.I18n;
 import hu.tryharddood.myzone.Util.MessagesAPI;
-import hu.tryharddood.myzone.Util.Updater;
 import hu.tryharddood.myzone.Util.WorldGuard.WorldGuardHelper;
 import hu.tryharddood.myzone.Util.WorldGuard.WorldGuardReflection;
 import hu.tryharddood.myzone.Zones.ZoneManager;
@@ -18,6 +16,7 @@ import org.bukkit.Bukkit;
 import org.bukkit.ChatColor;
 import org.bukkit.plugin.Plugin;
 import org.bukkit.plugin.java.JavaPlugin;
+import org.inventivetalent.reflection.minecraft.Minecraft;
 
 import java.util.Collections;
 
@@ -27,7 +26,6 @@ public class myZone extends JavaPlugin {
 	public static Economy              vaultEcon;
 	public static WorldGuardReflection worldGuardReflection;
 	public static WorldGuardHelper     worldGuardHelper;
-	public static MCVersion.Version    serverVersion;
 	public static ZoneManager          zoneManager;
 	private static I18n   _i18n;
 	private static String _name;
@@ -45,12 +43,11 @@ public class myZone extends JavaPlugin {
 	@Override
 	public void onEnable() {
 		myZonePlugin = this;
-		serverVersion = MCVersion.Version.getVersion();
 
 		_name = getDescription().getName();
 		_version = getDescription().getVersion();
 
-		if (serverVersion.olderThan(MCVersion.Version.v1_8_R1))
+		if (Minecraft.VERSION.olderThan(Minecraft.Version.v1_8_R1))
 		{
 			log(ChatColor.RED + "You server version is not supported. Please update your server...");
 			log(ChatColor.RED + "Disabling " + _name + " " + _version);

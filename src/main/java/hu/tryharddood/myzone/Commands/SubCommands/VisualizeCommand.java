@@ -3,7 +3,6 @@ package hu.tryharddood.myzone.Commands.SubCommands;
 import com.sk89q.worldedit.BlockVector;
 import hu.tryharddood.myzone.Commands.Subcommand;
 import hu.tryharddood.myzone.Properties;
-import hu.tryharddood.myzone.Util.ParticleAPI.ParticleEffect;
 import hu.tryharddood.myzone.Variables;
 import hu.tryharddood.myzone.Zones.Selection;
 import hu.tryharddood.myzone.myZone;
@@ -13,6 +12,7 @@ import org.bukkit.command.CommandSender;
 import org.bukkit.entity.Player;
 import org.bukkit.scheduler.BukkitRunnable;
 import org.bukkit.scheduler.BukkitTask;
+import org.inventivetalent.particle.ParticleEffect;
 
 import java.util.Collections;
 
