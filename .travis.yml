@@ -11,10 +11,15 @@ deploy:
   overwrite: true
   skip_cleanup: true
   api_key:
-    secure: ikonGGds/XXnkpQjt742dlare8Sqyd4rTu1ktVpYptlC8ztUN1T3Lu6TmCtI83Fw8Py2n7WZFyRsXXcg2PU8ISwxW50gJ3tv2gO+amYktkGiCYznp2Y2zbaOrWf8eKN3yF5GS02tJda0BGgzSTt6m46LWn8swcMfndjBvp093rxekLqGNVDByna5BK/0PsxI1pmfvjg4pqa2rOnRNV0zqzqdgIU+PFgbMYnLr1aO4S+Ds2KAb2SXoLFinJyPg1u0RXAmvId+5ZsBhFTSvaVm2PyVzJnZFRT2BSKVA61iW4YfvoFzvzR1VTKsaZlyAtFX6POnGjYl+bQcl7Ia+BQw/eHmwozzacxB+6tk9Yse18KPtqSVYbHBijlcIcZdhHGxmzGA9u/1F/VmDGOqSl/ypR2Goeer0DPPZB38PU7EinuI5i0hnfwKE+xgYvwnFn2Pu5sgal2T10UJiPE61MqxBdnn4vLVEnHjPHzEO0aNZ4WV/DuUeJailiOtiJJBIK1qq0bNKRU1mKnZXyClwpPrL9/QOIYwmaimEAYDDimLOm95ggTMxiMzwhuYSxlg0ZfTzlE+lLKuqfOxRh72T82x9hHFmwa41ph91K9cfx6kopNmMmr2cR9GJQnXR+49eKZ43QfIdGZgkMxhvnimKWiXfU1oVkLUE1faSx+EhYKWcSE=
+    secure: MWQqc/sJuaWMGAYoWiHT3OxmUBIcSEtZgJk1NKXJWI9TzZiPgrIBRNW7xmaftd3/oLi/WdYasxnFK814mYBa9G/UCLqMGo8WHYvYAYsiLeZvMtC0vUAwgyAvinJnlEKi+69FHrFr8VvzBZs7gkxIiega7j5p0co1/LC9s0/nERI90txSdi2DBmLWZK7PXnIm8kvoo+VDgpzXl9bjEWoxipUKRd/HYPtyWHmdKRINdqdaI5wBK2m8/81Dff3wJO2v7VB3z/VJ7NmC0qCkpdxbNtmXCwAzsMqxxaR34PFCkq89TnXu16PGolWlaALTfc9jL9UEcXIgpTiCbywGXrEW4GGGPWmU2I9Dq+wsDVXhLOQnBPd2PFTkFe0IP8l2TpSCb40XFvrMQ3aL0EYzSeFbt24op0sRb3I8w/Ap5O0NWfGjIRKfU1Gx5ZWYS/b8yK2ToeBhjeW5btBnAWwLha96IbE6qghw4riq3MThWePEL9PG/+ki3ElYcKCW7HjbE0p0Q54Sl+bZ+xbhrzjftTusg/XdufgRJh4IIX1JyuhMYofU6Vrmdjrfdt47G8D5i++HQiXlYxqrVGYsZI+h0YDTUbrbnmyH/RFQFnXkrRCF1kSoqrOgAvzi8QkrVbiQkDu1BO07VYdcIeNm/s3xg65fELzrKTXt8hOVQkjFAkTemjo=
   file: target/myZone.jar
   on:
     repo: TryHardDood/myZone
     branch: heads/v1.1
-
 script: mvn -Dmaven.wagon.http.ssl.insecure=true -Dmaven.wagon.http.ssl.allowall=true clean package
+  
+after_script:
+  - git config credential.helper "store --file=.git/credentials"
+  - echo "https://${GH_TOKEN}:@github.com" > .git/credentials
+  - node ./node_modules/grunt-cli/bin/grunt release
+
