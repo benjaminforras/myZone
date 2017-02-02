@@ -64,9 +64,9 @@ public class ZoneUtils {
 		com.sk89q.worldedit.Vector lc1 = border[0];
 		com.sk89q.worldedit.Vector lc2 = border[1];
 
-		int sizeX = lc2.getBlockX() - lc1.getBlockX();
-		int sizeZ = lc2.getBlockZ() - lc1.getBlockZ();
-		int sizeY = lc2.getBlockY() - lc1.getBlockY();
+		int sizeX = Math.abs(Math.abs(lc2.getBlockX()) - Math.abs(lc1.getBlockX()));
+		int sizeZ = Math.abs(Math.abs(lc2.getBlockY()) - Math.abs(lc1.getBlockY()));
+		int sizeY = Math.abs(Math.abs(lc2.getBlockZ()) - Math.abs(lc1.getBlockZ()));
 
 		com.sk89q.worldedit.Vector maxSize = getMaxSize(player);
 
