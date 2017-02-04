@@ -1,4 +1,4 @@
-BRANCH="heads/v1.1"
+BRANCH="v1.1"
 
 # Are we on the right branch?
 if [ "$TRAVIS_BRANCH" = "$BRANCH" ]; then
@@ -14,7 +14,7 @@ if [ "$TRAVIS_BRANCH" = "$BRANCH" ]; then
       git config --global user.name "Travis"
 
       # Add tag and push to master.
-      git tag -a v1.1-${TRAVIS_BUILD_NUMBER} -m "Travis build v1.1-TRAVIS_BUILD_NUMBER pushed a tag."
+      git tag -a ${TRAVIS_BRANCH}.${TRAVIS_BUILD_NUMBER} -m "Travis build ${TRAVIS_BRANCH}.${TRAVIS_BUILD_NUMBER} pushed a tag."
       git push origin --tags
       git fetch origin
 
