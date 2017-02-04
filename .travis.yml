@@ -1,30 +1,10 @@
 language: java
-install: true
-
-matrix:
-  include:
-  - jdk: oraclejdk8
-  
-script:
-- mvn clean package
-
-after_success:
-- git config --global user.email "builds@travis-ci.com"
-- git config --global user.name "Travis CI"
-- export GIT_TAG="myZone $TRAVIS_BRANCH-$(date -u "+%Y-%m-%d-%H-%M-%S")-$TRAVIS_BUILD_NUMBER"
-- git tag $GIT_TAG -a -m "Generated tag from TravisCI build $TRAVIS_BUILD_NUMBER"
-- git push origin $GIT_TAG
-
+jdk:
+- oraclejdk8
 deploy:
-  skip_cleanup: true
   provider: releases
   api_key:
-    secure: lamyyqyZ8i17UsyccFUvyLwUFMoRo4cg62HdNpN7X0sC2RrcnmqW1wNE3XqZfbIUQdGwfVIThESRc31PwPO5gCQRkhJG4+1AxZAtu/asn6CPZVjE+Y5Z00nsa/m0lEdFw1iRBvoNAJbXFsgtKNcPxmBBPEGM5i6mljTeYOgSNy87RNJsEe5jEhdPHTSMNyCQa6cPuTXU/FBHV43P6SNZVqrBIknLUSgB0RiPiefsG21sEw0DW1sIqSwju7Fe2BY3yjNUi804ol7FmMZDTvLj/PpnjkJZEQ30bsYUuJ4xhUdX04Mzd9XQUxEjgwPyKf13iYE3PIYSRN9mT6WEK/YXT3+ApeIEWgMIJigDsbiu3//93gY7GLiTPpJ4EFO45qcP9/fW8WkA2yF0b5TRc3z9Bvry4nOFPKd9bFmKDXg3bPIt9hQa3BBi8x4dYe7b+Be2mb1b0NpuhEUOn0hzQHFNv6+U+aSzbVrWkw8/4VzQwYAifELFBXvjHreliV0ZX4VnIefhslo21zN57oepcQbNWFDB4PJTixWyIk2M22H+CXp3nv3/sqPK/Nf2mAOcbmzhwF7MhNhcKQGdK7dHstWfOuxCIJLPGTDRDktnGGKEUIi8dqD1fOH1zu10fgCFeMawdS2Vj1oCuwVKpMIss0p2hY9rohT38DHJr1jWQikvHvY=
+    secure: oQZhkGRLwtBIeSADFFW5w35ofaxu1WdQ7TjjOT7FPLTnmnayFVJ5FHuP4SwURKx2iNRw7hweJZl7X7HQCTdTRi6+LOGx56z74TjyLHXUqZi37+AKSNoiO2tbJhbDTmCkh7pism/cQyPE9KZ60nR/9xgeugc1LJSsZaP74SMvrBJcJJQKAgkv8/FrwYbtwfMpmkQI0kMyeUpZh0cfFzz0txHTYo0iEY5FSEskaVtcGbP6ZxnHUuhN8fMAY+EzFtp8qZDF2+VU3DYGR+2EVXlvXowdvxEMSRLmJ4hhj0vkM9IvZadRL1pQNIX2Z2UtE6MTM7HvE5OLYbH2W9b0sWO3LA51rbn2RgXdDtKJUJRUhA+I+vwNRVwpe5VbG6bCWMHSM+EUUAMCPi+A1eBv0lqp/J4jCR+7jY38oAjx1UiyXQQoXdMBpaEBcDerGy0uc79J14fcAHnW3AHHKr2KgeuTnHnuPIJkYhk8Xz8WPdCzE6XiVVvxqIENAaSPzQW+4vfP0nSliqgku7smXaxFYB4TODmt72Z0omkHlxeFT0NGm8az3QUcKdBmBCMWDZrHsYr8kLOuweV4LTY5qk5CbZ3RBA1CtstRHNIe9ctpuZt0YKSsJteQDkzjaxtpWAva6rRpplSXT5++vxO6lp8qI72Hf+5eazMfYM8qVnw1LO1bss4=
   file: target/myZone.jar
   on:
-    repo: TryHardDood/myZone
     branch: v1.1
-
-env:
-  global:
-    secure: lmwJQW9kGHRc7b/RnblY1LJ3Oq5nN/zu5QVoCRjKAL5l1tEOmmQDXmn8i30ZScyD42poWT3Ts2Z4Yacl8xhYh1ZhAE5NEuDMImyvGIwn+TX63n54nwxcs84X2HN7sbmQEEZ5ZpJ5G7cGozLNjTpUB7X+/8k3LMG1kQzk2ljnGzAkpMdZhjTZmANjylMzzzmS839SBxGIYzmwOJ1S5oaQNENUw+hTF6+/RAIZBuIuveFLLr1o+hvi8N7UCqiJ+gMqxBL7Vg9NZA82rKmTuD0ZEbmvn5GllFFLKez22hkgIfT4tMxXp+LuZxtk81svOzvR+P/X4bbF5hPpd8PMauejXN5gi0ZhRP9CBqlWUkL0h2XZ3PJ9ZG6pOmyhzr19MP+UH9hTsESumYvBXJbB5QOVfLmenOalOBFe8d9UdT0rRzU5MdMlkZEwNomH0ehPcnD1uuedG2iFkM5Xxte5BImOx0WuAQ+yNmTwAlpFNAR7hLnyl1/gaz7tH4pKIrZ3K9qviIhqab2/ieABJ4AtujOjTvkViIdUMxol/2R6SeTfY0n6Cs/JblYKOSLIcF0aQBTwtT6WRn+z7IBJbNRz74TCNWDI55oFB91Q50b80iuX0dg7coiTVp5OGcCiA1LQ1T7T/yKvxxJ25DQrZGEtrHJQNoe6aSQeFUQoE2c435hiQ3c=
