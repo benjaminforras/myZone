@@ -7,8 +7,7 @@ after_success:
   - git config --global user.email "builds@travis-ci.com"
   - git config --global user.name "Travis CI"
   - export GIT_TAG=$TRAVIS_BRANCH.$TRAVIS_BUILD_NUMBER-SNAPSHOT
-  - echo -n $GIT_TAG > public/version
-  - git commit -m "Set build VERSION number" public/version
+  - git commit -m "Set build VERSION number"
   - git tag $GIT_TAG -a -m "Generated tag from TravisCI build $TRAVIS_BUILD_NUMBER"
   - git push --quiet https://$GITHUBKEY@github.com/TryHardDood/myZone $GIT_TAG > /dev/null 2>&1
 
