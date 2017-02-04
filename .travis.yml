@@ -6,7 +6,7 @@ after_success:
   # CREATE GIT TAG
   - git config --global user.email "builds@travis-ci.com"
   - git config --global user.name "Travis CI"
-  - export GIT_TAG=$TRAVIS_BRANCH-$TRAVIS_BUILD_NUMBER
+  - export GIT_TAG=$TRAVIS_BRANCH-$TRAVIS_BUILD_NUMBER-SNAPSHOT
   - echo -n $GIT_TAG > public/version
   - git commit -m "Set build VERSION number" public/version
   - git tag $GIT_TAG -a -m "Generated tag from TravisCI build $TRAVIS_BUILD_NUMBER"
