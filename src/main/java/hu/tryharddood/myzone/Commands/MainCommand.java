@@ -15,10 +15,12 @@ import hu.tryharddood.myzone.myZone;
 import org.bukkit.Bukkit;
 import org.bukkit.ChatColor;
 import org.bukkit.Material;
+import org.bukkit.Sound;
 import org.bukkit.command.Command;
 import org.bukkit.command.CommandSender;
 import org.bukkit.entity.Player;
 import org.bukkit.event.inventory.ClickType;
+import org.bukkit.event.inventory.InventoryAction;
 import org.bukkit.event.inventory.InventoryClickEvent;
 import org.bukkit.inventory.ItemStack;
 
@@ -39,17 +41,23 @@ public class MainCommand extends Subcommand {
 	private InventoryMenuListener flagSettingListener     = new InventoryMenuListener() {
 		@Override
 		public void interact(Player player, ClickType action, InventoryClickEvent event) {
-			ItemStack itemStack = event.getCurrentItem();
-			if (itemStack == null || !itemStack.hasItemMeta() || !itemStack.getItemMeta().hasDisplayName()) return;
+			if (event.getAction() != InventoryAction.PICKUP_ALL) {
+				player.playSound(player.getLocation(), Sound.BLOCK_NOTE_PLING, 1.0F, 1.0F);
+				event.setCancelled(true);
 
-			String itemName = itemStack.getItemMeta().getDisplayName();
+				player.closeInventory();
+				player.openInventory(event.getClickedInventory());
+
+				return;
+			}
+
+			String itemName = event.getCurrentItem().getItemMeta().getDisplayName();
 
 			Flag flag = myZone.worldGuardReflection.fuzzyMatchFlag(ChatColor.stripColor(itemName));
 
 			Object value;
 
-			if(action == ClickType.RIGHT)
-			{
+			if (action == ClickType.RIGHT) {
 				Bukkit.dispatchCommand(player, "zone flag " + myZone.zoneManager.getRegion(region.getId()).getZoneName() + " " + flag.getName());
 				event.getInventory().setItem(event.getSlot(), new ItemBuilder(Material.SIGN).setTitle(flag.getName()).addLore(ChatColor.GRAY + tl("GUI_FlagNotSet", true)).build());
 				player.updateInventory();
@@ -57,42 +65,27 @@ public class MainCommand extends Subcommand {
 			}
 
 			String prefix = "";
-			if (flag instanceof StateFlag)
-			{
+			if (flag instanceof StateFlag) {
 				value = region.getFlag(flag) == StateFlag.State.ALLOW ? "deny" : "allow";
 
-				if (value == "allow")
-				{
+				if (value == "allow") {
 					prefix = ChatColor.GREEN + tl("GUI_Allow", true);
-				}
-				else if (value == "deny")
-				{
+				} else if (value == "deny") {
 					prefix = ChatColor.RED + tl("GUI_Deny", true);
-				}
-				else
-				{
+				} else {
 					prefix = ChatColor.GRAY + tl("GUI_FlagNotSet", true);
 				}
-			}
-			else if (flag instanceof BooleanFlag)
-			{
+			} else if (flag instanceof BooleanFlag) {
 				value = region.getFlag(flag) == (Object) true ? "false" : "true";
 
-				if (value == "true")
-				{
+				if (value == "true") {
 					prefix = ChatColor.GREEN + tl("GUI_Allow", true);
-				}
-				else if (value == "false")
-				{
+				} else if (value == "false") {
 					prefix = ChatColor.RED + tl("GUI_Deny", true);
-				}
-				else
-				{
+				} else {
 					prefix = ChatColor.GRAY + tl("GUI_FlagNotSet", true);
 				}
-			}
-			else
-			{
+			} else {
 				value = "Unknown";
 			}
 
@@ -105,10 +98,17 @@ public class MainCommand extends Subcommand {
 	private InventoryMenuListener removeMemberListener    = new InventoryMenuListener() {
 		@Override
 		public void interact(Player player, ClickType action, InventoryClickEvent event) {
-			ItemStack itemStack = event.getCurrentItem();
-			if (itemStack == null || !itemStack.hasItemMeta() || !itemStack.getItemMeta().hasDisplayName()) return;
+			if (event.getAction() != InventoryAction.PICKUP_ALL) {
+				player.playSound(player.getLocation(), Sound.BLOCK_NOTE_PLING, 1.0F, 1.0F);
+				event.setCancelled(true);
 
-			String itemName   = itemStack.getItemMeta().getDisplayName();
+				player.closeInventory();
+				player.openInventory(event.getClickedInventory());
+
+				return;
+			}
+
+			String itemName   = event.getCurrentItem().getItemMeta().getDisplayName();
 			String playerName = ChatColor.stripColor(itemName);
 			Bukkit.dispatchCommand(player, "zone members " + region.getId() + " remove " + playerName);
 		}
@@ -116,10 +116,17 @@ public class MainCommand extends Subcommand {
 	private InventoryMenuListener removeOwnerListener     = new InventoryMenuListener() {
 		@Override
 		public void interact(Player player, ClickType action, InventoryClickEvent event) {
-			ItemStack itemStack = event.getCurrentItem();
-			if (itemStack == null || !itemStack.hasItemMeta() || !itemStack.getItemMeta().hasDisplayName()) return;
+			if (event.getAction() != InventoryAction.PICKUP_ALL) {
+				player.playSound(player.getLocation(), Sound.BLOCK_NOTE_PLING, 1.0F, 1.0F);
+				event.setCancelled(true);
 
-			String itemName   = itemStack.getItemMeta().getDisplayName();
+				player.closeInventory();
+				player.openInventory(event.getClickedInventory());
+
+				return;
+			}
+
+			String itemName   = event.getCurrentItem().getItemMeta().getDisplayName();
 			String playerName = ChatColor.stripColor(itemName);
 			Bukkit.dispatchCommand(player, "zone owners " + region.getId() + " remove " + playerName);
 		}
@@ -127,14 +134,19 @@ public class MainCommand extends Subcommand {
 	private InventoryMenuListener deleteInventoryListener = new InventoryMenuListener() {
 		@Override
 		public void interact(Player player, ClickType action, InventoryClickEvent event) {
-			if (event.getCurrentItem() == null) return;
+			if (event.getAction() != InventoryAction.PICKUP_ALL) {
+				player.playSound(player.getLocation(), Sound.BLOCK_NOTE_PLING, 1.0F, 1.0F);
+				event.setCancelled(true);
 
-			if (event.getCurrentItem().getDurability() == (short) 13)
-			{
-				if (Properties.getEconomyEnabled())
-				{
-					if (!myZone.vaultEcon.has(Bukkit.getOfflinePlayer(player.getUniqueId()), Properties.getZoneDeleteMoney()))
-					{
+				player.closeInventory();
+				player.openInventory(event.getClickedInventory());
+
+				return;
+			}
+
+			if (event.getCurrentItem().getDurability() == (short) 13) {
+				if (Properties.getEconomyEnabled()) {
+					if (!myZone.vaultEcon.has(Bukkit.getOfflinePlayer(player.getUniqueId()), Properties.getZoneDeleteMoney())) {
 						player.sendMessage(tl("Error") + " " + tl("Economy_NotEnoughMoney", Properties.getZoneDeleteMoney()));
 						return;
 					}
@@ -152,53 +164,50 @@ public class MainCommand extends Subcommand {
 	private InventoryMenuListener settingsMenuListener = new InventoryMenuListener() {
 		@Override
 		public void interact(Player player, ClickType action, InventoryClickEvent event) {
-			if (event.getCurrentItem() == null
-			    || event.getCurrentItem().getType() == Material.AIR
-			    || !event.getCurrentItem().hasItemMeta()
-			    || !event.getCurrentItem().getItemMeta().hasDisplayName())
-			{
+			if (event.getAction() != InventoryAction.PICKUP_ALL) {
+				player.playSound(player.getLocation(), Sound.BLOCK_NOTE_PLING, 1.0F, 1.0F);
 				event.setCancelled(true);
+
+				player.closeInventory();
+				player.openInventory(event.getClickedInventory());
+
 				return;
 			}
+
 			if (region == null) return;
 
 			ItemStack            itemStack  = event.getCurrentItem();
 			ArrayList<ItemStack> itemStacks = new ArrayList<>();
-			if (itemStack.getType() == Material.SIGN)
-			{
+			if (itemStack.getType() == Material.SIGN) {
 				itemStacks.clear();
 
 				String prefix = null;
-				for (Flag flag : _flagsCache)
-				{
-					if (!player.hasPermission(Variables.PlayerCommands.FLAGTYPEPERMISSION.replaceAll("\\[flag\\]", flag.getName())) && !player.hasPermission(Variables.PlayerCommands.FLAGTYPEPERMISSION.replaceAll("\\[flag\\]", "*")))
-					{
+				for (Flag flag : _flagsCache) {
+					if (!player.hasPermission(Variables.PlayerCommands.FLAGTYPEPERMISSION.replaceAll("\\[flag\\]", flag.getName())) && !player.hasPermission(Variables.PlayerCommands.FLAGTYPEPERMISSION.replaceAll("\\[flag\\]", "*"))) {
 						continue;
 					}
 
-					if (itemStacks.contains(new ItemBuilder(Material.SIGN).setTitle(flag.getName()).addLore(prefix).build()))
-					{
+					if (itemStacks.contains(new ItemBuilder(Material.SIGN).setTitle(flag.getName()).addLore(prefix).build())) {
 						continue;
 					}
 
-					if (flag instanceof StateFlag)
-					{
-						if (region.getFlag(flag) == StateFlag.State.ALLOW)
-						{ prefix = ChatColor.GREEN + tl("GUI_Allow", true); }
-						else if (region.getFlag(flag) == StateFlag.State.DENY)
-						{ prefix = ChatColor.RED + tl("GUI_Deny", true); }
-						else
-						{ prefix = ChatColor.GRAY + tl("GUI_FlagNotSet", true); }
+					if (flag instanceof StateFlag) {
+						if (region.getFlag(flag) == StateFlag.State.ALLOW) {
+							prefix = ChatColor.GREEN + tl("GUI_Allow", true);
+						} else if (region.getFlag(flag) == StateFlag.State.DENY) {
+							prefix = ChatColor.RED + tl("GUI_Deny", true);
+						} else {
+							prefix = ChatColor.GRAY + tl("GUI_FlagNotSet", true);
+						}
 
-					}
-					else if (flag instanceof BooleanFlag)
-					{
-						if (region.getFlag(flag) == (Object) true)
-						{ prefix = ChatColor.GREEN + tl("GUI_Allow", true); }
-						else if (region.getFlag(flag) == (Object) false)
-						{ prefix = ChatColor.RED + tl("GUI_Deny", true); }
-						else
-						{ prefix = ChatColor.GRAY + tl("GUI_FlagNotSet", true); }
+					} else if (flag instanceof BooleanFlag) {
+						if (region.getFlag(flag) == (Object) true) {
+							prefix = ChatColor.GREEN + tl("GUI_Allow", true);
+						} else if (region.getFlag(flag) == (Object) false) {
+							prefix = ChatColor.RED + tl("GUI_Deny", true);
+						} else {
+							prefix = ChatColor.GRAY + tl("GUI_FlagNotSet", true);
+						}
 					}
 
 					itemStacks.add(new ItemBuilder(Material.SIGN).setTitle(flag.getName()).addLore(prefix).build());
@@ -208,22 +217,17 @@ public class MainCommand extends Subcommand {
 				pageInventory.show(player);
 
 				pageInventory.onInteract(flagSettingListener, ClickType.LEFT, ClickType.RIGHT);
-			}
-			else if (itemStack.getType() == Material.SKULL_ITEM)
-			{
-				if (itemStack.getItemMeta().getDisplayName().contains(tl("GUI_Members", true)))
-				{
-					if (region.getMembers() == null)
-					{
+			} else if (itemStack.getType() == Material.SKULL_ITEM) {
+				if (itemStack.getItemMeta().getDisplayName().contains(tl("GUI_Members", true))) {
+					if (region.getMembers() == null) {
 						return;
 					}
 					List<UUID> members = new ArrayList<>();
 					members.addAll(region.getMembers().getUniqueIds());
 
 					itemStacks.clear();
-					for (int i = 0; i < members.size(); i++)
-					{
-						itemStacks.add(new ItemBuilder(Material.SKULL_ITEM, (short) 3).setTitle(ChatColor.GRAY + Bukkit.getOfflinePlayer(members.get(i)).getName()).build());
+					for (UUID member : members) {
+						itemStacks.add(new ItemBuilder(Material.SKULL_ITEM, (short) 3).setTitle(ChatColor.GRAY + Bukkit.getOfflinePlayer(member).getName()).build());
 					}
 
 					PageInventory pageInventory = new PageInventory("Members", itemStacks);
@@ -231,20 +235,16 @@ public class MainCommand extends Subcommand {
 
 					pageInventory.onInteract(removeMemberListener, ClickType.LEFT);
 					player.updateInventory();
-				}
-				else
-				{
-					if (region.getOwners() == null)
-					{
+				} else {
+					if (region.getOwners() == null) {
 						return;
 					}
 					List<UUID> owners = new ArrayList<>();
 					owners.addAll(region.getOwners().getUniqueIds());
 
 					itemStacks.clear();
-					for (int i = 0; i < owners.size(); i++)
-					{
-						itemStacks.add(new ItemBuilder(Material.SKULL_ITEM, (short) 3).setTitle(ChatColor.GRAY + Bukkit.getOfflinePlayer(owners.get(i)).getName()).build());
+					for (UUID owner : owners) {
+						itemStacks.add(new ItemBuilder(Material.SKULL_ITEM, (short) 3).setTitle(ChatColor.GRAY + Bukkit.getOfflinePlayer(owner).getName()).build());
 					}
 
 					PageInventory pageInventory = new PageInventory("Owners", itemStacks);
@@ -253,9 +253,7 @@ public class MainCommand extends Subcommand {
 					pageInventory.onInteract(removeOwnerListener, ClickType.LEFT);
 					player.updateInventory();
 				}
-			}
-			else if (itemStack.getType() == Material.BARRIER)
-			{
+			} else if (itemStack.getType() == Material.BARRIER) {
 				InventoryMenuBuilder imb = new InventoryMenuBuilder(27).withTitle("Are you sure?");
 				imb.withItem(11, new ItemBuilder(Material.STAINED_GLASS_PANE, (short) 13).setTitle(ChatColor.GREEN + tl("GUI_Confirm", true)).build());
 				imb.withItem(15, new ItemBuilder(Material.STAINED_GLASS_PANE, (short) 14).setTitle(ChatColor.GREEN + tl("GUI_Cancel", true)).build());
@@ -267,26 +265,25 @@ public class MainCommand extends Subcommand {
 	private InventoryMenuListener mainMenuListener     = new InventoryMenuListener() {
 		@Override
 		public void interact(Player player, ClickType action, InventoryClickEvent event) {
-			if (event.getCurrentItem() == null
-			    || event.getCurrentItem().getType() == Material.AIR
-			    || !event.getCurrentItem().hasItemMeta()
-			    || !event.getCurrentItem().getItemMeta().hasDisplayName())
-			{
+
+			if (event.getAction() != InventoryAction.PICKUP_ALL) {
+				player.playSound(player.getLocation(), Sound.BLOCK_NOTE_PLING, 1.0F, 1.0F);
 				event.setCancelled(true);
+
+				player.closeInventory();
+				player.openInventory(event.getClickedInventory());
+
 				return;
 			}
 
 			String itemName = event.getCurrentItem().getItemMeta().getDisplayName();
-
-			if (myZone.zoneManager.getRegionID(ChatColor.stripColor(itemName)) != null)
-			{
-				if (myZone.worldGuardHelper.getPlayerMemberRegions(player.getUniqueId()).contains(ChatColor.stripColor(itemName)))
-				{
+			if (myZone.zoneManager.getRegionID(ChatColor.stripColor(itemName)) != null) {
+				if (myZone.worldGuardHelper.getPlayerMemberRegions(player.getUniqueId()).contains(ChatColor.stripColor(itemName))) {
 					return;
 				}
 				region = myZone.worldGuardHelper.getRegion(myZone.zoneManager.getRegionID(ChatColor.stripColor(itemName)));
 
-				InventoryMenuBuilder imb = new InventoryMenuBuilder(54).withTitle("ZoneUtils - " + ChatColor.stripColor(itemName));
+				InventoryMenuBuilder imb = new InventoryMenuBuilder(45).withTitle("ZoneUtils - " + ChatColor.stripColor(itemName));
 
 				ArrayList<ItemStack> itemStacks = new ArrayList<>();
 				itemStacks.add(new ItemBuilder(Material.SIGN).setTitle(ChatColor.GREEN + tl("GUI_Flags", true)).build());
@@ -294,7 +291,7 @@ public class MainCommand extends Subcommand {
 				itemStacks.add(new ItemBuilder(Material.SKULL_ITEM, (short) 3).setTitle(ChatColor.GREEN + tl("GUI_Owners", true)).build());
 				itemStacks.add(new ItemBuilder(Material.BARRIER).setTitle(ChatColor.GREEN + tl("GUI_Delete", true)).build());
 
-				PageLayout pageLayout = new PageLayout("XXXXXXXXX", "XXXXOXXXX", "XXXXXXXXX", "XXOXXXOXX", "XXXXXXXXX", "XXXXOXXXX");
+				PageLayout pageLayout = new PageLayout("XXXXOXXXX", "XXXXXXXXX", "XXOXXXOXX", "XXXXXXXXX", "XXXXOXXXX");
 				imb.withItems(pageLayout.generate(itemStacks));
 
 				imb.show(player);
@@ -344,25 +341,21 @@ public class MainCommand extends Subcommand {
 		int membersSize = member.size();
 		int size        = zonesSize + membersSize;
 
-		if (size == 0)
-		{
+		if (size == 0) {
 			player.sendMessage(tl("Error") + " " + tl("no_zones"));
 			return;
 		}
 
 		ArrayList<ItemStack> itemStacks = new ArrayList<>();
-		for (String s : owned)
-		{
+		for (String s : owned) {
 			itemStacks.add(new ItemBuilder(Material.WOOD_DOOR).setTitle(ChatColor.YELLOW + s).build());
 		}
 
-		for (String s : member)
-		{
+		for (String s : member) {
 			itemStacks.add(new ItemBuilder(Material.ACACIA_DOOR_ITEM).setTitle(ChatColor.YELLOW + s).build());
 		}
 
-		if (itemStacks == null)
-		{
+		if (itemStacks == null) {
 			player.sendMessage(tl("Error") + " " + "&7Please contact a server administrator.");
 			myZone.log("ERROR! Please send this to the plugin's author: ");
 			myZone.log("--------- StackTrace ----------");

@@ -354,8 +354,4 @@ public class Properties {
 	public static Integer getZoneOwnerRemoveMoney() {
 		return _zoneOwnerRemoveMoney;
 	}
-
-	/*public static Integer getViewDistance() {
-		return _viewdistance;
-	}*/
 }

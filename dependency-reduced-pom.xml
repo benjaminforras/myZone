@@ -6,7 +6,7 @@
   <name>myZone</name>
   <version>1.1-SNAPSHOT</version>
   <description>myZone is a easy to use protection system which is based on Worldguard, that allows users to perform
-		various actions on user-selected areas</description>
+        various actions on user-selected areas</description>
   <url>https://tryharddood.github.io</url>
   <build>
     <resources>
@@ -36,14 +36,6 @@
             </goals>
             <configuration>
               <minimizeJar>true</minimizeJar>
-              <filters>
-                <filter>
-                  <artifact>org.inventivetalent:apihelper</artifact>
-                  <excludes>
-                    <exclude>**</exclude>
-                  </excludes>
-                </filter>
-              </filters>
               <artifactSet>
                 <includes>
                   <include>com.github.InventivetalentDev.ReflectionHelper:*</include>
