@@ -138,9 +138,9 @@
                             <minimizeJar>true</minimizeJar>
                             <artifactSet>
                                 <includes>
-                                    <include>com.github.InventivetalentDev.ReflectionHelper:*</include>
+                                    <include>com.github.InventivetalentDev:ReflectionHelper:*</include>
+                                    <include>com.github.InventivetalentDev:ParticleAPI:*</include>
                                     <include>com.github.TryHardDood:BossBarAPI:*</include>
-                                    <include>com.github.InventivetalentDev.ParticleAPI:*</include>
                                 </includes>
                             </artifactSet>
                             <relocations>

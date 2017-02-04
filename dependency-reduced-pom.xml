@@ -38,9 +38,9 @@
               <minimizeJar>true</minimizeJar>
               <artifactSet>
                 <includes>
-                  <include>com.github.InventivetalentDev.ReflectionHelper:*</include>
+                  <include>com.github.InventivetalentDev:ReflectionHelper:*</include>
+                  <include>com.github.InventivetalentDev:ParticleAPI:*</include>
                   <include>com.github.TryHardDood:BossBarAPI:*</include>
-                  <include>com.github.InventivetalentDev.ParticleAPI:*</include>
                 </includes>
               </artifactSet>
               <relocations>
@@ -97,18 +97,6 @@
           <groupId>net.md-5</groupId>
         </exclusion>
       </exclusions>
-    </dependency>
-    <dependency>
-      <groupId>com.github.InventivetalentDev</groupId>
-      <artifactId>ReflectionHelper</artifactId>
-      <version>-SNAPSHOT</version>
-      <scope>compile</scope>
-    </dependency>
-    <dependency>
-      <groupId>com.github.InventivetalentDev</groupId>
-      <artifactId>ParticleAPI</artifactId>
-      <version>-SNAPSHOT</version>
-      <scope>compile</scope>
     </dependency>
     <dependency>
       <groupId>com.github.sk89q.WorldEdit</groupId>

@@ -1,5 +1,4 @@
 sudo: false
-
 language: java
 jdk: oraclejdk8
 
@@ -8,18 +7,11 @@ after_success:
 
 deploy:
   provider: releases
-  overwrite: true
-  skip_cleanup: true
   api_key:
-    secure: MWQqc/sJuaWMGAYoWiHT3OxmUBIcSEtZgJk1NKXJWI9TzZiPgrIBRNW7xmaftd3/oLi/WdYasxnFK814mYBa9G/UCLqMGo8WHYvYAYsiLeZvMtC0vUAwgyAvinJnlEKi+69FHrFr8VvzBZs7gkxIiega7j5p0co1/LC9s0/nERI90txSdi2DBmLWZK7PXnIm8kvoo+VDgpzXl9bjEWoxipUKRd/HYPtyWHmdKRINdqdaI5wBK2m8/81Dff3wJO2v7VB3z/VJ7NmC0qCkpdxbNtmXCwAzsMqxxaR34PFCkq89TnXu16PGolWlaALTfc9jL9UEcXIgpTiCbywGXrEW4GGGPWmU2I9Dq+wsDVXhLOQnBPd2PFTkFe0IP8l2TpSCb40XFvrMQ3aL0EYzSeFbt24op0sRb3I8w/Ap5O0NWfGjIRKfU1Gx5ZWYS/b8yK2ToeBhjeW5btBnAWwLha96IbE6qghw4riq3MThWePEL9PG/+ki3ElYcKCW7HjbE0p0Q54Sl+bZ+xbhrzjftTusg/XdufgRJh4IIX1JyuhMYofU6Vrmdjrfdt47G8D5i++HQiXlYxqrVGYsZI+h0YDTUbrbnmyH/RFQFnXkrRCF1kSoqrOgAvzi8QkrVbiQkDu1BO07VYdcIeNm/s3xg65fELzrKTXt8hOVQkjFAkTemjo=
+    secure: lamyyqyZ8i17UsyccFUvyLwUFMoRo4cg62HdNpN7X0sC2RrcnmqW1wNE3XqZfbIUQdGwfVIThESRc31PwPO5gCQRkhJG4+1AxZAtu/asn6CPZVjE+Y5Z00nsa/m0lEdFw1iRBvoNAJbXFsgtKNcPxmBBPEGM5i6mljTeYOgSNy87RNJsEe5jEhdPHTSMNyCQa6cPuTXU/FBHV43P6SNZVqrBIknLUSgB0RiPiefsG21sEw0DW1sIqSwju7Fe2BY3yjNUi804ol7FmMZDTvLj/PpnjkJZEQ30bsYUuJ4xhUdX04Mzd9XQUxEjgwPyKf13iYE3PIYSRN9mT6WEK/YXT3+ApeIEWgMIJigDsbiu3//93gY7GLiTPpJ4EFO45qcP9/fW8WkA2yF0b5TRc3z9Bvry4nOFPKd9bFmKDXg3bPIt9hQa3BBi8x4dYe7b+Be2mb1b0NpuhEUOn0hzQHFNv6+U+aSzbVrWkw8/4VzQwYAifELFBXvjHreliV0ZX4VnIefhslo21zN57oepcQbNWFDB4PJTixWyIk2M22H+CXp3nv3/sqPK/Nf2mAOcbmzhwF7MhNhcKQGdK7dHstWfOuxCIJLPGTDRDktnGGKEUIi8dqD1fOH1zu10fgCFeMawdS2Vj1oCuwVKpMIss0p2hY9rohT38DHJr1jWQikvHvY=
   file: target/myZone.jar
   on:
     repo: TryHardDood/myZone
     branch: heads/v1.1
-script: mvn -Dmaven.wagon.http.ssl.insecure=true -Dmaven.wagon.http.ssl.allowall=true clean package
-  
-after_script:
-  - git config credential.helper "store --file=.git/credentials"
-  - echo "https://${GH_TOKEN}:@github.com" > .git/credentials
-  - node ./node_modules/grunt-cli/bin/grunt release
 
+script: mvn -Dmaven.wagon.http.ssl.insecure=true -Dmaven.wagon.http.ssl.allowall=true clean package
