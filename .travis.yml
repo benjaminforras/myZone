@@ -22,7 +22,3 @@ deploy:
 
 before_script:
   - export COMMIT_MESSAGE=$(git show -s --format=%B $TRAVIS_COMMIT | tr -d '\n')
-
-branches:
-  except:
-    - /^v[0-9].[0-9]/
