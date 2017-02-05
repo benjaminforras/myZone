@@ -7,7 +7,7 @@ before_deploy:
   - git config --global user.email "builds@travis-ci.com"
   - git config --global user.name "Travis CI"
   - export GIT_TAG=" $TRAVIS_BRANCH.$TRAVIS_BUILD_NUMBER-SNAPSHOT"
-  - git tag $GIT_TAG -a -m "" -m "Generated build from TravisCI for build $TRAVIS_BUILD_NUMBER" -m "$COMMIT_MESSAGE"
+  - git tag $GIT_TAG -a -m "$COMMIT_MESSAGE"
   - git push -q https://$GITHUBKEY@github.com/TryHardDood/myZone $GIT_TAG
   - ls -R
 
