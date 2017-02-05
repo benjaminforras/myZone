@@ -3,6 +3,17 @@ language: java
 jdk:
   - oraclejdk8
 
+# Cache maven dependencies
+cache:
+  directories:
+  - .autoconf
+  - $HOME/.m2
+
+# Extract the latest commits
+before_script:
+  - export COMMIT_MESSAGE=$(git show -s --format=%B $TRAVIS_COMMIT | tr -d '\n')
+
+# Auto push release
 before_deploy:
   - git config --global user.email "builds@travis-ci.com"
   - git config --global user.name "Travis CI"
@@ -20,9 +31,6 @@ deploy:
   on:
     branch: v1.1
     tags: false
-
-before_script:
-  - export COMMIT_MESSAGE=$(git show -s --format=%B $TRAVIS_COMMIT | tr -d '\n')
 
 branches:
   only:
