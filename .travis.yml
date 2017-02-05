@@ -2,9 +2,6 @@ language: java
 jdk:
 - oraclejdk8
 
-after_success:
-- sh push_release.sh
-
 deploy:
   provider: releases
   skip_cleanup: true
@@ -12,4 +9,5 @@ deploy:
     secure: oQZhkGRLwtBIeSADFFW5w35ofaxu1WdQ7TjjOT7FPLTnmnayFVJ5FHuP4SwURKx2iNRw7hweJZl7X7HQCTdTRi6+LOGx56z74TjyLHXUqZi37+AKSNoiO2tbJhbDTmCkh7pism/cQyPE9KZ60nR/9xgeugc1LJSsZaP74SMvrBJcJJQKAgkv8/FrwYbtwfMpmkQI0kMyeUpZh0cfFzz0txHTYo0iEY5FSEskaVtcGbP6ZxnHUuhN8fMAY+EzFtp8qZDF2+VU3DYGR+2EVXlvXowdvxEMSRLmJ4hhj0vkM9IvZadRL1pQNIX2Z2UtE6MTM7HvE5OLYbH2W9b0sWO3LA51rbn2RgXdDtKJUJRUhA+I+vwNRVwpe5VbG6bCWMHSM+EUUAMCPi+A1eBv0lqp/J4jCR+7jY38oAjx1UiyXQQoXdMBpaEBcDerGy0uc79J14fcAHnW3AHHKr2KgeuTnHnuPIJkYhk8Xz8WPdCzE6XiVVvxqIENAaSPzQW+4vfP0nSliqgku7smXaxFYB4TODmt72Z0omkHlxeFT0NGm8az3QUcKdBmBCMWDZrHsYr8kLOuweV4LTY5qk5CbZ3RBA1CtstRHNIe9ctpuZt0YKSsJteQDkzjaxtpWAva6rRpplSXT5++vxO6lp8qI72Hf+5eazMfYM8qVnw1LO1bss4=
   file: target/myZone.jar
   on:
+    tags: true
     branch: v1.1
