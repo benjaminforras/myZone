@@ -15,7 +15,6 @@
 	<a href="https://github.com/TryHardDood/myZone/issues">:bug: Report an issue</a>
 </p>
 
-[![Donate](https://img.shields.io/badge/Donate-PayPal-green.svg)]()
 <a href="https://paypal.me/tryharddood" target="_blank"><img src="https://img.shields.io/badge/Donate-PayPal-green.svg"/></a>
 -----
 
