@@ -1,34 +1,50 @@
-**![](https://tryharddood.github.io/custom/projects/myzone/img/myzone.png)**
-
-[![](https://i.imgur.com/HE08V7H.png)](https://github.com/TryHardDood/myZone/issues)
-
-**Features**
-
-* Zone protection
-* Easy-to-use
-* Economy support via [Vault](https://dev.bukkit.org/projects/vault)
-* 1.7.10, 1.8.X, 1.9.4, 1.10, 1.11 support.
-* Multilanguage support
-* Easy costumization
-* Update notifier
-
-**Dependencies**
+<p align="center">
+	<img src="https://tryharddood.github.io/custom/projects/myzone/img/myzone.png"/>
+	<br/>
+	<a href="#features">Features</a> |
+  
+	<a href="#installation">Installation</a> |
+  
+	<a href="#commands">Commands</a> |
+  
+	<a href="#permissions">Permissions</a> |
+  
+	<a href="#configuration">Configuration</a>
+	<br/>
+	<br/>
+	<a href="https://github.com/TryHardDood/myZone/issues">:bug: Report an issue</a>
+</p>
+<h3 id="features">Features</h3>
+<ul>
+	<li>Zone protection</li>
+	<li>Easy-to-use</li>
+	<li>Economy support via 
+		<a href="https://dev.bukkit.org/projects/vault" target="_blank">Vault</a>
+	</li>
+	<li>1.7.10, 1.8.X, 1.9.4, 1.10, 1.11 support.</li>
+	<li>Multilanguage support</li>
+	<li>Easy costumization</li>
+	<li>Update notifier</li>
+</ul>
+<h3>Dependencies</h3>
 
 If you would like to use the economy support you’ll have to have [Vault](https://dev.bukkit.org/projects/vault) installed.
 
-**Installation**
 
-1.  Download [myZone](https://dev.bukkit.org/projects/myzone/files)
-2.  Make sure your server is not running.
-3.  Copy the .jar file into your plugins directory.
-4.  Start the server.
-5.  If you made a backup of your config.yml file, stop the server and edit the newly  
-     generated config.yml file with only what you need, from the backup.
-6.  Start the server.
-7.  Enjoy!
-
-**Commands**
-
+<h3 id="installation">Installation</h3>
+<ol>
+	<li>Download 
+		<a href="https://dev.bukkit.org/projects/myzone/files">myZone</a>
+	</li>
+	<li>Make sure your server is not running.</li>
+	<li>Copy the .jar file into your plugins directory.</li>
+	<li>Start the server.</li>
+	<li>If you made a backup of your config.yml file, stop the server and edit the newly generated config.yml file with only what you need, from the backup.</li>
+	<li>Start the server.</li>
+	<li>Enjoy!</li>
+	<li></li>
+</ol>
+<h3 id="commands">Commands</h3>
 <table>
 	<thead>
 		<tr>
@@ -110,9 +126,7 @@ If you would like to use the economy support you’ll have to have [Vault](https
 		</tr>
 	</tbody>
 </table>
-
-**Permissions**
-
+<h3 id="permissions">Permissions</h3>
 <table>
 	<thead>
 		<tr>
@@ -126,14 +140,14 @@ If you would like to use the economy support you’ll have to have [Vault](https
 			<td>myzone.zone.selectborder</td>
 			<td>Gives access to use the zone selection tool.</td>
 			<td>
-				<br>
+				<br/>
 			</td>
 		</tr>
 		<tr>
 			<td>myzone.zone.checkzone</td>
 			<td>Gives access to use the zone checking tool.</td>
 			<td>
-				<br>
+				<br/>
 			</td>
 		</tr>
 		<tr>
@@ -153,7 +167,8 @@ If you would like to use the economy support you’ll have to have [Vault](https
 		</tr>
 	</tbody>
 </table>
-
-**Configuration**
+<h3 id="configuration">Configuration</h3>
 
 Here you can find the default configuration file: [config.yml](https://github.com/TryHardDood/myZone/blob/v1.1/src/main/resources/config.yml)
+
+<p align="right">:trollface:</p>
