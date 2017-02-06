@@ -15,7 +15,7 @@
 	<a href="https://github.com/TryHardDood/myZone/issues">:bug: Report an issue</a>
 </p>
 
-<a href="https://paypal.me/tryharddood" target="_blank"><img src="https://img.shields.io/badge/Donate-PayPal-green.svg"/></a>
+<a href="https://travis-ci.org/TryHardDood/myZone" target="_blank"><img src="https://api.travis-ci.org/TryHardDood/myZone.svg?branch=v1.1"/></a>  <a href="https://paypal.me/tryharddood" target="_blank"><img src="https://img.shields.io/badge/Donate-PayPal-green.svg"/></a>
 -----
 
 <h3 id="features">Features</h3>
