@@ -14,6 +14,11 @@
 	<br/>
 	<a href="https://github.com/TryHardDood/myZone/issues">:bug: Report an issue</a>
 </p>
+
+[![Donate](https://img.shields.io/badge/Donate-PayPal-green.svg)]()
+<a href="https://paypal.me/tryharddood" target="_blank"><img src="https://img.shields.io/badge/Donate-PayPal-green.svg"/></a>
+-----
+
 <h3 id="features">Features</h3>
 <ul>
 	<li>Zone protection</li>
@@ -42,7 +47,6 @@ If you would like to use the economy support you’ll have to have [Vault](https
 	<li>If you made a backup of your config.yml file, stop the server and edit the newly generated config.yml file with only what you need, from the backup.</li>
 	<li>Start the server.</li>
 	<li>Enjoy!</li>
-	<li></li>
 </ol>
 <h3 id="commands">Commands</h3>
 <table>
@@ -170,5 +174,7 @@ If you would like to use the economy support you’ll have to have [Vault](https
 <h3 id="configuration">Configuration</h3>
 
 Here you can find the default configuration file: [config.yml](https://github.com/TryHardDood/myZone/blob/v1.1/src/main/resources/config.yml)
+
+<p align="center">Made by <a href="https://github.com/TryHardDood/" target="_blank">TryHardDood</a> with :heart:</p>
 
 <p align="right">:trollface:</p>
