@@ -24,7 +24,7 @@
 <a href="https://paypal.me/tryharddood" target="_blank">
 	<img src="https://img.shields.io/badge/Donate-PayPal-green.svg"/>
 </a>
------
+<hr/>
 
 
 <h3 id="features">Features</h3>
@@ -192,7 +192,8 @@ If you would like to use the economy support you’ll have to have [Vault](https
 
 Here you can find the default configuration file: [config.yml](https://github.com/TryHardDood/myZone/blob/v1.1/src/main/resources/config.yml)
 
-
+<br/>
+<hr/>
 <p align="center">Made by 
 	<a href="https://github.com/TryHardDood/" target="_blank">TryHardDood</a> with :heart:
 </p>
