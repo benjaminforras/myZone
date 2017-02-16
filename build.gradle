@@ -32,6 +32,7 @@ repositories {
 
 dependencies {
     compile group: 'org.spigotmc', name: 'spigot-api', version: '1.11.2-R0.1-SNAPSHOT'
+    compile group: 'de.cubeisland.engine', name: 'reflect', version: '2.0.4'
     compile group: 'com.google.code.findbugs', name: 'jsr305', version: '2.0.1'
 
     compile group: 'com.github.InventivetalentDev', name: 'ReflectionHelper', version: '395cfea950'
@@ -50,10 +51,15 @@ shadowJar {
     archiveName = "${baseName}.${extension}"
 
     dependencies {
+        include(dependency('de.cubeisland.engine:reflect'))
+
         include(dependency('com.github.InventivetalentDev:ReflectionHelper'))
         include(dependency('com.github.InventivetalentDev:ParticleAPI'))
         include(dependency('com.github.TryHardDood:BossBarAPI'))
+
     }
+
+    relocate 'de.cubeisland.engine.reflect', 'hu.tryharddood.reflectapi'
 
     relocate 'org.inventivetalent.bossbar', 'hu.tryharddood.myzone.Util.BossBarAPI'
     relocate 'org.inventivetalent.particle', 'hu.tryharddood.myzone.Util.ParticleAPI'

@@ -2,3 +2,5 @@
 myZone.iml
 .gradle/
 build/
+
+target/

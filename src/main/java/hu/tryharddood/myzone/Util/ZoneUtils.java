@@ -30,7 +30,6 @@ package hu.tryharddood.myzone.Util;
 
 import com.sk89q.worldguard.protection.managers.RegionManager;
 import com.sk89q.worldguard.protection.regions.ProtectedRegion;
-import hu.tryharddood.myzone.Properties;
 import hu.tryharddood.myzone.myZone;
 import org.bukkit.Bukkit;
 import org.bukkit.World;
@@ -97,11 +96,11 @@ public class ZoneUtils {
 	public static int getMaxZones(Player player) {
 		int max = -1;
 
-		for (String perm : Properties.getMaxZonePermissions().keySet())
+		for (Map.Entry<Integer, String> entry : myZone.config.restriction.maxZonePermission.entrySet())
 		{
-			if (player.hasPermission(perm))
+			if (player.hasPermission(entry.getValue()))
 			{
-				int size = Properties.getMaxZonePermissions().get(perm);
+				int size = entry.getKey();
 				if ((size != -1) && (size <= max))
 				{
 					continue;
@@ -115,13 +114,29 @@ public class ZoneUtils {
 	public static com.sk89q.worldedit.Vector getMaxSize(Player player) {
 		com.sk89q.worldedit.Vector max = toVector(new Vector(-1, -1, -1));
 
-		for (String perm : Properties.getMaxZoneSizePermissions().keySet())
+		for (Map.Entry<String, String> entry : myZone.config.restriction.maxZoneSizePermission.entrySet())
 		{
-			if (player.hasPermission(perm))
+			if (player.hasPermission(entry.getValue()))
 			{
-				max = Properties.getMaxZoneSizePermissions().get(perm);
+				//noinspection ConstantConditions
+				max = toVector(getVector(entry.getKey()));
 			}
 		}
 		return max;
+	}
+
+	private static Vector getVector(String value) {
+		Vector   vector = new Vector(0, 0, 0);
+		String[] split  = value.split(", ");
+		try
+		{
+			vector.setX(Double.parseDouble(split[0].substring(1)));
+			vector.setY(Double.parseDouble(split[1]));
+			vector.setZ(Double.parseDouble(split[2].substring(0, split[2].length() - 1)));
+		} catch (Exception e)
+		{
+			return null;
+		}
+		return vector;
 	}
 }

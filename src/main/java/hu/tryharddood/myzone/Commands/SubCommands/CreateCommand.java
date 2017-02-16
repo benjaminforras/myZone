@@ -2,7 +2,6 @@ package hu.tryharddood.myzone.Commands.SubCommands;
 
 import com.sk89q.worldedit.Vector;
 import hu.tryharddood.myzone.Commands.Subcommand;
-import hu.tryharddood.myzone.Properties;
 import hu.tryharddood.myzone.Util.ZoneUtils;
 import hu.tryharddood.myzone.Variables;
 import hu.tryharddood.myzone.Zones.Selection;
@@ -13,6 +12,7 @@ import org.bukkit.command.CommandSender;
 import org.bukkit.entity.Player;
 
 import java.util.Random;
+import java.util.regex.Pattern;
 
 import static hu.tryharddood.myzone.Util.Localization.I18n.tl;
 
@@ -50,7 +50,7 @@ public class CreateCommand extends Subcommand {
 
 		if ((selection.getPos1() == null) || (selection.getPos2() == null))
 		{
-			sender.sendMessage(tl("Wrong") + " " + tl("SuggestItem", Properties.getCreateTool().toString()));
+			sender.sendMessage(tl("Wrong") + " " + tl("SuggestItem", myZone.config.createTool));
 			return;
 		}
 
@@ -60,13 +60,13 @@ public class CreateCommand extends Subcommand {
 			return;
 		}
 
-		if (Properties.getDisabledWorlds().contains(selection.getPos1World().getName()))
+		if (myZone.config.disabledWorlds.contains(selection.getPos1World().getName()))
 		{
 			sender.sendMessage(tl("Error") + " " + tl("CreateZone_Error2", selection.getPos1World().getName()));
 			return;
 		}
 
-		if (Properties.getRegex().matcher(args[1]).find())
+		if (Pattern.compile(myZone.config.zone.regex).matcher(args[1]).find())
 		{
 			sender.sendMessage(tl("Error") + " " + tl("CreateZone_Error5"));
 			return;
@@ -90,14 +90,14 @@ public class CreateCommand extends Subcommand {
 			return;
 		}
 
-		if (Properties.getEconomyEnabled())
+		if (myZone.config.economy.enabled)
 		{
-			if (!myZone.vaultEcon.has(Bukkit.getOfflinePlayer(player.getUniqueId()), Properties.getZoneCreationMoney()))
+			if (!myZone.vaultEcon.has(Bukkit.getOfflinePlayer(player.getUniqueId()), myZone.config.economy.create))
 			{
-				sender.sendMessage(tl("Error") + " " + tl("Economy_NotEnoughMoney", Properties.getZoneCreationMoney()));
+				sender.sendMessage(tl("Error") + " " + tl("Economy_NotEnoughMoney", myZone.config.economy.create));
 				return;
 			}
-			myZone.vaultEcon.withdrawPlayer(Bukkit.getOfflinePlayer(player.getUniqueId()), Properties.getZoneCreationMoney());
+			myZone.vaultEcon.withdrawPlayer(Bukkit.getOfflinePlayer(player.getUniqueId()), myZone.config.economy.create);
 		}
 
 

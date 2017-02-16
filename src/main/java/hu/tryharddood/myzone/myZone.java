@@ -1,6 +1,7 @@
 package hu.tryharddood.myzone;
 
 import com.sk89q.worldguard.bukkit.WorldGuardPlugin;
+import de.cubeisland.engine.reflect.Reflector;
 import hu.tryharddood.myzone.Commands.CommandHandler;
 import hu.tryharddood.myzone.Commands.MainCommand;
 import hu.tryharddood.myzone.Commands.SubCommands.*;
@@ -18,6 +19,8 @@ import org.bukkit.plugin.Plugin;
 import org.bukkit.plugin.java.JavaPlugin;
 import org.inventivetalent.reflection.minecraft.Minecraft;
 
+import java.io.File;
+import java.io.IOException;
 import java.util.Collections;
 
 public class myZone extends JavaPlugin {
@@ -31,6 +34,10 @@ public class myZone extends JavaPlugin {
 	private static String _name;
 	private static String _version;
 	public InventoryListener inventoryListener;
+
+	private Reflector _factory = new Reflector();
+
+	public static Config config;
 
 	public static void log(String message) {
 		Bukkit.getConsoleSender().sendMessage("[" + _name + " v" + _version + "] " + message);
@@ -71,11 +78,38 @@ public class myZone extends JavaPlugin {
 		log("Hooking events...");
 		registerEvents();
 
-		log("Loading configuration file...");
-		Properties.loadConfiguration();
+		/////////////////////////////////////////////////////
+		//Properties.loadConfiguration();
+		/////////////////////////////////////////////////////
+
+		loadConfiguration();
 
 		zoneManager = new ZoneManager();
 		zoneManager.loadZones();
+	}
+
+	public void loadConfiguration()
+	{
+		log("Loading configuration file...");
+		File file = new File(getDataFolder(), "config.yml");
+		if (!getDataFolder().exists()) {
+			getDataFolder().mkdir();
+		}
+		if (!file.exists()) {
+			try {
+				file.createNewFile();
+			}
+			catch (IOException e) {
+				e.printStackTrace();
+			}
+		}
+
+		config = _factory.load(Config.class, file);
+
+		config.reload();
+		config.save();
+
+		config.init();
 	}
 
 	@Override

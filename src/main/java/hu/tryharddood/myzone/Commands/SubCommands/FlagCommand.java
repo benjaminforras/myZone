@@ -4,7 +4,6 @@ import com.sk89q.worldguard.LocalPlayer;
 import com.sk89q.worldguard.protection.flags.*;
 import com.sk89q.worldguard.protection.regions.ProtectedRegion;
 import hu.tryharddood.myzone.Commands.Subcommand;
-import hu.tryharddood.myzone.Properties;
 import hu.tryharddood.myzone.Variables;
 import hu.tryharddood.myzone.myZone;
 import org.bukkit.Bukkit;
@@ -53,7 +52,7 @@ public class FlagCommand extends Subcommand {
 	public void onCommand(CommandSender sender, Command cmd, String label, String[] args) {
 		if (_flags == null || _flags.size() == 0)
 		{
-			List<Flag<?>> flags = Properties.getFlags();
+			List<Flag<?>> flags = myZone.config.flags;
 			for (Flag flag : flags)
 			{
 				_flags.add(flag.getName());
@@ -102,14 +101,14 @@ public class FlagCommand extends Subcommand {
 			return;
 		}
 
-		if (Properties.getEconomyEnabled())
+		if (myZone.config.economy.enabled)
 		{
-			if (!myZone.vaultEcon.has(Bukkit.getOfflinePlayer(player.getUniqueId()), Properties.getZoneFlagMoney()))
+			if (!myZone.vaultEcon.has(Bukkit.getOfflinePlayer(player.getUniqueId()), myZone.config.economy.flag))
 			{
-				sender.sendMessage(tl("Error") + " " + tl("Economy_NotEnoughMoney", Properties.getZoneFlagMoney()));
+				sender.sendMessage(tl("Error") + " " + tl("Economy_NotEnoughMoney", myZone.config.economy.flag));
 				return;
 			}
-			myZone.vaultEcon.withdrawPlayer(Bukkit.getOfflinePlayer(player.getUniqueId()), Properties.getZoneFlagMoney());
+			myZone.vaultEcon.withdrawPlayer(Bukkit.getOfflinePlayer(player.getUniqueId()), myZone.config.economy.flag);
 		}
 
 		if (args.length == 3 || (args.length >= 4 && args[3].equalsIgnoreCase("none")))

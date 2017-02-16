@@ -95,7 +95,7 @@ public class InventoryListener implements Listener {
 	@EventHandler(priority = EventPriority.NORMAL, ignoreCancelled = true)
 	public void onInventoryClick(InventoryClickEvent event) {
 		Player    player    = (Player) event.getWhoClicked();
-		Inventory inventory = event.getClickedInventory();
+		Inventory inventory = event.getInventory();
 		ClickType type      = event.getClick();
 
 		if (listenerMap.containsKey(inventory))
@@ -103,19 +103,22 @@ public class InventoryListener implements Listener {
 			event.setCancelled(true);
 			event.setResult(Event.Result.DENY);
 
-			Map<ClickType, List<InventoryMenuListener>> actionMap = listenerMap.get(inventory);
-			if (actionMap.containsKey(type))
+			if(event.getCurrentItem() != null && event.getClickedInventory().contains(event.getCurrentItem()))
 			{
-				List<InventoryMenuListener> listeners = actionMap.get(type);
-
-				for (InventoryMenuListener listener : listeners)
+				Map<ClickType, List<InventoryMenuListener>> actionMap = listenerMap.get(inventory);
+				if (actionMap.containsKey(type))
 				{
-					try
+					List<InventoryMenuListener> listeners = actionMap.get(type);
+
+					for (InventoryMenuListener listener : listeners)
 					{
-						listener.interact(player, type, event);
-					} catch (Throwable throwable)
-					{
-						throwable.printStackTrace();
+						try
+						{
+							listener.interact(player, type, event);
+						} catch (Throwable throwable)
+						{
+							throwable.printStackTrace();
+						}
 					}
 				}
 			}

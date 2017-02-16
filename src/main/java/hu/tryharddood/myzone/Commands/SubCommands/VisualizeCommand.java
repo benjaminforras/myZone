@@ -2,7 +2,6 @@ package hu.tryharddood.myzone.Commands.SubCommands;
 
 import com.sk89q.worldedit.BlockVector;
 import hu.tryharddood.myzone.Commands.Subcommand;
-import hu.tryharddood.myzone.Properties;
 import hu.tryharddood.myzone.Variables;
 import hu.tryharddood.myzone.Zones.Selection;
 import hu.tryharddood.myzone.myZone;
@@ -55,7 +54,7 @@ public class VisualizeCommand extends Subcommand {
 
 		if ((vectors[0] == null) || (vectors[1] == null))
 		{
-			sender.sendMessage(tl("Wrong") + " " + tl("SuggestItem", Properties.getCreateTool().toString()));
+			sender.sendMessage(tl("Wrong") + " " + tl("SuggestItem", myZone.config.createTool));
 			return;
 		}
 
@@ -65,7 +64,7 @@ public class VisualizeCommand extends Subcommand {
 			return;
 		}
 
-		if (Properties.getDisabledWorlds().contains(selection.getPos1World().getName()))
+		if (myZone.config.disabledWorlds.contains(selection.getPos1World().getName()))
 		{
 			sender.sendMessage(tl("Error") + " " + tl("CreateZone_Error2", selection.getPos1World().getName()));
 			return;

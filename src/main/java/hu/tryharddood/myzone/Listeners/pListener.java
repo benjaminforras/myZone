@@ -3,7 +3,6 @@ package hu.tryharddood.myzone.Listeners;
 import com.sk89q.worldguard.bukkit.WGBukkit;
 import com.sk89q.worldguard.protection.ApplicableRegionSet;
 import com.sk89q.worldguard.protection.flags.Flag;
-import hu.tryharddood.myzone.Properties;
 import hu.tryharddood.myzone.Variables;
 import hu.tryharddood.myzone.Zones.Selection;
 import hu.tryharddood.myzone.myZone;
@@ -71,7 +70,7 @@ public class pListener implements Listener {
 	private void _handleClickEvent(Player player, ItemStack itemStack, Location location, Action action, PlayerInteractEvent event) {
 		if (action == Action.LEFT_CLICK_BLOCK)
 		{
-			if (itemStack.getType().equals(Properties.getCreateTool()))
+			if (itemStack.getType().equals(myZone.config.createToolMaterial))
 			{
 				if (!player.hasPermission(Variables.PlayerInteract.SELECTPERMISSION))
 				{
@@ -80,7 +79,7 @@ public class pListener implements Listener {
 					return;
 				}
 
-				if (Properties.getDisabledWorlds().contains(location.getWorld().getName()))
+				if (myZone.config.disabledWorlds.contains(location.getWorld().getName()))
 				{
 					player.sendMessage(tl("Error") + " " + tl("Creation_Select_Error1", location.getWorld().getName()));
 					event.setCancelled(true);
@@ -95,7 +94,7 @@ public class pListener implements Listener {
 		}
 		else if (action == Action.RIGHT_CLICK_BLOCK)
 		{
-			if (itemStack.getType().equals(Properties.getCreateTool()))
+			if (itemStack.getType().equals(myZone.config.createToolMaterial))
 			{
 				if (!player.hasPermission(Variables.PlayerInteract.SELECTPERMISSION))
 				{
@@ -104,7 +103,7 @@ public class pListener implements Listener {
 					return;
 				}
 
-				if (Properties.getDisabledWorlds().contains(location.getWorld().getName()))
+				if (myZone.config.disabledWorlds.contains(location.getWorld().getName()))
 				{
 					player.sendMessage(tl("Error") + " " + tl("Creation_Select_Error1", location.getWorld().getName()));
 					event.setCancelled(true);
@@ -116,7 +115,7 @@ public class pListener implements Listener {
 				player.sendMessage(tl("Success") + " " + tl("Creation_Select_Border", "2."));
 				event.setCancelled(true);
 			}
-			else if (itemStack.getType().equals(Properties.getCheckTool()))
+			else if (itemStack.getType().equals(myZone.config.checkToolMaterial))
 			{
 				if (!player.hasPermission(Variables.PlayerInteract.CHECKPERMISSION))
 				{
@@ -139,7 +138,7 @@ public class pListener implements Listener {
 				if (set.getRegions().size() == 0)
 				{
 					player.sendMessage(tl("Error") + " " + tl("Info_Tool_CheckFail"));
-					spamBlock.put(player.getUniqueId(), System.currentTimeMillis() + (Properties.getCheckToolDelay() * 1000));
+					spamBlock.put(player.getUniqueId(), System.currentTimeMillis() + (myZone.config.delay.checkTool * 1000));
 					event.setCancelled(true);
 					return;
 				}
@@ -149,7 +148,7 @@ public class pListener implements Listener {
 					if (region.getId().equalsIgnoreCase("__global__"))
 					{
 						player.sendMessage(tl("Error") + " " + tl("Info_Tool_CheckFail"));
-						spamBlock.put(player.getUniqueId(), System.currentTimeMillis() + (Properties.getCheckToolDelay() * 1000));
+						spamBlock.put(player.getUniqueId(), System.currentTimeMillis() + (myZone.config.delay.checkTool * 1000));
 						event.setCancelled(true);
 						return;
 					}
@@ -157,7 +156,7 @@ public class pListener implements Listener {
 					if (region == null)
 					{
 						player.sendMessage(tl("Error") + " " + tl("Info_Tool_CheckFail"));
-						spamBlock.put(player.getUniqueId(), System.currentTimeMillis() + (Properties.getCheckToolDelay() * 1000));
+						spamBlock.put(player.getUniqueId(), System.currentTimeMillis() + (myZone.config.delay.checkTool * 1000));
 						event.setCancelled(true);
 						return;
 					}
@@ -200,7 +199,7 @@ public class pListener implements Listener {
 					}
 					player.sendMessage(ChatColor.GRAY + tl("Text_Flags", true) + ": " + ChatColor.GOLD + (temp));
 					player.sendMessage(ChatColor.GRAY + tl("Text_Type", true) + ": " + ChatColor.GOLD + (region.getType().getName()));
-					spamBlock.put(player.getUniqueId(), System.currentTimeMillis() + (Properties.getCheckToolDelay() * 1000));
+					spamBlock.put(player.getUniqueId(), System.currentTimeMillis() + (myZone.config.delay.checkTool * 1000));
 					event.setCancelled(true);
 				});
 			}

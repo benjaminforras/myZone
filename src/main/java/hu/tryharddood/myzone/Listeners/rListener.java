@@ -5,8 +5,8 @@ import com.sk89q.worldguard.protection.ApplicableRegionSet;
 import com.sk89q.worldguard.protection.flags.DefaultFlag;
 import com.sk89q.worldguard.protection.managers.RegionManager;
 import com.sk89q.worldguard.protection.regions.ProtectedRegion;
-import hu.tryharddood.myzone.Properties;
 import hu.tryharddood.myzone.Util.MessagesAPI;
+import hu.tryharddood.myzone.myZone;
 import net.md_5.bungee.api.chat.TextComponent;
 import org.bukkit.Bukkit;
 import org.bukkit.ChatColor;
@@ -95,11 +95,11 @@ public class rListener implements Listener {
 					String greetmessage = region.getFlag(DefaultFlag.GREET_MESSAGE);
 					if (greetmessage != null)
 					{
-						if (Properties.getTitlesEnabled())
+						if (myZone.config.messages.title.enabled)
 							MessagesAPI.sendTitle(player, "", ChatColor.translateAlternateColorCodes('&', greetmessage));
-						if (Properties.getActionBarEnabled())
+						if (myZone.config.messages.actionBar.enabled)
 							MessagesAPI.sendActionBar(player, ChatColor.translateAlternateColorCodes('&', greetmessage), 25);
-						if (Properties.getBossBarEnabled())
+						if (myZone.config.messages.bossBar.enabled)
 							BossBarAPI.addBar(Collections.singletonList(player), new TextComponent(ChatColor.translateAlternateColorCodes('&', greetmessage)), BossBarAPI.Color.BLUE, BossBarAPI.Style.NOTCHED_20, 1.0f, 25, 2);
 					}
 				}, 1L);
@@ -131,11 +131,11 @@ public class rListener implements Listener {
 						String farewellmessage = region.getFlag(DefaultFlag.FAREWELL_MESSAGE);
 						if (farewellmessage != null)
 						{
-							if (hu.tryharddood.myzone.Properties.getTitlesEnabled())
+							if (myZone.config.messages.title.enabled)
 								MessagesAPI.sendTitle(player, "", ChatColor.translateAlternateColorCodes('&', farewellmessage));
-							if (Properties.getActionBarEnabled())
+							if (myZone.config.messages.actionBar.enabled)
 								MessagesAPI.sendActionBar(player, ChatColor.translateAlternateColorCodes('&', farewellmessage), 10);
-							if (Properties.getBossBarEnabled())
+							if (myZone.config.messages.bossBar.enabled)
 								BossBarAPI.addBar(Collections.singletonList(player), new TextComponent(ChatColor.stripColor(farewellmessage)), BossBarAPI.Color.BLUE, BossBarAPI.Style.NOTCHED_20, 1.0f, 10, 2);
 						}
 					}, 1L);

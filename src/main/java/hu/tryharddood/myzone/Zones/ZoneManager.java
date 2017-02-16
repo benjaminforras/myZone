@@ -1,6 +1,5 @@
 package hu.tryharddood.myzone.Zones;
 
-import hu.tryharddood.myzone.Properties;
 import hu.tryharddood.myzone.myZone;
 import org.bukkit.configuration.file.YamlConfiguration;
 import org.bukkit.plugin.java.JavaPlugin;
@@ -11,6 +10,7 @@ import java.util.HashMap;
 import java.util.Map;
 import java.util.UUID;
 import java.util.logging.Level;
+import java.util.regex.Pattern;
 
 /*****************************************************
  * Created by TryHardDood on 2016. 07. 07..
@@ -56,7 +56,7 @@ public class ZoneManager {
 				fileName = fileName.substring(0, extensionIndex);
 			}
 
-			if (Properties.getRegex().matcher(fileName).find())
+			if (Pattern.compile(myZone.config.zone.regex).matcher(fileName).find())
 			{
 				_instance.getLogger().info("Error when trying to load " + fileName);
 				_instance.getLogger().info("- The name contains special characters.");

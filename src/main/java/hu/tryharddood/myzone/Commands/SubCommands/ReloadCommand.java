@@ -1,7 +1,6 @@
 package hu.tryharddood.myzone.Commands.SubCommands;
 
 import hu.tryharddood.myzone.Commands.Subcommand;
-import hu.tryharddood.myzone.Properties;
 import hu.tryharddood.myzone.Variables;
 import hu.tryharddood.myzone.myZone;
 import org.bukkit.command.Command;
@@ -39,7 +38,7 @@ public class ReloadCommand extends Subcommand {
 	@Override
 	public void onCommand(CommandSender sender, Command cmd, String label, String[] args) {
 		myZone.zoneManager.loadZones();
-		Properties.loadConfiguration();
+		myZone.myZonePlugin.loadConfiguration();
 
 		sender.sendMessage(tl("Success") + " " + tl("Reload_Success"));
 	}

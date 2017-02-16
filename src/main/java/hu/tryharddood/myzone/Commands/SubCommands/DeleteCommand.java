@@ -6,7 +6,6 @@ import hu.tryharddood.myzone.Commands.Subcommand;
 import hu.tryharddood.myzone.MenuBuilder.ItemBuilder;
 import hu.tryharddood.myzone.MenuBuilder.inventory.InventoryMenuBuilder;
 import hu.tryharddood.myzone.MenuBuilder.inventory.InventoryMenuListener;
-import hu.tryharddood.myzone.Properties;
 import hu.tryharddood.myzone.Variables;
 import hu.tryharddood.myzone.myZone;
 import org.bukkit.Bukkit;
@@ -78,14 +77,14 @@ public class DeleteCommand extends Subcommand {
 
 				if (event.getCurrentItem().getDurability() == (short) 13)
 				{
-					if (Properties.getEconomyEnabled())
+					if (myZone.config.economy.enabled)
 					{
-						if (!myZone.vaultEcon.has(Bukkit.getOfflinePlayer(player.getUniqueId()), Properties.getZoneDeleteMoney()))
+						if (!myZone.vaultEcon.has(Bukkit.getOfflinePlayer(player.getUniqueId()), myZone.config.economy.delete))
 						{
-							player.sendMessage(tl("Error") + " " + tl("Economy_NotEnoughMoney", Properties.getZoneDeleteMoney()));
+							player.sendMessage(tl("Error") + " " + tl("Economy_NotEnoughMoney", myZone.config.economy.delete));
 							return;
 						}
-						myZone.vaultEcon.withdrawPlayer(Bukkit.getOfflinePlayer(player.getUniqueId()), Properties.getZoneDeleteMoney());
+						myZone.vaultEcon.withdrawPlayer(Bukkit.getOfflinePlayer(player.getUniqueId()), myZone.config.economy.delete);
 					}
 
 					player.sendMessage(tl("Success") + " " + tl("DeleteZone_Success", args[1]));

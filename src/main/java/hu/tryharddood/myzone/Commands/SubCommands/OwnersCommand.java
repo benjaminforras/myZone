@@ -3,7 +3,6 @@ package hu.tryharddood.myzone.Commands.SubCommands;
 import com.sk89q.worldguard.LocalPlayer;
 import com.sk89q.worldguard.protection.regions.ProtectedRegion;
 import hu.tryharddood.myzone.Commands.Subcommand;
-import hu.tryharddood.myzone.Properties;
 import hu.tryharddood.myzone.Variables;
 import hu.tryharddood.myzone.myZone;
 import org.bukkit.Bukkit;
@@ -89,14 +88,14 @@ public class OwnersCommand extends Subcommand {
 				return;
 			}
 
-			if (Properties.getEconomyEnabled())
+			if (myZone.config.economy.enabled)
 			{
-				if (!myZone.vaultEcon.has(Bukkit.getOfflinePlayer(player.getUniqueId()), Properties.getZoneOwnerAddMoney()))
+				if (!myZone.vaultEcon.has(Bukkit.getOfflinePlayer(player.getUniqueId()), myZone.config.economy.owner.ownerAdd))
 				{
-					sender.sendMessage(tl("Error") + " " + tl("Economy_NotEnoughMoney", Properties.getZoneOwnerAddMoney()));
+					sender.sendMessage(tl("Error") + " " + tl("Economy_NotEnoughMoney", myZone.config.economy.owner.ownerAdd));
 					return;
 				}
-				myZone.vaultEcon.withdrawPlayer(Bukkit.getOfflinePlayer(player.getUniqueId()), Properties.getZoneOwnerAddMoney());
+				myZone.vaultEcon.withdrawPlayer(Bukkit.getOfflinePlayer(player.getUniqueId()), myZone.config.economy.owner.ownerAdd);
 			}
 
 			region.getOwners().addPlayer(lcPlayer);
@@ -139,14 +138,14 @@ public class OwnersCommand extends Subcommand {
 				return;
 			}
 
-			if (Properties.getEconomyEnabled())
+			if (myZone.config.economy.enabled)
 			{
-				if (!myZone.vaultEcon.has(Bukkit.getOfflinePlayer(player.getUniqueId()), Properties.getZoneOwnerRemoveMoney()))
+				if (!myZone.vaultEcon.has(Bukkit.getOfflinePlayer(player.getUniqueId()), myZone.config.economy.owner.ownerRemove))
 				{
-					sender.sendMessage(tl("Error") + " " + tl("Economy_NotEnoughMoney", Properties.getZoneOwnerRemoveMoney()));
+					sender.sendMessage(tl("Error") + " " + tl("Economy_NotEnoughMoney", myZone.config.economy.owner.ownerRemove));
 					return;
 				}
-				myZone.vaultEcon.withdrawPlayer(Bukkit.getOfflinePlayer(player.getUniqueId()), Properties.getZoneOwnerRemoveMoney());
+				myZone.vaultEcon.withdrawPlayer(Bukkit.getOfflinePlayer(player.getUniqueId()), myZone.config.economy.owner.ownerRemove);
 			}
 
 			region.getOwners().removePlayer(lcPlayer);
