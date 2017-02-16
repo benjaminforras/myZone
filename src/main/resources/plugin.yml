@@ -1,5 +1,5 @@
 name: myZone
-version: ${project.version}
+version: @version@
 main: hu.tryharddood.myzone.myZone
 depend: [WorldEdit, WorldGuard]
 softdepend: [Vault]

@@ -1,5 +1,4 @@
 .idea/
 myZone.iml
-src/test/
-target/
-dependency-reduced-pom.xml
+.gradle/
+build/

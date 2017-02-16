@@ -1,0 +1,78 @@
+apply plugin: 'java'
+apply plugin: 'maven'
+
+group = 'hu.tryharddood'
+
+description = "myZone is a easy to use protection system which is based on Worldguard, that allows users to perform various actions on user-selected areas"
+
+sourceCompatibility = 1.8
+targetCompatibility = 1.8
+
+compileJava.options.encoding = 'UTF-8'
+
+buildscript {
+    repositories {
+        jcenter()
+        maven { url "https://plugins.gradle.org/m2/" }
+    }
+
+    dependencies {
+        classpath "com.github.jengelman.gradle.plugins:shadow:1.2.4"
+    }
+}
+
+repositories {
+    maven { url "https://hub.spigotmc.org/nexus/content/repositories/snapshots/" }
+    maven { url "http://maven.sk89q.com/repo/" }
+    maven { url "http://nexus.hc.to/content/repositories/pub_releases/" }
+    maven { url "https://jitpack.io" }
+    maven { url "http://repo.maven.apache.org/maven2" }
+    maven { url "https://oss.sonatype.org/content/repositories/snapshots/" }
+}
+
+dependencies {
+    compile group: 'org.spigotmc', name: 'spigot-api', version: '1.11.2-R0.1-SNAPSHOT'
+    compile group: 'com.google.code.findbugs', name: 'jsr305', version: '2.0.1'
+
+    compile group: 'com.github.InventivetalentDev', name: 'ReflectionHelper', version: '395cfea950'
+    compile group: 'com.github.InventivetalentDev', name: 'ParticleAPI', version: '65b701708a'
+    compile group: 'com.github.TryHardDood', name: 'BossBarAPI', version: 'dafa36593c'
+
+    compile group: 'com.github.sk89q.WorldEdit', name: 'worldedit-bukkit', version: 'a8d04c24be'
+    compile group: 'com.github.sk89q.WorldGuard', name: 'worldguard-legacy', version: '6e56763a7f'
+    compile group: 'net.milkbowl.vault', name: 'VaultAPI', version: '1.6'
+    compile group: 'net.milkbowl.vault', name: 'Vault', version: '1.6.6'
+}
+
+apply plugin: "com.github.johnrengelman.shadow"
+
+shadowJar {
+    archiveName = "${baseName}.${extension}"
+
+    dependencies {
+        include(dependency('com.github.InventivetalentDev:ReflectionHelper'))
+        include(dependency('com.github.InventivetalentDev:ParticleAPI'))
+        include(dependency('com.github.TryHardDood:BossBarAPI'))
+    }
+
+    relocate 'org.inventivetalent.bossbar', 'hu.tryharddood.myzone.Util.BossBarAPI'
+    relocate 'org.inventivetalent.particle', 'hu.tryharddood.myzone.Util.ParticleAPI'
+    relocate 'org.inventivetalent.reflection', 'hu.tryharddood.myzone.Util.ReflectionHelper'
+}
+
+task copyFile(type: Copy) {
+    from('build/libs')
+    into('target')
+    include('myZone.jar')
+}
+
+import org.apache.tools.ant.filters.ReplaceTokens
+
+processResources {
+    from(sourceSets.main.resources.srcDirs) {
+        filter ReplaceTokens, tokens: [version: version]
+    }
+}
+
+assemble.dependsOn(shadowJar)
+assemble.finalizedBy(copyFile)

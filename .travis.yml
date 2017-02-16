@@ -2,12 +2,34 @@ language: java
 
 jdk:
   - oraclejdk8
+  
+# Cache dependencies
+before_cache:
+  - rm -f  $HOME/.gradle/caches/modules-2/modules-2.lock
+  - rm -fr $HOME/.gradle/caches/*/plugin-resolution/
+cache:
+  directories:
+    - $HOME/.gradle/caches/
+    - $HOME/.gradle/wrapper/
+    
+before_install:
+ - chmod +x gradlew
 
+# Extract the latest commits
+before_script:
+#  - export COMMIT_MESSAGE=$(git show -s --format=%B $TRAVIS_COMMIT | tr -d '\n')
+  - "export COMMIT_MESSAGE=\"$(git log --format=%B --no-merges -n 1)\""
+
+script: 
+ - ./gradlew clean
+ - ./gradlew assemble -Pversion="1.1.$TRAVIS_BUILD_NUMBER"
+ 
+# Auto push release
 before_deploy:
   - git config --global user.email "builds@travis-ci.com"
   - git config --global user.name "Travis CI"
-  - export GIT_TAG=" $TRAVIS_BRANCH.$TRAVIS_BUILD_NUMBER-SNAPSHOT"
-  - git tag $GIT_TAG -a -m "Generated build from TravisCI for build $TRAVIS_BUILD_NUMBER" -m "$COMMIT_MESSAGE"
+  - export GIT_TAG="v1.1.$TRAVIS_BUILD_NUMBER-SNAPSHOT"
+  - git tag $GIT_TAG -a -m "$COMMIT_MESSAGE"
   - git push -q https://$GITHUBKEY@github.com/TryHardDood/myZone $GIT_TAG
   - ls -R
 
@@ -16,14 +38,11 @@ deploy:
   skip_cleanup: true
   api_key:
     secure: oQZhkGRLwtBIeSADFFW5w35ofaxu1WdQ7TjjOT7FPLTnmnayFVJ5FHuP4SwURKx2iNRw7hweJZl7X7HQCTdTRi6+LOGx56z74TjyLHXUqZi37+AKSNoiO2tbJhbDTmCkh7pism/cQyPE9KZ60nR/9xgeugc1LJSsZaP74SMvrBJcJJQKAgkv8/FrwYbtwfMpmkQI0kMyeUpZh0cfFzz0txHTYo0iEY5FSEskaVtcGbP6ZxnHUuhN8fMAY+EzFtp8qZDF2+VU3DYGR+2EVXlvXowdvxEMSRLmJ4hhj0vkM9IvZadRL1pQNIX2Z2UtE6MTM7HvE5OLYbH2W9b0sWO3LA51rbn2RgXdDtKJUJRUhA+I+vwNRVwpe5VbG6bCWMHSM+EUUAMCPi+A1eBv0lqp/J4jCR+7jY38oAjx1UiyXQQoXdMBpaEBcDerGy0uc79J14fcAHnW3AHHKr2KgeuTnHnuPIJkYhk8Xz8WPdCzE6XiVVvxqIENAaSPzQW+4vfP0nSliqgku7smXaxFYB4TODmt72Z0omkHlxeFT0NGm8az3QUcKdBmBCMWDZrHsYr8kLOuweV4LTY5qk5CbZ3RBA1CtstRHNIe9ctpuZt0YKSsJteQDkzjaxtpWAva6rRpplSXT5++vxO6lp8qI72Hf+5eazMfYM8qVnw1LO1bss4=
-  file: target/myZone.jar
+  file: "$TRAVIS_BUILD_DIR/target/myZone.jar"
   on:
     branch: v1.1
     tags: false
 
-before_script:
-  - export COMMIT_MESSAGE=$(git show -s --format=%B $TRAVIS_COMMIT | tr -d '\n')
-
-branches:
+ branches:
   only:
   - v1.1
