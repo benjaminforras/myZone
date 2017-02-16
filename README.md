@@ -42,7 +42,11 @@
 </ul>
 <h3>Dependencies</h3>
 
+<<<<<<< HEAD
 If you would like to use the economy support you’ll have to have [Vault](https://dev.bukkit.org/projects/vault) installed.
+=======
+If you would like to use the economy support youâ€™ll have to have [Vault](https://dev.bukkit.org/projects/vault) installed.
+>>>>>>> v1.1
 
 
 
@@ -197,4 +201,8 @@ Here you can find the default configuration file: [config.yml](https://github.co
 <p align="center">Made by 
 	<a href="https://github.com/TryHardDood/" target="_blank">TryHardDood</a> with :heart:
 </p>
+<<<<<<< HEAD
 <p align="right">:trollface:</p>
+=======
+<p align="right">:trollface:</p>
+>>>>>>> v1.1
