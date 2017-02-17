@@ -116,6 +116,7 @@ public class WorldGuardHelper {
 			_instance.getLogger().warning("Failed to delete region: " + e.getMessage());
 		}
 		myZone.zoneManager.getZones().put(zoneName, zoneObject);
+		myZone.zoneManager.updateCacheForPlayer(owner.getUniqueId());
 		owner.sendMessage(tl("Success") + " " + tl("CreateZone_Success", zoneName));
 	}
 
@@ -167,7 +168,7 @@ public class WorldGuardHelper {
 		ProtectedRegion region;
 		for (Map.Entry<String, ZoneObject> zoneEntry : myZone.zoneManager.getZones().entrySet())
 		{
-			region = myZone.worldGuardHelper.getRegion(zoneEntry.getValue().getRegionID());
+			region = getRegion(zoneEntry.getValue().getRegionID());
 			if (region == null)
 				continue;
 

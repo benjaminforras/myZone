@@ -10,19 +10,16 @@ import hu.tryharddood.myzone.MenuBuilder.PageLayout;
 import hu.tryharddood.myzone.MenuBuilder.inventory.InventoryMenuBuilder;
 import hu.tryharddood.myzone.MenuBuilder.inventory.InventoryMenuListener;
 import hu.tryharddood.myzone.Variables;
+import hu.tryharddood.myzone.Zones.ZoneManager;
 import hu.tryharddood.myzone.myZone;
 import org.bukkit.Bukkit;
 import org.bukkit.ChatColor;
 import org.bukkit.Material;
-import org.bukkit.Sound;
 import org.bukkit.command.Command;
 import org.bukkit.command.CommandSender;
 import org.bukkit.entity.Player;
-import org.bukkit.event.Event;
 import org.bukkit.event.inventory.ClickType;
-import org.bukkit.event.inventory.InventoryAction;
 import org.bukkit.event.inventory.InventoryClickEvent;
-import org.bukkit.inventory.Inventory;
 import org.bukkit.inventory.ItemStack;
 
 import java.util.ArrayList;
@@ -205,11 +202,12 @@ public class MainCommand extends Subcommand {
 					player.updateInventory();
 				}
 			} else if (itemStack.getType() == Material.BARRIER) {
-				InventoryMenuBuilder imb = new InventoryMenuBuilder(27).withTitle("Are you sure?");
+				/*InventoryMenuBuilder imb = new InventoryMenuBuilder(27).withTitle("Are you sure?");
 				imb.withItem(11, new ItemBuilder(Material.STAINED_GLASS_PANE, (short) 13).setTitle(ChatColor.GREEN + tl("GUI_Confirm", true)).build());
 				imb.withItem(15, new ItemBuilder(Material.STAINED_GLASS_PANE, (short) 14).setTitle(ChatColor.GREEN + tl("GUI_Cancel", true)).build());
 				imb.show(player);
-				imb.onInteract(deleteInventoryListener, ClickType.LEFT);
+				imb.onInteract(deleteInventoryListener, ClickType.LEFT);*/
+				Bukkit.dispatchCommand(player, "zone delete " + myZone.zoneManager.getRegionName(region.getId()));
 			}
 		}
 	};
@@ -273,7 +271,12 @@ public class MainCommand extends Subcommand {
 
 		Player player = (Player) sender;
 
-		HashMap<String, List<String>> zones = myZone.worldGuardHelper.getPlayerRegions(player.getUniqueId());
+		HashMap<String, List<String>> zones;
+		if(!myZone.zoneManager.getCache().containsKey(player.getUniqueId()))
+		{
+			myZone.zoneManager.updateCacheForPlayer(player.getUniqueId());
+		}
+		zones = myZone.zoneManager.getCache().get(player.getUniqueId());
 
 		List<String> owned  = zones.get("owned");
 		List<String> member = zones.get("member");
@@ -294,18 +297,6 @@ public class MainCommand extends Subcommand {
 
 		for (String s : member) {
 			itemStacks.add(new ItemBuilder(Material.ACACIA_DOOR_ITEM).setTitle(ChatColor.YELLOW + s).build());
-		}
-
-		if (itemStacks == null) {
-			player.sendMessage(tl("Error") + " " + "&7Please contact a server administrator.");
-			myZone.log("ERROR! Please send this to the plugin's author: ");
-			myZone.log("--------- StackTrace ----------");
-			myZone.log("Zones Size: " + owned.size());
-			myZone.log("Zones: " + owned.toString());
-			myZone.log("Members Size: " + member.size());
-			myZone.log("Members: " + member.toString());
-			myZone.log("Overall Size: " + size);
-			myZone.log("--------- End of StackTrace ----------");
 		}
 
 		PageInventory pageInventory = new PageInventory("myZone GUI", itemStacks);

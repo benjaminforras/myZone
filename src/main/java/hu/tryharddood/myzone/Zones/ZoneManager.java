@@ -7,8 +7,10 @@ import org.bukkit.plugin.java.JavaPlugin;
 import java.io.File;
 import java.io.IOException;
 import java.util.HashMap;
+import java.util.List;
 import java.util.Map;
 import java.util.UUID;
+import java.util.concurrent.ConcurrentHashMap;
 import java.util.logging.Level;
 import java.util.regex.Pattern;
 
@@ -17,8 +19,9 @@ import java.util.regex.Pattern;
  ****************************************************/
 public class ZoneManager {
 
-	private final JavaPlugin                  _instance = JavaPlugin.getProvidingPlugin(ZoneManager.class);
-	private       HashMap<String, ZoneObject> _zones    = new HashMap<>();
+	private final JavaPlugin                                             _instance = JavaPlugin.getProvidingPlugin(ZoneManager.class);
+	private       HashMap<String, ZoneObject>                            _zones    = new HashMap<>();
+	public static        ConcurrentHashMap<UUID, HashMap<String, List<String>>> zoneCache = new ConcurrentHashMap<>();
 
 	public ZoneManager() {}
 
@@ -67,6 +70,22 @@ public class ZoneManager {
 		}
 
 		myZone.log("Successfully loaded " + _zones.size() + " zones");
+	}
+
+	public void updateCacheForPlayers(UUID... players)
+	{
+		for(UUID player : players)
+			updateCacheForPlayer(player);
+	}
+
+	public void updateCacheForPlayer(UUID player)
+	{
+		if(zoneCache.containsKey(player))
+		{
+			zoneCache.put(player, new HashMap<>());
+		}
+		zoneCache.put(player, myZone.worldGuardHelper.getPlayerRegions(player));
+		System.out.println("Updated cache for player: " + player.toString());
 	}
 
 	private void getZoneData(File file) {
@@ -168,5 +187,10 @@ public class ZoneManager {
 			}
 		}
 		return null;
+	}
+
+	public ConcurrentHashMap<UUID, HashMap<String, List<String>>> getCache()
+	{
+		return zoneCache;
 	}
 }

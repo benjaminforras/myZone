@@ -100,6 +100,7 @@ public class OwnersCommand extends Subcommand {
 
 			region.getOwners().addPlayer(lcPlayer);
 			sender.sendMessage(tl("Success") + " " + tl("OwnersZone_Add_Success", lcPlayer.getName()));
+			myZone.zoneManager.updateCacheForPlayer(lcPlayer.getUniqueId());
 		}
 		else if (action.equalsIgnoreCase("remove"))
 		{
@@ -151,6 +152,7 @@ public class OwnersCommand extends Subcommand {
 			region.getOwners().removePlayer(lcPlayer);
 
 			sender.sendMessage(tl("Success") + " " + tl("OwnersZone_Remove_Success", lcPlayer.getName()));
+			myZone.zoneManager.updateCacheForPlayer(lcPlayer.getUniqueId());
 		}
 		myZone.worldGuardHelper.saveAll();
 	}

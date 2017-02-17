@@ -98,6 +98,7 @@ public class MembersCommand extends Subcommand {
 
 			region.getMembers().addPlayer(lcPlayer);
 			sender.sendMessage(tl("Success") + " " + tl("MembersZone_Add_Success", lcPlayer.getName()));
+			myZone.zoneManager.updateCacheForPlayer(lcPlayer.getUniqueId());
 		}
 		else if (action.equalsIgnoreCase("remove"))
 		{
@@ -142,6 +143,7 @@ public class MembersCommand extends Subcommand {
 			region.getMembers().removePlayer(lcPlayer);
 
 			sender.sendMessage(tl("Success") + " " + tl("MembersZone_Remove_Success", lcPlayer.getName()));
+			myZone.zoneManager.updateCacheForPlayer(lcPlayer.getUniqueId());
 		}
 		myZone.worldGuardHelper.saveAll();
 	}
