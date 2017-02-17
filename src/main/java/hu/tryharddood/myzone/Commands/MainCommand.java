@@ -95,7 +95,7 @@ public class MainCommand extends Subcommand {
 				value = "Unknown";
 			}
 
-			Bukkit.dispatchCommand(player, "zone flag " + myZone.zoneManager.getRegion(region.getId()).getZoneName() + " " + flag.getName() + " " + value.toString());
+			Bukkit.dispatchCommand(player, "zone flag " + myZone.zoneManager.getRegionName(region.getId()) + " " + flag.getName() + " " + value.toString());
 
 			event.getInventory().setItem(event.getSlot(), new ItemBuilder(Material.SIGN).setTitle(flag.getName()).addLore(prefix).build());
 			player.updateInventory();
@@ -123,7 +123,7 @@ public class MainCommand extends Subcommand {
 
 			String itemName   = event.getCurrentItem().getItemMeta().getDisplayName();
 			String playerName = ChatColor.stripColor(itemName);
-			Bukkit.dispatchCommand(player, "zone members " + region.getId() + " remove " + playerName);
+			Bukkit.dispatchCommand(player, "zone members " + myZone.zoneManager.getRegionName(region.getId()) + " remove " + playerName);
 		}
 	};
 	private InventoryMenuListener removeOwnerListener     = new InventoryMenuListener() {
@@ -148,7 +148,7 @@ public class MainCommand extends Subcommand {
 
 			String itemName   = event.getCurrentItem().getItemMeta().getDisplayName();
 			String playerName = ChatColor.stripColor(itemName);
-			Bukkit.dispatchCommand(player, "zone owners " + region.getId() + " remove " + playerName);
+			Bukkit.dispatchCommand(player, "zone owners " + myZone.zoneManager.getRegionName(region.getId()) + " remove " + playerName);
 		}
 	};
 
