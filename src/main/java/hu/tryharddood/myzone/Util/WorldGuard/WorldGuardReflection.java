@@ -112,7 +112,7 @@ public class WorldGuardReflection {
 				return parseInputMethod.invoke(flag, (FlagContext.create().setSender(sender).setInput(value).setObject("region", region).build()));
 			} catch (IllegalAccessException | InvocationTargetException e)
 			{
-				e.printStackTrace();
+				System.out.println("If someone just resetted a flag just ignore this: " + e.getMessage());
 			}
 		}
 		else
@@ -122,7 +122,7 @@ public class WorldGuardReflection {
 				return parseInputMethod.invoke(flag, _worldGuardPlugin, sender, value);
 			} catch (IllegalAccessException | InvocationTargetException e)
 			{
-				e.printStackTrace();
+				System.out.println("If someone just resetted a flag just ignore this: " + e.getMessage());
 			}
 		}
 		return null;
