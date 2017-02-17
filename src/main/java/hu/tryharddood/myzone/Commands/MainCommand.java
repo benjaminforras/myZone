@@ -20,6 +20,7 @@ import org.bukkit.entity.Player;
 import org.bukkit.event.inventory.ClickType;
 import org.bukkit.event.inventory.InventoryClickEvent;
 import org.bukkit.inventory.ItemStack;
+import org.bukkit.inventory.meta.SkullMeta;
 
 import java.util.ArrayList;
 import java.util.HashMap;
@@ -208,8 +209,13 @@ public class MainCommand extends Subcommand {
 					members.addAll(region.getMembers().getUniqueIds());
 
 					itemStacks.clear();
+					ItemStack headItem = new ItemStack(Material.SKULL_ITEM,1, (short) 3);
+					SkullMeta skullMeta = (SkullMeta) headItem.getItemMeta();
 					for (UUID member : members) {
-						itemStacks.add(new ItemBuilder(Material.SKULL_ITEM, (short) 3).setTitle(ChatColor.GRAY + Bukkit.getOfflinePlayer(member).getName()).build());
+						skullMeta.setOwner(Bukkit.getOfflinePlayer(member).getName());
+						headItem.setItemMeta(skullMeta);
+
+						itemStacks.add(new ItemBuilder(headItem).setTitle(ChatColor.GRAY + Bukkit.getOfflinePlayer(member).getName()).build());
 					}
 
 					PageInventory pageInventory = new PageInventory("Members", itemStacks);
@@ -225,8 +231,13 @@ public class MainCommand extends Subcommand {
 					owners.addAll(region.getOwners().getUniqueIds());
 
 					itemStacks.clear();
+					ItemStack headItem = new ItemStack(Material.SKULL_ITEM,1, (short) 3);
+					SkullMeta skullMeta = (SkullMeta) headItem.getItemMeta();
 					for (UUID owner : owners) {
-						itemStacks.add(new ItemBuilder(Material.SKULL_ITEM, (short) 3).setTitle(ChatColor.GRAY + Bukkit.getOfflinePlayer(owner).getName()).build());
+						skullMeta.setOwner(Bukkit.getOfflinePlayer(owner).getName());
+						headItem.setItemMeta(skullMeta);
+
+						itemStacks.add(new ItemBuilder(headItem).setTitle(ChatColor.GRAY + Bukkit.getOfflinePlayer(owner).getName()).build());
 					}
 
 					PageInventory pageInventory = new PageInventory("Owners", itemStacks);
