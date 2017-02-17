@@ -10,7 +10,6 @@ import hu.tryharddood.myzone.MenuBuilder.PageLayout;
 import hu.tryharddood.myzone.MenuBuilder.inventory.InventoryMenuBuilder;
 import hu.tryharddood.myzone.MenuBuilder.inventory.InventoryMenuListener;
 import hu.tryharddood.myzone.Variables;
-import hu.tryharddood.myzone.Zones.ZoneManager;
 import hu.tryharddood.myzone.myZone;
 import org.bukkit.Bukkit;
 import org.bukkit.ChatColor;
@@ -36,9 +35,28 @@ public class MainCommand extends Subcommand {
 	private static ArrayList<Flag> _flagsCache = new ArrayList<>();
 	private ProtectedRegion region;
 
+	private PageInventory _pageInventory;
+
 	private InventoryMenuListener flagSettingListener     = new InventoryMenuListener() {
 		@Override
 		public void interact(Player player, ClickType action, InventoryClickEvent event) {
+
+			ItemStack item = _pageInventory.getInventory().getItem(event.getSlot());
+			if(item == null)
+			{
+				return;
+			}
+
+			int newPage = 0;
+			if (item.equals(_pageInventory.getBackPage())) {
+				newPage = -1;
+			} else if (item.equals(_pageInventory.getForwardsPage())) {
+				newPage = 1;
+			}
+			if (newPage != 0) {
+				_pageInventory.setPage(_pageInventory.getCurrentPage() + newPage);
+				return;
+			}
 			String itemName = event.getCurrentItem().getItemMeta().getDisplayName();
 
 			Flag flag = myZone.worldGuardReflection.fuzzyMatchFlag(ChatColor.stripColor(itemName));
@@ -86,6 +104,23 @@ public class MainCommand extends Subcommand {
 	private InventoryMenuListener removeMemberListener    = new InventoryMenuListener() {
 		@Override
 		public void interact(Player player, ClickType action, InventoryClickEvent event) {
+			ItemStack item = _pageInventory.getInventory().getItem(event.getSlot());
+			if(item == null)
+			{
+				return;
+			}
+
+			int newPage = 0;
+			if (item.equals(_pageInventory.getBackPage())) {
+				newPage = -1;
+			} else if (item.equals(_pageInventory.getForwardsPage())) {
+				newPage = 1;
+			}
+			if (newPage != 0) {
+				_pageInventory.setPage(_pageInventory.getCurrentPage() + newPage);
+				return;
+			}
+
 			String itemName   = event.getCurrentItem().getItemMeta().getDisplayName();
 			String playerName = ChatColor.stripColor(itemName);
 			Bukkit.dispatchCommand(player, "zone members " + region.getId() + " remove " + playerName);
@@ -94,28 +129,26 @@ public class MainCommand extends Subcommand {
 	private InventoryMenuListener removeOwnerListener     = new InventoryMenuListener() {
 		@Override
 		public void interact(Player player, ClickType action, InventoryClickEvent event) {
+			ItemStack item = _pageInventory.getInventory().getItem(event.getSlot());
+			if(item == null)
+			{
+				return;
+			}
+
+			int newPage = 0;
+			if (item.equals(_pageInventory.getBackPage())) {
+				newPage = -1;
+			} else if (item.equals(_pageInventory.getForwardsPage())) {
+				newPage = 1;
+			}
+			if (newPage != 0) {
+				_pageInventory.setPage(_pageInventory.getCurrentPage() + newPage);
+				return;
+			}
+
 			String itemName   = event.getCurrentItem().getItemMeta().getDisplayName();
 			String playerName = ChatColor.stripColor(itemName);
 			Bukkit.dispatchCommand(player, "zone owners " + region.getId() + " remove " + playerName);
-		}
-	};
-	private InventoryMenuListener deleteInventoryListener = new InventoryMenuListener() {
-		@Override
-		public void interact(Player player, ClickType action, InventoryClickEvent event) {
-			if (event.getCurrentItem().getDurability() == (short) 13) {
-				if (myZone.config.economy.enabled) {
-					if (!myZone.vaultEcon.has(Bukkit.getOfflinePlayer(player.getUniqueId()), myZone.config.economy.delete)) {
-						player.sendMessage(tl("Error") + " " + tl("Economy_NotEnoughMoney", myZone.config.economy.delete));
-						return;
-					}
-					myZone.vaultEcon.withdrawPlayer(Bukkit.getOfflinePlayer(player.getUniqueId()), myZone.config.economy.delete);
-				}
-
-				player.sendMessage(tl("Success") + " " + tl("DeleteZone_Success", region.getId()));
-				myZone.worldGuardHelper.deleteRegion(region);
-				myZone.worldGuardHelper.saveAll();
-			}
-			player.closeInventory();
 		}
 	};
 
@@ -165,6 +198,7 @@ public class MainCommand extends Subcommand {
 				pageInventory.show(player);
 
 				pageInventory.onInteract(flagSettingListener, ClickType.LEFT, ClickType.RIGHT);
+				_pageInventory = pageInventory;
 			} else if (itemStack.getType() == Material.SKULL_ITEM) {
 				if (itemStack.getItemMeta().getDisplayName().contains(tl("GUI_Members", true))) {
 					if (region.getMembers() == null) {
@@ -182,7 +216,7 @@ public class MainCommand extends Subcommand {
 					pageInventory.show(player);
 
 					pageInventory.onInteract(removeMemberListener, ClickType.LEFT);
-					player.updateInventory();
+					_pageInventory = pageInventory;
 				} else {
 					if (region.getOwners() == null) {
 						return;
@@ -199,7 +233,7 @@ public class MainCommand extends Subcommand {
 					pageInventory.show(player);
 
 					pageInventory.onInteract(removeOwnerListener, ClickType.LEFT);
-					player.updateInventory();
+					_pageInventory = pageInventory;
 				}
 			} else if (itemStack.getType() == Material.BARRIER) {
 				/*InventoryMenuBuilder imb = new InventoryMenuBuilder(27).withTitle("Are you sure?");
@@ -303,5 +337,6 @@ public class MainCommand extends Subcommand {
 		pageInventory.show(player);
 
 		pageInventory.onInteract(mainMenuListener, ClickType.LEFT);
+		_pageInventory = pageInventory;
 	}
 }
