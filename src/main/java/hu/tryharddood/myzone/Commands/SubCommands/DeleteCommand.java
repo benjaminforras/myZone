@@ -74,7 +74,7 @@ public class DeleteCommand extends Subcommand
 			return;
 		}
 
-		InventoryMenuBuilder imb = new InventoryMenuBuilder(27).withTitle("Are you sure?");
+		InventoryMenuBuilder imb = new InventoryMenuBuilder(27).withTitle(tl("GUI_AreYouSure"));
 		imb.withItem(11, new ItemBuilder(Material.STAINED_GLASS_PANE, (short) 13).setTitle(ChatColor.GREEN + tl("GUI_Confirm", true)).build());
 		imb.withItem(15, new ItemBuilder(Material.STAINED_GLASS_PANE, (short) 14).setTitle(ChatColor.GREEN + tl("GUI_Cancel", true)).build());
 		imb.show(player);

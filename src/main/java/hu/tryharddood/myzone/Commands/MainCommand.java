@@ -195,7 +195,7 @@ public class MainCommand extends Subcommand {
 					itemStacks.add(new ItemBuilder(Material.SIGN).setTitle(flag.getName()).addLore(prefix).build());
 				}
 
-				PageInventory pageInventory = new PageInventory("Flags", itemStacks);
+				PageInventory pageInventory = new PageInventory(tl("GUI_Flags"), itemStacks);
 				pageInventory.show(player);
 
 				pageInventory.onInteract(flagSettingListener, ClickType.LEFT, ClickType.RIGHT);
@@ -218,7 +218,7 @@ public class MainCommand extends Subcommand {
 						itemStacks.add(new ItemBuilder(headItem).setTitle(ChatColor.GRAY + Bukkit.getOfflinePlayer(member).getName()).build());
 					}
 
-					PageInventory pageInventory = new PageInventory("Members", itemStacks);
+					PageInventory pageInventory = new PageInventory(tl("GUI_Members"), itemStacks);
 					pageInventory.show(player);
 
 					pageInventory.onInteract(removeMemberListener, ClickType.LEFT);
@@ -240,7 +240,7 @@ public class MainCommand extends Subcommand {
 						itemStacks.add(new ItemBuilder(headItem).setTitle(ChatColor.GRAY + Bukkit.getOfflinePlayer(owner).getName()).build());
 					}
 
-					PageInventory pageInventory = new PageInventory("Owners", itemStacks);
+					PageInventory pageInventory = new PageInventory(tl("GUI_Owners"), itemStacks);
 					pageInventory.show(player);
 
 					pageInventory.onInteract(removeOwnerListener, ClickType.LEFT);
@@ -267,7 +267,7 @@ public class MainCommand extends Subcommand {
 				}
 				region = myZone.worldGuardHelper.getRegion(myZone.zoneManager.getRegionID(ChatColor.stripColor(itemName)));
 
-				InventoryMenuBuilder imb = new InventoryMenuBuilder(45).withTitle("ZoneUtils - " + ChatColor.stripColor(itemName));
+				InventoryMenuBuilder imb = new InventoryMenuBuilder(45).withTitle(ChatColor.stripColor(itemName));
 
 				ArrayList<ItemStack> itemStacks = new ArrayList<>();
 				itemStacks.add(new ItemBuilder(Material.SIGN).setTitle(ChatColor.GREEN + tl("GUI_Flags", true)).build());
