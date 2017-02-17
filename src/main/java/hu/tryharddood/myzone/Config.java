@@ -172,6 +172,19 @@ public class Config extends ReflectedYaml
 		public String regex = "[^a-zA-Z0-9_\\p{L}+]";
 	}
 
+	@Name("AutoExpand")
+	@Comment({"You can enable autoexpanding", "When the Y coordinates are the same it allows the user to expand it to the max height", "MaxHeight is based on the player's permission."})
+	public AutoExpand autoexpand;
+
+	public class AutoExpand implements Section
+	{
+		@Name("Enabled")
+		public boolean enabled = false;
+
+		@Name("PermissionOnly")
+		public boolean permissionOnly = false;
+	}
+
 	@Name("Economy")
 	@Comment({"Here you can change the default values for the economy part"})
 	public Economy economy;
