@@ -30,7 +30,7 @@ public class ListCommand extends Subcommand {
 
 	@Override
 	public String getDescription() {
-		return tl("ListZone_Command_Description", true);
+		return tl("ListZone_Command_Description");
 	}
 
 	@Override

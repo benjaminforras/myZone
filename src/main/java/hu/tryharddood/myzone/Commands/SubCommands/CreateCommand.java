@@ -30,7 +30,7 @@ public class CreateCommand extends Subcommand {
 
 	@Override
 	public String getDescription() {
-		return tl("CreateZone_Command_Description", true);
+		return tl("CreateZone_Command_Description");
 	}
 
 	@Override

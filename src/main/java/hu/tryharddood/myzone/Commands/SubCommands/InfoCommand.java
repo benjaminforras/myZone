@@ -32,7 +32,7 @@ public class InfoCommand extends Subcommand {
 
 	@Override
 	public String getDescription() {
-		return tl("Info_Command_Description", true);
+		return tl("Info_Command_Description");
 	}
 
 	@Override
@@ -61,7 +61,7 @@ public class InfoCommand extends Subcommand {
 		RegionManager   regionManager = myZone.worldGuardHelper.getRegionManager(regionID);
 
 		player.sendMessage(ChatColor.GRAY + "ID: " + ChatColor.GOLD + zoneName);
-		player.sendMessage(ChatColor.GRAY + tl("Text_Owners", true) + ": ");
+		player.sendMessage(ChatColor.GRAY + tl("Text_Owners") + ": ");
 		if (region.getOwners().getUniqueIds().size() == 0)
 		{
 			player.sendMessage(ChatColor.GOLD + "- " + "None");
@@ -74,8 +74,8 @@ public class InfoCommand extends Subcommand {
 			}
 		}
 
-		player.sendMessage(ChatColor.GRAY + tl("Text_Location", true) + ": " + ChatColor.GOLD + regionManager.getName() + " - " + (region.getMinimumPoint() + " -> " + region.getMaximumPoint()));
-		player.sendMessage(ChatColor.GRAY + tl("Text_Members", true) + ": ");
+		player.sendMessage(ChatColor.GRAY + tl("Text_Location") + ": " + ChatColor.GOLD + regionManager.getName() + " - " + (region.getMinimumPoint() + " -> " + region.getMaximumPoint()));
+		player.sendMessage(ChatColor.GRAY + tl("Text_Members") + ": ");
 		if (region.getMembers().getUniqueIds().size() == 0)
 		{
 			player.sendMessage(ChatColor.GOLD + "- " + "None");
@@ -97,7 +97,7 @@ public class InfoCommand extends Subcommand {
 		{
 			temp = temp.substring(0, temp.length() - 2);
 		}
-		player.sendMessage(ChatColor.GRAY + tl("Text_Flags", true) + ": " + ChatColor.GOLD + (temp));
-		player.sendMessage(ChatColor.GRAY + tl("Text_Type", true) + ": " + ChatColor.GOLD + (region.getType().getName()));
+		player.sendMessage(ChatColor.GRAY + tl("Text_Flags") + ": " + ChatColor.GOLD + (temp));
+		player.sendMessage(ChatColor.GRAY + tl("Text_Type") + ": " + ChatColor.GOLD + (region.getType().getName()));
 	}
 }

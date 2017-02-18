@@ -22,7 +22,7 @@ public class ReloadCommand extends Subcommand {
 
 	@Override
 	public String getDescription() {
-		return tl("Reload_Command_Description", true);
+		return tl("Reload_Command_Description");
 	}
 
 	@Override

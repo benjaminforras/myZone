@@ -120,7 +120,7 @@ public class myZone extends JavaPlugin {
 	}
 
 	private void registerEvents() {
-		this.getServer().getPluginManager().registerEvents(inventoryListener = new InventoryListener(this), this);
+		this.getServer().getPluginManager().registerEvents(inventoryListener = new InventoryListener(), this);
 		this.getServer().getPluginManager().registerEvents(new pListener(), this);
 
 		log("Events successfully hooked.");

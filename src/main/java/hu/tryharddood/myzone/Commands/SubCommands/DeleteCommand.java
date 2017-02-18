@@ -17,7 +17,6 @@ import org.bukkit.event.inventory.ClickType;
 
 import java.util.ArrayList;
 import java.util.List;
-import java.util.Set;
 import java.util.UUID;
 
 import static hu.tryharddood.myzone.Util.Localization.I18n.tl;
@@ -41,7 +40,7 @@ public class DeleteCommand extends Subcommand
 	@Override
 	public String getDescription()
 	{
-		return tl("DeleteZone_Command_Description", true);
+		return tl("DeleteZone_Command_Description");
 	}
 
 	@Override
@@ -75,8 +74,8 @@ public class DeleteCommand extends Subcommand
 		}
 
 		InventoryMenuBuilder imb = new InventoryMenuBuilder(27).withTitle(tl("GUI_AreYouSure"));
-		imb.withItem(11, new ItemBuilder(Material.STAINED_GLASS_PANE, (short) 13).setTitle(ChatColor.GREEN + tl("GUI_Confirm", true)).build());
-		imb.withItem(15, new ItemBuilder(Material.STAINED_GLASS_PANE, (short) 14).setTitle(ChatColor.GREEN + tl("GUI_Cancel", true)).build());
+		imb.withItem(11, new ItemBuilder(Material.STAINED_GLASS_PANE, (short) 13).setTitle(ChatColor.GREEN + tl("GUI_Confirm")).build());
+		imb.withItem(15, new ItemBuilder(Material.STAINED_GLASS_PANE, (short) 14).setTitle(ChatColor.GREEN + tl("GUI_Cancel")).build());
 		imb.show(player);
 
 		imb.onInteract((player_, action_, event_) -> {

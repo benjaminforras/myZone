@@ -29,7 +29,7 @@ public class HelpCommand extends Subcommand {
 
 	@Override
 	public String getDescription() {
-		return tl("Help_Command_Description", true);
+		return tl("Help_Command_Description");
 	}
 
 	@Override

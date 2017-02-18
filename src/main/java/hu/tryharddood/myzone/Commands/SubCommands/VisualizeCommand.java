@@ -33,7 +33,7 @@ public class VisualizeCommand extends Subcommand {
 
 	@Override
 	public String getDescription() {
-		return tl("Command_Visualize_Description", true);
+		return tl("Command_Visualize_Description");
 	}
 
 	@Override

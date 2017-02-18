@@ -114,7 +114,7 @@ public class pListener implements Listener
 				}
 				if (spamBlock.containsKey(player.getUniqueId())) {
 					if (spamBlock.get(player.getUniqueId()) > System.currentTimeMillis()) {
-						player.sendMessage(tl("Error") + " " + tl("Info_Tool_SpamBlock", ((spamBlock.get(player.getUniqueId()) - System.currentTimeMillis()) / 1000) + " " + tl("Text_Second", true)));
+						player.sendMessage(tl("Error") + " " + tl("Info_Tool_SpamBlock", ((spamBlock.get(player.getUniqueId()) - System.currentTimeMillis()) / 1000) + " " + tl("Text_Second")));
 						event.setCancelled(true);
 						return;
 					}
@@ -145,7 +145,7 @@ public class pListener implements Listener
 					}
 
 					player.sendMessage(ChatColor.GRAY + "ID: " + ChatColor.GOLD + myZone.zoneManager.getRegionName(region.getId()));
-					player.sendMessage(ChatColor.GRAY + tl("Text_Owners", true) + ": ");
+					player.sendMessage(ChatColor.GRAY + tl("Text_Owners") + ": ");
 					if (region.getOwners().getUniqueIds().size() == 0) {
 						player.sendMessage(ChatColor.GOLD + "- " + "None");
 					}
@@ -154,8 +154,8 @@ public class pListener implements Listener
 							player.sendMessage(ChatColor.GOLD + "- " + Bukkit.getOfflinePlayer(s).getName());
 						}
 					}
-					player.sendMessage(ChatColor.GRAY + tl("Text_Location", true) + ": " + ChatColor.GOLD + location.getWorld().getName() + " - " + (region.getMinimumPoint() + " -> " + region.getMaximumPoint()));
-					player.sendMessage(ChatColor.GRAY + tl("Text_Members", true) + ": ");
+					player.sendMessage(ChatColor.GRAY + tl("Text_Location") + ": " + ChatColor.GOLD + location.getWorld().getName() + " - " + (region.getMinimumPoint() + " -> " + region.getMaximumPoint()));
+					player.sendMessage(ChatColor.GRAY + tl("Text_Members") + ": ");
 					if (region.getMembers().getUniqueIds().size() == 0) {
 						player.sendMessage(ChatColor.GOLD + "- " + "None");
 					}
@@ -172,8 +172,8 @@ public class pListener implements Listener
 					if (!Objects.equals(temp, "")) {
 						temp = temp.substring(0, temp.length() - 2);
 					}
-					player.sendMessage(ChatColor.GRAY + tl("Text_Flags", true) + ": " + ChatColor.GOLD + (temp));
-					player.sendMessage(ChatColor.GRAY + tl("Text_Type", true) + ": " + ChatColor.GOLD + (region.getType().getName()));
+					player.sendMessage(ChatColor.GRAY + tl("Text_Flags") + ": " + ChatColor.GOLD + (temp));
+					player.sendMessage(ChatColor.GRAY + tl("Text_Type") + ": " + ChatColor.GOLD + (region.getType().getName()));
 					spamBlock.put(player.getUniqueId(), System.currentTimeMillis() + (myZone.config.delay.checkTool * 1000));
 					event.setCancelled(true);
 				});

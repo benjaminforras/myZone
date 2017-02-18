@@ -1,31 +1,3 @@
-/*
- * Copyright 2015-2016 inventivetalent. All rights reserved.
- *
- *  Redistribution and use in source and binary forms, with or without modification, are
- *  permitted provided that the following conditions are met:
- *
- *     1. Redistributions of source code must retain the above copyright notice, this list of
- *        conditions and the following disclaimer.
- *
- *     2. Redistributions in binary form must reproduce the above copyright notice, this list
- *        of conditions and the following disclaimer in the documentation and/or other materials
- *        provided with the distribution.
- *
- *  THIS SOFTWARE IS PROVIDED BY THE AUTHOR ''AS IS'' AND ANY EXPRESS OR IMPLIED
- *  WARRANTIES, INCLUDING, BUT NOT LIMITED TO, THE IMPLIED WARRANTIES OF MERCHANTABILITY AND
- *  FITNESS FOR A PARTICULAR PURPOSE ARE DISCLAIMED. IN NO EVENT SHALL THE AUTHOR OR
- *  CONTRIBUTORS BE LIABLE FOR ANY DIRECT, INDIRECT, INCIDENTAL, SPECIAL, EXEMPLARY, OR
- *  CONSEQUENTIAL DAMAGES (INCLUDING, BUT NOT LIMITED TO, PROCUREMENT OF SUBSTITUTE GOODS OR
- *  SERVICES; LOSS OF USE, DATA, OR PROFITS; OR BUSINESS INTERRUPTION) HOWEVER CAUSED AND ON
- *  ANY THEORY OF LIABILITY, WHETHER IN CONTRACT, STRICT LIABILITY, OR TORT (INCLUDING
- *  NEGLIGENCE OR OTHERWISE) ARISING IN ANY WAY OUT OF THE USE OF THIS SOFTWARE, EVEN IF
- *  ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
- *
- *  The views and conclusions contained in the software and documentation are those of the
- *  authors and contributors and should not be interpreted as representing official policies,
- *  either expressed or implied, of anybody else.
- */
-
 package hu.tryharddood.myzone.MenuBuilder.inventory;
 
 import org.bukkit.entity.Player;
@@ -35,32 +7,36 @@ import org.bukkit.event.EventPriority;
 import org.bukkit.event.Listener;
 import org.bukkit.event.inventory.ClickType;
 import org.bukkit.event.inventory.InventoryClickEvent;
+import org.bukkit.event.inventory.InventoryCloseEvent;
 import org.bukkit.inventory.Inventory;
-import org.bukkit.plugin.java.JavaPlugin;
+import org.bukkit.inventory.ItemStack;
 
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
-public class InventoryListener implements Listener {
+public class InventoryListener implements Listener
+{
 
+	public static final Map<Inventory, InventoryMenuBuilder> builderMap = new HashMap<>();
 	private final Map<Inventory, Map<ClickType, List<InventoryMenuListener>>> listenerMap     = new HashMap<>();
 	private final Map<Inventory, List<InventoryEventHandler>>                 eventHandlerMap = new HashMap<>();
-	private JavaPlugin plugin;
 
-	public InventoryListener(JavaPlugin plugin) {
-		this.plugin = plugin;
-	}
-
-	public void registerListener(InventoryMenuBuilder builder, InventoryMenuListener listener, ClickType[] actions) {
+	public void registerListener(InventoryMenuBuilder builder, InventoryMenuListener listener, ClickType[] actions)
+	{
 		Map<ClickType, List<InventoryMenuListener>> map = listenerMap.get(builder.getInventory());
-		if (map == null) { map = new HashMap<>(); }
-		for (ClickType action : actions)
-		{
+		if (map == null) {
+			map = new HashMap<>();
+		}
+		for (ClickType action : actions) {
 			List<InventoryMenuListener> list = map.get(action);
-			if (list == null) { list = new ArrayList<>(); }
-			if (list.contains(listener)) { throw new IllegalArgumentException("listener already registered"); }
+			if (list == null) {
+				list = new ArrayList<>();
+			}
+			if (list.contains(listener)) {
+				throw new IllegalArgumentException("listener already registered");
+			}
 			list.add(listener);
 
 			map.put(action, list);
@@ -69,75 +45,133 @@ public class InventoryListener implements Listener {
 		listenerMap.put(builder.getInventory(), map);
 	}
 
-	public void unregisterListener(InventoryMenuBuilder builder, InventoryMenuListener listener, ClickType[] actions) {
+	public void unregisterListener(InventoryMenuBuilder builder, InventoryMenuListener listener, ClickType[] actions)
+	{
 		Map<ClickType, List<InventoryMenuListener>> map = listenerMap.get(builder.getInventory());
-		if (map == null) { return; }
-		for (ClickType action : actions)
-		{
+		if (map == null) {
+			return;
+		}
+		for (ClickType action : actions) {
 			List<InventoryMenuListener> list = map.get(action);
-			if (list == null) {continue; }
+			if (list == null) {
+				continue;
+			}
 			list.remove(listener);
 		}
 	}
 
-	public void unregisterAllListeners(Inventory inventory) {
+	public void unregisterAllListeners(Inventory inventory)
+	{
 		listenerMap.remove(inventory);
 	}
 
-	public void registerEventHandler(InventoryMenuBuilder builder, InventoryEventHandler eventHandler) {
+	public void registerEventHandler(InventoryMenuBuilder builder, InventoryEventHandler eventHandler)
+	{
 		List<InventoryEventHandler> list = eventHandlerMap.get(builder.getInventory());
-		if (list == null) { list = new ArrayList<>(); }
-		if (!list.contains(eventHandler)) { list.add(eventHandler); }
+		if (list == null) {
+			list = new ArrayList<>();
+		}
+		if (!list.contains(eventHandler)) {
+			list.add(eventHandler);
+		}
 
 		eventHandlerMap.put(builder.getInventory(), list);
 	}
 
 	@EventHandler(priority = EventPriority.NORMAL, ignoreCancelled = true)
-	public void onInventoryClick(InventoryClickEvent event) {
+	public void onInventoryClick(InventoryClickEvent event)
+	{
 		Player    player    = (Player) event.getWhoClicked();
-		Inventory inventory = event.getInventory();
+		Inventory inventory = event.getInventory(); // <- Fix for moving items from the player's inventory to the gui
 		ClickType type      = event.getClick();
 
-		if (listenerMap.containsKey(inventory))
-		{
+		if (listenerMap.containsKey(inventory)) {
 			event.setCancelled(true);
 			event.setResult(Event.Result.DENY);
 
-			if(event.getCurrentItem() != null && event.getClickedInventory().contains(event.getCurrentItem()))
-			{
+			if(event.getRawSlot() >= event.getInventory().getSize()){
+				return;
+			}
+
+			if (event.getCurrentItem() != null && event.getClickedInventory().contains(event.getCurrentItem())) { // <- Fix for moving items from the player's inventory to the gui
+
 				Map<ClickType, List<InventoryMenuListener>> actionMap = listenerMap.get(inventory);
-				if (actionMap.containsKey(type))
-				{
+				if (actionMap.containsKey(type)) {
 					List<InventoryMenuListener> listeners = actionMap.get(type);
 
-					for (InventoryMenuListener listener : listeners)
-					{
-						try
-						{
+					for (InventoryMenuListener listener : listeners) {
+
+						try {
+							InventoryMenuBuilder builder = getBuilderForInventory(inventory);
+							if (builder instanceof PageInventoryBuilder) {
+								ItemStack            item        = inventory.getItem(event.getSlot());
+								PageInventoryBuilder pageBuilder = (PageInventoryBuilder) builder;
+
+								if (pageBuilder.getExitInventory() != null) {
+									if (item.equals(pageBuilder.getExitInventory())) {
+										player.closeInventory();
+									}
+								}
+
+								int newPage = 0;
+								if (item.equals(pageBuilder.getBackPage())) {
+									newPage = -1;
+								}
+								else if (item.equals(pageBuilder.getForwardsPage())) {
+									newPage = 1;
+								}
+								if (newPage != 0) {
+									pageBuilder.setPage(pageBuilder.getCurrentPage() + newPage);
+								}
+							}
+
 							listener.interact(player, type, event);
-						} catch (Throwable throwable)
-						{
+						}
+						catch (Throwable throwable) {
 							throwable.printStackTrace();
 						}
 					}
 				}
 			}
 		}
-		if (eventHandlerMap.containsKey(inventory))
-		{
+
+		if (eventHandlerMap.containsKey(inventory)) {
 			List<InventoryEventHandler> list = eventHandlerMap.get(inventory);
 
-			for (InventoryEventHandler handler : list)
-			{
-				try
-				{
+			for (InventoryEventHandler handler : list) {
+				try {
 					handler.handle(event);
-				} catch (Throwable throwable)
-				{
+				}
+				catch (Throwable throwable) {
 					throwable.printStackTrace();
 				}
 			}
 		}
 	}
 
+	@EventHandler(priority = EventPriority.NORMAL, ignoreCancelled = true)
+	public void onInventoryCloseEvent(InventoryCloseEvent event)
+	{
+		Inventory inventory = event.getInventory();
+
+		if (listenerMap.containsKey(inventory)) {
+			listenerMap.remove(inventory);
+		}
+		if (eventHandlerMap.containsKey(inventory)) {
+			eventHandlerMap.remove(inventory);
+		}
+		if (builderMap.containsKey(inventory)) {
+			builderMap.remove(inventory);
+		}
+	}
+
+	private InventoryMenuBuilder getBuilderForInventory(Inventory inventory)
+	{
+		for (Map.Entry<Inventory, InventoryMenuBuilder> entry : builderMap.entrySet()) {
+			if (entry.getKey().getTitle().equals(inventory.getTitle())) {
+				return entry.getValue();
+			}
+		}
+		return null;
+	}
 }

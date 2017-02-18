@@ -5,10 +5,10 @@ import com.sk89q.worldguard.protection.flags.Flag;
 import com.sk89q.worldguard.protection.flags.StateFlag;
 import com.sk89q.worldguard.protection.regions.ProtectedRegion;
 import hu.tryharddood.myzone.MenuBuilder.ItemBuilder;
+import hu.tryharddood.myzone.MenuBuilder.PageInventory;
 import hu.tryharddood.myzone.MenuBuilder.PageLayout;
 import hu.tryharddood.myzone.MenuBuilder.inventory.InventoryMenuBuilder;
 import hu.tryharddood.myzone.MenuBuilder.inventory.InventoryMenuListener;
-import hu.tryharddood.myzone.MenuBuilder.inventory.PageInventoryBuilder;
 import hu.tryharddood.myzone.Variables;
 import hu.tryharddood.myzone.myZone;
 import org.bukkit.Bukkit;
@@ -37,16 +37,18 @@ public class MainCommand extends Subcommand
 	private static ArrayList<Flag> _flagsCache = new ArrayList<>();
 	private ProtectedRegion region;
 
+	private PageInventory _pageInventory;
+
 	private InventoryMenuListener flagSettingListener  = new InventoryMenuListener()
 	{
 		@Override
 		public void interact(Player player, ClickType action, InventoryClickEvent event)
 		{
-			if (event.getCurrentItem() == null || event.getCurrentItem().getType().equals(Material.AIR)) {
+
+			ItemStack item = _pageInventory.getInventory().getItem(event.getSlot());
+			if (item == null) {
 				return;
 			}
-
-			/*ItemStack item = _pageInventory.getInventory().getItem(slot);
 
 			int newPage = 0;
 			if (item.equals(_pageInventory.getBackPage())) {
@@ -58,7 +60,7 @@ public class MainCommand extends Subcommand
 			if (newPage != 0) {
 				_pageInventory.setPage(_pageInventory.getCurrentPage() + newPage);
 				return;
-			}*/
+			}
 			String itemName = event.getCurrentItem().getItemMeta().getDisplayName();
 
 			Flag flag = myZone.worldGuardReflection.fuzzyMatchFlag(ChatColor.stripColor(itemName));
@@ -114,7 +116,20 @@ public class MainCommand extends Subcommand
 		@Override
 		public void interact(Player player, ClickType action, InventoryClickEvent event)
 		{
-			if (event.getCurrentItem() == null || event.getCurrentItem().getType().equals(Material.AIR)) {
+			ItemStack item = _pageInventory.getInventory().getItem(event.getSlot());
+			if (item == null) {
+				return;
+			}
+
+			int newPage = 0;
+			if (item.equals(_pageInventory.getBackPage())) {
+				newPage = -1;
+			}
+			else if (item.equals(_pageInventory.getForwardsPage())) {
+				newPage = 1;
+			}
+			if (newPage != 0) {
+				_pageInventory.setPage(_pageInventory.getCurrentPage() + newPage);
 				return;
 			}
 
@@ -128,7 +143,20 @@ public class MainCommand extends Subcommand
 		@Override
 		public void interact(Player player, ClickType action, InventoryClickEvent event)
 		{
-			if (event.getCurrentItem() == null || event.getCurrentItem().getType().equals(Material.AIR)) {
+			ItemStack item = _pageInventory.getInventory().getItem(event.getSlot());
+			if (item == null) {
+				return;
+			}
+
+			int newPage = 0;
+			if (item.equals(_pageInventory.getBackPage())) {
+				newPage = -1;
+			}
+			else if (item.equals(_pageInventory.getForwardsPage())) {
+				newPage = 1;
+			}
+			if (newPage != 0) {
+				_pageInventory.setPage(_pageInventory.getCurrentPage() + newPage);
 				return;
 			}
 
@@ -143,10 +171,6 @@ public class MainCommand extends Subcommand
 		@Override
 		public void interact(Player player, ClickType action, InventoryClickEvent event)
 		{
-			if (event.getCurrentItem() == null || event.getCurrentItem().getType().equals(Material.AIR)) {
-				return;
-			}
-
 			if (region == null) return;
 
 			ItemStack            itemStack  = event.getCurrentItem();
@@ -191,10 +215,11 @@ public class MainCommand extends Subcommand
 					itemStacks.add(new ItemBuilder(Material.SIGN).setTitle(flag.getName()).addLore(prefix).build());
 				}
 
-				PageInventoryBuilder pageInventory = new PageInventoryBuilder(tl("GUI_Flags"), itemStacks);
+				PageInventory pageInventory = new PageInventory(tl("GUI_Flags"), itemStacks);
 				pageInventory.show(player);
 
 				pageInventory.onInteract(flagSettingListener, ClickType.LEFT, ClickType.RIGHT);
+				_pageInventory = pageInventory;
 			}
 			else if (itemStack.getType() == Material.SKULL_ITEM) {
 				if (itemStack.getItemMeta().getDisplayName().contains(tl("GUI_Members"))) {
@@ -214,10 +239,11 @@ public class MainCommand extends Subcommand
 						itemStacks.add(new ItemBuilder(headItem).setTitle(ChatColor.GRAY + Bukkit.getOfflinePlayer(member).getName()).build());
 					}
 
-					PageInventoryBuilder pageInventory = new PageInventoryBuilder(tl("GUI_Members"), itemStacks);
+					PageInventory pageInventory = new PageInventory(tl("GUI_Members"), itemStacks);
 					pageInventory.show(player);
 
 					pageInventory.onInteract(removeMemberListener, ClickType.LEFT);
+					_pageInventory = pageInventory;
 				}
 				else {
 					if (region.getOwners() == null) {
@@ -236,10 +262,11 @@ public class MainCommand extends Subcommand
 						itemStacks.add(new ItemBuilder(headItem).setTitle(ChatColor.GRAY + Bukkit.getOfflinePlayer(owner).getName()).build());
 					}
 
-					PageInventoryBuilder pageInventory = new PageInventoryBuilder(tl("GUI_Owners"), itemStacks);
+					PageInventory pageInventory = new PageInventory(tl("GUI_Owners"), itemStacks);
 					pageInventory.show(player);
 
 					pageInventory.onInteract(removeOwnerListener, ClickType.LEFT);
+					_pageInventory = pageInventory;
 				}
 			}
 			else if (itemStack.getType() == Material.BARRIER) {
@@ -252,9 +279,6 @@ public class MainCommand extends Subcommand
 		@Override
 		public void interact(Player player, ClickType action, InventoryClickEvent event)
 		{
-			if (event.getCurrentItem() == null || event.getCurrentItem().getType().equals(Material.AIR)) {
-				return;
-			}
 
 			String itemName = event.getCurrentItem().getItemMeta().getDisplayName();
 			if (myZone.zoneManager.getRegionID(ChatColor.stripColor(itemName)) != null) {
@@ -346,9 +370,10 @@ public class MainCommand extends Subcommand
 			itemStacks.add(new ItemBuilder(Material.ACACIA_DOOR_ITEM).setTitle(ChatColor.YELLOW + s).build());
 		}
 
-		PageInventoryBuilder pageInventory = new PageInventoryBuilder("myZone GUI", itemStacks);
+		PageInventory pageInventory = new PageInventory("myZone GUI", itemStacks);
 		pageInventory.show(player);
 
 		pageInventory.onInteract(mainMenuListener, ClickType.LEFT);
+		_pageInventory = pageInventory;
 	}
 }

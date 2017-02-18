@@ -27,7 +27,7 @@ public class MembersCommand extends Subcommand {
 
 	@Override
 	public String getDescription() {
-		return tl("MembersZone_Command_Description", true);
+		return tl("MembersZone_Command_Description");
 	}
 
 	@Override

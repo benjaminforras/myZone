@@ -28,7 +28,7 @@ public class ExpandCommand extends Subcommand {
 
 	@Override
 	public String getDescription() {
-		return tl("ExpandZone_Command_Description", true);
+		return tl("ExpandZone_Command_Description");
 	}
 
 	@Override

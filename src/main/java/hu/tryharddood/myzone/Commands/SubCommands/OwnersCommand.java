@@ -29,7 +29,7 @@ public class OwnersCommand extends Subcommand {
 
 	@Override
 	public String getDescription() {
-		return tl("OwnersZone_Command_Description", true);
+		return tl("OwnersZone_Command_Description");
 	}
 
 	@Override

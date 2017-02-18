@@ -12,7 +12,6 @@ import org.bukkit.command.Command;
 import org.bukkit.command.CommandSender;
 import org.bukkit.entity.Player;
 
-import java.lang.reflect.InvocationTargetException;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
@@ -36,7 +35,7 @@ public class FlagCommand extends Subcommand {
 
 	@Override
 	public String getDescription() {
-		return tl("FlagZone_Command_Description", true);
+		return tl("FlagZone_Command_Description");
 	}
 
 	@Override
@@ -121,7 +120,7 @@ public class FlagCommand extends Subcommand {
 			try
 			{
 				region.setFlag(flag, myZone.worldGuardReflection.parseInput(flag, sender, region, value));
-				sender.sendMessage(tl("Success") + " " + tl("flag_reset_success", flag.getName()));
+				sender.sendMessage(tl("Success") + " " + tl("flag_reset_success", args[2]));
 			} catch (InvalidFlagFormat | NullPointerException ignored) {}
 			return;
 		}

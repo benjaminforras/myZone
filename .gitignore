@@ -2,7 +2,6 @@
 myZone.iml
 .gradle/
 build/
-
 target/
-
-pom\.xml
+_MenuBuilder/
+pom.xml

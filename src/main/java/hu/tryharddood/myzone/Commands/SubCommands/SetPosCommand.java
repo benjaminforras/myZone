@@ -25,7 +25,7 @@ public class SetPosCommand extends Subcommand {
 
 	@Override
 	public String getDescription() {
-		return tl("SetPos_Command_Description", true);
+		return tl("SetPos_Command_Description");
 	}
 
 	@Override
