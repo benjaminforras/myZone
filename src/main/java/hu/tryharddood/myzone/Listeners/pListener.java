@@ -181,6 +181,10 @@ public class pListener implements Listener
 		}
 
 		if ((setPos != -1 && myZone.config.autoexpand.enabled) && (selection.getPos1() != null && selection.getPos2() != null)) {
+			if (myZone.config.autoexpand.permissionOnly && !player.hasPermission(Variables.PlayerCommands.AUTOEXPAND_PERMISSION)) {
+					return;
+			}
+
 			if (selection.getPos1().getY() == selection.getPos2().getY()) {
 				int maxHeight = (int) ZoneUtils.getMaxSize(player).getY();
 

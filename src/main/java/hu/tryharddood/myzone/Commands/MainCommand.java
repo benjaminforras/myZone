@@ -9,6 +9,7 @@ import hu.tryharddood.myzone.MenuBuilder.PageLayout;
 import hu.tryharddood.myzone.MenuBuilder.inventory.InventoryMenuBuilder;
 import hu.tryharddood.myzone.MenuBuilder.inventory.InventoryMenuListener;
 import hu.tryharddood.myzone.MenuBuilder.inventory.PageInventoryBuilder;
+import hu.tryharddood.myzone.Util.HeadTextureChanger;
 import hu.tryharddood.myzone.Variables;
 import hu.tryharddood.myzone.myZone;
 import org.bukkit.Bukkit;
@@ -208,7 +209,13 @@ public class MainCommand extends Subcommand
 					ItemStack headItem  = new ItemStack(Material.SKULL_ITEM, 1, (short) 3);
 					SkullMeta skullMeta = (SkullMeta) headItem.getItemMeta();
 					for (UUID member : members) {
-						skullMeta.setOwner(Bukkit.getOfflinePlayer(member).getName());
+						//skullMeta.setOwner(Bukkit.getOfflinePlayer(member).getName());
+						try {
+							HeadTextureChanger.applyTextureToMeta(skullMeta, HeadTextureChanger.createProfile(HeadTextureChanger.encodeBase64(/*String.format("https://crafatar.com/skins/%s", member)*/"https://crafatar.com/skins/7ac3c39f-23d5-472a-a7c9-24798265fa15".getBytes())));
+						}
+						catch (Exception e) {
+							e.printStackTrace();
+						}
 						headItem.setItemMeta(skullMeta);
 
 						itemStacks.add(new ItemBuilder(headItem).setTitle(ChatColor.GRAY + Bukkit.getOfflinePlayer(member).getName()).build());
@@ -230,7 +237,13 @@ public class MainCommand extends Subcommand
 					ItemStack headItem  = new ItemStack(Material.SKULL_ITEM, 1, (short) 3);
 					SkullMeta skullMeta = (SkullMeta) headItem.getItemMeta();
 					for (UUID owner : owners) {
-						skullMeta.setOwner(Bukkit.getOfflinePlayer(owner).getName());
+						//skullMeta.setOwner(Bukkit.getOfflinePlayer(owner).getName());
+						try {
+							HeadTextureChanger.applyTextureToMeta(skullMeta, HeadTextureChanger.createProfile(HeadTextureChanger.encodeBase64(/*String.format("https://crafatar.com/skins/%s", owner)*/"https://crafatar.com/skins/7ac3c39f-23d5-472a-a7c9-24798265fa15".getBytes())));
+						}
+						catch (Exception e) {
+							e.printStackTrace();
+						}
 						headItem.setItemMeta(skullMeta);
 
 						itemStacks.add(new ItemBuilder(headItem).setTitle(ChatColor.GRAY + Bukkit.getOfflinePlayer(owner).getName()).build());
@@ -351,4 +364,38 @@ public class MainCommand extends Subcommand
 
 		pageInventory.onInteract(mainMenuListener, ClickType.LEFT);
 	}
+
+	/**
+	 * https://mcapi.ca/rawskin/username
+	 * https://crafatar.com/skins/uuid
+	 *
+	 * @param url
+	 * @return
+	 */
+
+	/*public ItemStack getSkull(String url)
+	{
+		ItemStack head = new ItemStack(Material.SKULL_ITEM, 1, (short) 3);
+		if (url.isEmpty()) return head;
+
+		Class  gameProfileClass    = new ClassResolver().resolveSilent("net.minecraft.util.com.mojang.authlib.GameProfile");
+		Method getPropertiesMethod = new MethodResolver(gameProfileClass).resolveSilent("getProperties");
+
+		SkullMeta   headMeta = (SkullMeta) head.getItemMeta();
+		GameProfile profile  = new GameProfile(UUID.randomUUID(), null);
+		//byte[]      encodedData = Base64.encodeBase64(String.format("{textures:{SKIN:{url:\"%s\"}}}", url).getBytes());
+		byte[] encodedData = Base64Coder.encodeString("{textures:{SKIN:{url:\"" + url + "\"}}}").getBytes();
+		profile.getProperties().put("textures", new Property("textures", new String(encodedData)));
+		Field profileField = null;
+		try {
+			profileField = headMeta.getClass().getDeclaredField("profile");
+			profileField.setAccessible(true);
+			profileField.set(headMeta, profile);
+		}
+		catch (NoSuchFieldException | IllegalArgumentException | IllegalAccessException e1) {
+			e1.printStackTrace();
+		}
+		head.setItemMeta(headMeta);
+		return head;
+	}*/
 }

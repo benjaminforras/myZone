@@ -37,6 +37,7 @@ dependencies {
 
     compile group: 'com.github.InventivetalentDev', name: 'ReflectionHelper', version: '395cfea950'
     compile group: 'com.github.InventivetalentDev', name: 'ParticleAPI', version: '65b701708a'
+    compile group: 'com.github.InventivetalentDev', name: 'MCWrappers', version: '48ab47648f'
     compile group: 'com.github.TryHardDood', name: 'BossBarAPI', version: 'dafa36593c'
 
     compile group: 'com.github.sk89q.WorldEdit', name: 'worldedit-bukkit', version: 'a8d04c24be'
@@ -55,6 +56,7 @@ shadowJar {
 
         include(dependency('com.github.InventivetalentDev:ReflectionHelper'))
         include(dependency('com.github.InventivetalentDev:ParticleAPI'))
+        include(dependency('com.github.InventivetalentDev:MCWrappers'))
         include(dependency('com.github.TryHardDood:BossBarAPI'))
 
     }
@@ -64,6 +66,7 @@ shadowJar {
     relocate 'org.inventivetalent.bossbar', 'hu.tryharddood.myzone.Util.BossBarAPI'
     relocate 'org.inventivetalent.particle', 'hu.tryharddood.myzone.Util.ParticleAPI'
     relocate 'org.inventivetalent.reflection', 'hu.tryharddood.myzone.Util.ReflectionHelper'
+    relocate 'org.inventivetalent.mcwrapper', 'hu.tryharddood.myzone.Util.MCWrapper'
 }
 
 task copyFile(type: Copy) {

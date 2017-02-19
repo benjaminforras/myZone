@@ -47,6 +47,8 @@ public class Variables {
 		public static final String MESSAGES_TITLE_PERMISSION = "myzone.messages.title";
 		public static final String MESSAGES_ACTIONBAR_PERMISSION = "myzone.messages.actionbar";
 		public static final String MESSAGES_BOSSBAR_PERMISSION = "myzone.messages.bossbar";
+
+		public static final String AUTOEXPAND_PERMISSION = "myzone.zone.autoexpand";
 	}
 
 	public class PlayerInteract {
