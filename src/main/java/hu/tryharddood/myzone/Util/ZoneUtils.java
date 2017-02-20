@@ -40,23 +40,25 @@ import java.util.Map;
 
 import static com.sk89q.worldguard.bukkit.BukkitUtil.toVector;
 
-public class ZoneUtils {
+public class ZoneUtils
+{
 
-	public static String canBuildZone(Player player, com.sk89q.worldedit.Vector[] border) {
-		if (checkOwnsPermission(player))
-		{
+	public static String canBuildZone(Player player, com.sk89q.worldedit.Vector[] border)
+	{
+		if (checkOwnsPermission(player)) {
 			return "max";
 		}
 		return checkSizePermission(player, border);
 	}
 
-	private static boolean checkOwnsPermission(Player player) {
+	private static boolean checkOwnsPermission(Player player)
+	{
 		return (myZone.worldGuardHelper.getPlayerRegionsNum(player.getUniqueId()) >= getMaxZones(player)) && (getMaxZones(player) != -1);
 	}
 
-	public static String checkSizePermission(Player player, com.sk89q.worldedit.Vector[] border) {
-		if (border == null)
-		{
+	public static String checkSizePermission(Player player, com.sk89q.worldedit.Vector[] border)
+	{
+		if (border == null) {
 			return "";
 		}
 
@@ -69,23 +71,20 @@ public class ZoneUtils {
 
 		com.sk89q.worldedit.Vector maxSize = getMaxSize(player);
 
-		if ((Math.abs(sizeX) > maxSize.getX() && maxSize.getX() != -1.0D) || (Math.abs(sizeY) > maxSize.getY() && maxSize.getY() != -1.0D) || (Math.abs(sizeZ) > maxSize.getZ() && maxSize.getZ() != -1.0D))
-		{
+		if ((Math.abs(sizeX) > maxSize.getX() && maxSize.getX() != -1.0D) || (Math.abs(sizeY) > maxSize.getY() && maxSize.getY() != -1.0D) || (Math.abs(sizeZ) > maxSize.getZ() && maxSize.getZ() != -1.0D)) {
 			return "size:(" + sizeX + ", " + sizeY + ", " + sizeZ + ")";
 		}
 		return "";
 	}
 
-	public static Integer getPlayerZones(Player player) {
+	public static Integer getPlayerZones(Player player)
+	{
 		RegionManager regionManager;
 		Integer       number = 0;
-		for (World world : Bukkit.getWorlds())
-		{
+		for (World world : Bukkit.getWorlds()) {
 			regionManager = myZone.worldGuardReflection.getWorldGuardPlugin().getRegionManager(world);
-			for (Map.Entry<String, ProtectedRegion> object : regionManager.getRegions().entrySet())
-			{
-				if (object.getValue().getOwners().contains(player.getUniqueId()) || object.getValue().getOwners().contains(player.getName()))
-				{
+			for (Map.Entry<String, ProtectedRegion> object : regionManager.getRegions().entrySet()) {
+				if (object.getValue().getOwners().contains(player.getUniqueId()) || object.getValue().getOwners().contains(player.getName())) {
 					number++;
 				}
 			}
@@ -93,16 +92,15 @@ public class ZoneUtils {
 		return number;
 	}
 
-	public static int getMaxZones(Player player) {
+	public static int getMaxZones(Player player)
+	{
 		int max = -1;
 
-		for (Map.Entry<Integer, String> entry : myZone.config.restriction.maxZonePermission.entrySet())
-		{
-			if (player.hasPermission(entry.getValue()))
-			{
+		for (Map.Entry<Integer, String> entry : myZone.config.restriction.maxZonePermission.entrySet()) {
+			if (player.isOp()) break;
+			if (player.hasPermission(entry.getValue())) {
 				int size = entry.getKey();
-				if ((size != -1) && (size <= max))
-				{
+				if ((size != -1) && (size <= max)) {
 					continue;
 				}
 				max = size;
@@ -111,13 +109,12 @@ public class ZoneUtils {
 		return max;
 	}
 
-	public static com.sk89q.worldedit.Vector getMaxSize(Player player) {
+	public static com.sk89q.worldedit.Vector getMaxSize(Player player)
+	{
 		com.sk89q.worldedit.Vector max = toVector(new Vector(-1, -1, -1));
 
-		for (Map.Entry<String, String> entry : myZone.config.restriction.maxZoneSizePermission.entrySet())
-		{
-			if (player.hasPermission(entry.getValue()))
-			{
+		for (Map.Entry<String, String> entry : myZone.config.restriction.maxZoneSizePermission.entrySet()) {
+			if (player.hasPermission(entry.getValue())) {
 				//noinspection ConstantConditions
 				max = toVector(getVector(entry.getKey()));
 			}
@@ -125,16 +122,16 @@ public class ZoneUtils {
 		return max;
 	}
 
-	private static Vector getVector(String value) {
+	private static Vector getVector(String value)
+	{
 		Vector   vector = new Vector(0, 0, 0);
 		String[] split  = value.split(", ");
-		try
-		{
+		try {
 			vector.setX(Double.parseDouble(split[0].substring(1)));
 			vector.setY(Double.parseDouble(split[1]));
 			vector.setZ(Double.parseDouble(split[2].substring(0, split[2].length() - 1)));
-		} catch (Exception e)
-		{
+		}
+		catch (Exception e) {
 			return null;
 		}
 		return vector;

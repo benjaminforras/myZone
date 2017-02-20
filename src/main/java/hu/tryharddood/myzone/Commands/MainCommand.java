@@ -121,6 +121,7 @@ public class MainCommand extends Subcommand
 
 			String itemName   = event.getCurrentItem().getItemMeta().getDisplayName();
 			String playerName = ChatColor.stripColor(itemName);
+			player.closeInventory();
 			Bukkit.dispatchCommand(player, "zone members " + myZone.zoneManager.getRegionName(region.getId()) + " remove " + playerName);
 		}
 	};
@@ -135,6 +136,7 @@ public class MainCommand extends Subcommand
 
 			String itemName   = event.getCurrentItem().getItemMeta().getDisplayName();
 			String playerName = ChatColor.stripColor(itemName);
+			player.closeInventory();
 			Bukkit.dispatchCommand(player, "zone owners " + myZone.zoneManager.getRegionName(region.getId()) + " remove " + playerName);
 		}
 	};
