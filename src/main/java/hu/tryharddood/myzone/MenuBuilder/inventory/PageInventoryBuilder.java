@@ -1,9 +1,9 @@
 package hu.tryharddood.myzone.MenuBuilder.inventory;
 
+import hu.tryharddood.myzone.MenuBuilder.ItemBuilder;
 import org.bukkit.ChatColor;
 import org.bukkit.Material;
 import org.bukkit.inventory.ItemStack;
-import hu.tryharddood.myzone.MenuBuilder.ItemBuilder;
 
 import java.util.ArrayList;
 import java.util.Arrays;

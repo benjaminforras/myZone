@@ -58,6 +58,7 @@ public class myZone extends JavaPlugin {
 		{
 			log(ChatColor.RED + "You server version is not supported. Please update your server...");
 			log(ChatColor.RED + "Disabling " + _name + " " + _version);
+			this.getServer().getPluginManager().disablePlugin(this);
 			return;
 		}
 
@@ -77,10 +78,6 @@ public class myZone extends JavaPlugin {
 
 		log("Hooking events...");
 		registerEvents();
-
-		/////////////////////////////////////////////////////
-		//Properties.loadConfiguration();
-		/////////////////////////////////////////////////////
 
 		loadConfiguration();
 

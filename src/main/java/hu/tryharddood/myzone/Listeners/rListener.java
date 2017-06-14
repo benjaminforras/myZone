@@ -44,12 +44,12 @@ public class rListener implements Listener {
 
 	@EventHandler
 	public void onPlayerMove(PlayerMoveEvent e) {
-		e.setCancelled(updateRegions(e.getPlayer(), e.getTo()));
+		updateRegions(e.getPlayer(), e.getTo());
 	}
 
 	@EventHandler
 	public void onPlayerTeleport(PlayerTeleportEvent e) {
-		e.setCancelled(updateRegions(e.getPlayer(), e.getTo()));
+		updateRegions(e.getPlayer(), e.getTo());
 	}
 
 	@EventHandler

@@ -10,6 +10,7 @@ import org.bukkit.event.inventory.InventoryClickEvent;
 import org.bukkit.event.inventory.InventoryType;
 import org.bukkit.inventory.Inventory;
 import org.bukkit.inventory.ItemStack;
+import org.bukkit.scheduler.BukkitRunnable;
 
 import javax.annotation.Nonnegative;
 import javax.annotation.Nonnull;
@@ -19,12 +20,11 @@ import java.util.UUID;
 
 import static org.bukkit.event.inventory.ClickType.*;
 
-public class InventoryMenuBuilder extends MenuBuilder<Inventory>
-{
+public class InventoryMenuBuilder extends MenuBuilder<Inventory> {
 
 	public static final ClickType[] ALL_CLICK_TYPES = new ClickType[]{LEFT, SHIFT_LEFT, RIGHT, SHIFT_RIGHT, WINDOW_BORDER_LEFT, WINDOW_BORDER_RIGHT, MIDDLE, NUMBER_KEY, DOUBLE_CLICK, DROP, CONTROL_DROP};
-	protected boolean inventoryInUse;
-	private Inventory inventory;
+	protected boolean   inventoryInUse;
+	private   Inventory inventory;
 	private List<ItemCallback> callbackItems = new ArrayList<>();
 	private String  title;
 	private boolean playerInventoryUsed;
@@ -32,8 +32,7 @@ public class InventoryMenuBuilder extends MenuBuilder<Inventory>
 	/**
 	 * Construct a new InventoryMenuBuilder without content
 	 */
-	public InventoryMenuBuilder()
-	{
+	public InventoryMenuBuilder() {
 	}
 
 	/**
@@ -41,8 +40,7 @@ public class InventoryMenuBuilder extends MenuBuilder<Inventory>
 	 *
 	 * @param size Size of the inventory
 	 */
-	public InventoryMenuBuilder(int size)
-	{
+	public InventoryMenuBuilder(int size) {
 		this();
 		withSize(size);
 	}
@@ -53,8 +51,7 @@ public class InventoryMenuBuilder extends MenuBuilder<Inventory>
 	 * @param size  Size of the inventory
 	 * @param title Title of the inventory
 	 */
-	public InventoryMenuBuilder(int size, String title)
-	{
+	public InventoryMenuBuilder(int size, String title) {
 		this(size);
 		withTitle(title);
 	}
@@ -64,8 +61,7 @@ public class InventoryMenuBuilder extends MenuBuilder<Inventory>
 	 *
 	 * @param type {@link InventoryType}
 	 */
-	public InventoryMenuBuilder(InventoryType type)
-	{
+	public InventoryMenuBuilder(InventoryType type) {
 		this();
 		withType(type);
 	}
@@ -76,22 +72,19 @@ public class InventoryMenuBuilder extends MenuBuilder<Inventory>
 	 * @param type  {@link InventoryType}
 	 * @param title Title of the inventory
 	 */
-	public InventoryMenuBuilder(InventoryType type, String title)
-	{
+	public InventoryMenuBuilder(InventoryType type, String title) {
 		this(type);
 		withTitle(title);
 	}
 
-	protected void initInventory(Inventory inventory)
-	{
+	protected void initInventory(Inventory inventory) {
 		if (this.inventory != null) {
 			throw new IllegalStateException("Inventory already initialized");
 		}
 		this.inventory = inventory;
 	}
 
-	protected void validateInit()
-	{
+	protected void validateInit() {
 		if (this.inventory == null) {
 			throw new IllegalStateException("inventory not yet initialized");
 		}
@@ -100,8 +93,7 @@ public class InventoryMenuBuilder extends MenuBuilder<Inventory>
 	/**
 	 * @return The {@link Inventory} being built
 	 */
-	public Inventory getInventory()
-	{
+	public Inventory getInventory() {
 		return inventory;
 	}
 
@@ -111,8 +103,7 @@ public class InventoryMenuBuilder extends MenuBuilder<Inventory>
 	 * @param size Size of the inventory
 	 * @return the InventoryMenuBuilder
 	 */
-	public InventoryMenuBuilder withSize(int size)
-	{
+	public InventoryMenuBuilder withSize(int size) {
 		initInventory(Bukkit.createInventory(null, size));
 		return this;
 	}
@@ -123,8 +114,7 @@ public class InventoryMenuBuilder extends MenuBuilder<Inventory>
 	 * @param type {@link InventoryType}
 	 * @return the InventoryMenuBuilder
 	 */
-	public InventoryMenuBuilder withType(InventoryType type)
-	{
+	public InventoryMenuBuilder withType(InventoryType type) {
 		initInventory(Bukkit.createInventory(null, type));
 		return this;
 	}
@@ -135,8 +125,7 @@ public class InventoryMenuBuilder extends MenuBuilder<Inventory>
 	 * @param title new title of the inventory
 	 * @return the InventoryMenuBuilder
 	 */
-	public InventoryMenuBuilder withTitle(@Nonnull String title)
-	{
+	public InventoryMenuBuilder withTitle(@Nonnull String title) {
 		return withTitle(title, true);
 	}
 
@@ -147,8 +136,7 @@ public class InventoryMenuBuilder extends MenuBuilder<Inventory>
 	 * @param refresh if <code>true</code>, the inventory will be re-opened to all viewers
 	 * @return the InventoryMenuBuilder
 	 */
-	public InventoryMenuBuilder withTitle(@Nonnull String title, boolean refresh)
-	{
+	public InventoryMenuBuilder withTitle(@Nonnull String title, boolean refresh) {
 		validateInit();
 		InventoryHelper.changeTitle(this.inventory, title);
 		this.title = title;
@@ -168,12 +156,10 @@ public class InventoryMenuBuilder extends MenuBuilder<Inventory>
 	 * @param eventHandler {@link InventoryEventHandler} to add
 	 * @return the InventoryMenuBuilder
 	 */
-	public InventoryMenuBuilder withEventHandler(@Nonnull InventoryEventHandler eventHandler)
-	{
+	public InventoryMenuBuilder withEventHandler(@Nonnull InventoryEventHandler eventHandler) {
 		try {
 			myZone.myZonePlugin.inventoryListener.registerEventHandler(this, eventHandler);
-		}
-		catch (IllegalArgumentException e) {
+		} catch (IllegalArgumentException e) {
 			throw e;
 		}
 		return this;
@@ -186,15 +172,13 @@ public class InventoryMenuBuilder extends MenuBuilder<Inventory>
 	 * @param actions  the {@link ClickType}s the listener should listen for (you can also use {@link #ALL_CLICK_TYPES} or {@link ClickType#values()}
 	 * @return the InventoryMenuBuilder
 	 */
-	public InventoryMenuBuilder onInteract(@Nonnull InventoryMenuListener listener, @Nonnull ClickType... actions)
-	{
+	public InventoryMenuBuilder onInteract(@Nonnull InventoryMenuListener listener, @Nonnull ClickType... actions) {
 		if (actions == null || (actions != null && actions.length == 0)) {
 			throw new IllegalArgumentException("must specify at least one action");
 		}
 		try {
 			myZone.myZonePlugin.inventoryListener.registerListener(this, listener, actions);
-		}
-		catch (IllegalArgumentException e) {
+		} catch (IllegalArgumentException e) {
 			throw e;
 		}
 		return this;
@@ -207,8 +191,7 @@ public class InventoryMenuBuilder extends MenuBuilder<Inventory>
 	 * @param item {@link ItemStack} to set
 	 * @return the InventoryMenuBuilder
 	 */
-	public InventoryMenuBuilder withItem(@Nonnegative int slot, @Nonnull ItemStack item)
-	{
+	public InventoryMenuBuilder withItem(@Nonnegative int slot, @Nonnull ItemStack item) {
 		validateInit();
 		this.inventory.setItem(slot, item);
 		return this;
@@ -223,14 +206,11 @@ public class InventoryMenuBuilder extends MenuBuilder<Inventory>
 	 * @param actions  the {@link ClickType}s the listener should listen for (you can also use {@link #ALL_CLICK_TYPES} or {@link ClickType#values()}
 	 * @return the InventoryMenuBuilder
 	 */
-	public InventoryMenuBuilder withItem(@Nonnegative final int slot, @Nonnull final ItemStack item, @Nonnull final ItemListener listener, @Nonnull ClickType... actions)
-	{
+	public InventoryMenuBuilder withItem(@Nonnegative final int slot, @Nonnull final ItemStack item, @Nonnull final ItemListener listener, @Nonnull ClickType... actions) {
 		withItem(slot, item);
-		onInteract(new InventoryMenuListener()
-		{
+		onInteract(new InventoryMenuListener() {
 			@Override
-			public void interact(Player player, ClickType action, InventoryClickEvent event)
-			{
+			public void interact(Player player, ClickType action, InventoryClickEvent event) {
 				if (event.getSlot() == slot) {
 					listener.onInteract(player, action, item);
 				}
@@ -246,8 +226,7 @@ public class InventoryMenuBuilder extends MenuBuilder<Inventory>
 	 * @param callback {@link ItemCallback}
 	 * @return the InventoryMenuBuilder
 	 */
-	public InventoryMenuBuilder withItem(@Nonnull ItemCallback callback)
-	{
+	public InventoryMenuBuilder withItem(@Nonnull ItemCallback callback) {
 		callbackItems.add(callback);
 		return this;
 	}
@@ -257,8 +236,7 @@ public class InventoryMenuBuilder extends MenuBuilder<Inventory>
 	 *
 	 * @return a {@link Inventory}
 	 */
-	public Inventory build()
-	{
+	public Inventory build() {
 		if (!InventoryListener.builderMap.containsKey(getInventory())) {
 			InventoryListener.builderMap.put(getInventory(), this);
 		}
@@ -271,11 +249,16 @@ public class InventoryMenuBuilder extends MenuBuilder<Inventory>
 	 * @param viewers Array of {@link HumanEntity}
 	 * @return the InventoryMenuBuilder
 	 */
-	public InventoryMenuBuilder show(HumanEntity... viewers)
-	{
+	public InventoryMenuBuilder show(HumanEntity... viewers) {
 		refreshContent();
 		for (HumanEntity viewer : viewers) {
-			viewer.openInventory(this.build());
+			new BukkitRunnable() {
+				@Override
+				public void run() {
+					viewer.openInventory(build());
+				}
+			}.runTask(myZone.myZonePlugin);
+
 		}
 		this.inventoryInUse = true;
 		return this;
@@ -287,8 +270,7 @@ public class InventoryMenuBuilder extends MenuBuilder<Inventory>
 	 *
 	 * @return the InventoryMenuBuilder
 	 */
-	public InventoryMenuBuilder refreshContent()
-	{
+	public InventoryMenuBuilder refreshContent() {
 		for (ItemCallback callback : callbackItems) {
 			int       slot = callback.getSlot();
 			ItemStack item = callback.getItem();
@@ -299,71 +281,59 @@ public class InventoryMenuBuilder extends MenuBuilder<Inventory>
 	}
 
 	@Override
-	public void dispose()
-	{
+	public void dispose() {
 		myZone.myZonePlugin.inventoryListener.unregisterAllListeners(getInventory());
 	}
 
-	public void unregisterListener(InventoryMenuListener listener)
-	{
+	public void unregisterListener(InventoryMenuListener listener) {
 		try {
 			myZone.myZonePlugin.inventoryListener.registerListener(this, listener, ALL_CLICK_TYPES);
-		}
-		catch (IllegalArgumentException e) {
+		} catch (IllegalArgumentException e) {
 			throw e;
 		}
 	}
 
-	public InventoryMenuBuilder setPlayerInventory()
-	{
+	public InventoryMenuBuilder setPlayerInventory() {
 		if (!isInventoryInUse()) {
 			this.playerInventoryUsed = true;
 		}
 		return this;
 	}
 
-	public void withItems(List<ItemStack> items)
-	{
+	public void withItems(List<ItemStack> items) {
 		withItems(items.toArray(new ItemStack[items.size()]));
 	}
 
-	public void withItems(ItemStack[] items)
-	{
+	public void withItems(ItemStack[] items) {
 
 		for (int i = 0; i < items.length; i++) {
 			if (items[i] != null) withItem(i, items[i]);
 		}
 	}
 
-	public boolean isPlayerInventory()
-	{
+	public boolean isPlayerInventory() {
 		return playerInventoryUsed;
 	}
 
-	public boolean isInventoryInUse()
-	{
+	public boolean isInventoryInUse() {
 		return this.inventoryInUse;
 	}
 
-	public String getTitle()
-	{
+	public String getTitle() {
 		return this.title;
 	}
 
-	protected void setItems(ItemStack[] items)
-	{
+	protected void setItems(ItemStack[] items) {
 		if (isPlayerInventory()) {
 			for (int i = 0; i < items.length; i++) {
 				withItem(i, items[i]);
 			}
-		}
-		else {
+		} else {
 			getInventory().setContents(items);
 		}
 	}
 
-	public UUID getUniqueID()
-	{
+	public UUID getUniqueID() {
 		return UUID.randomUUID();
 	}
 }
